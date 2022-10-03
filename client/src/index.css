@@ -1,0 +1,27 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Permanent+Marker&display=swap");
+
+body {
+	font-family: "Montserrat", sans-serif;
+	background-color: #161b7f;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+	background-color: #8ecae6;
+	width: 0.4vw;
+}
+
+::-webkit-scrollbar-thumb {
+	background: #219ebc;
+}
+
+.show {
+	opacity: 1 !important;
+	visibility: visible !important;
+	right: 0 !important;
+}
