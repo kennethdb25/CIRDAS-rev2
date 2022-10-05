@@ -58,6 +58,7 @@ complaintRouter.get("/citizen/complaint/:id", async (req, res) => {
 	}
 });
 
+// For Citizen - Pending
 complaintRouter.get("/citizen/complaint/:status/:id", async (req, res) => {
 	try {
 		const getComplaintById = await complaintSchema.find({ id: req.params.id, status: "Pending" }).count();
@@ -66,7 +67,17 @@ complaintRouter.get("/citizen/complaint/:status/:id", async (req, res) => {
 		res.status(404).json(error);
 	}
 });
+// For Police - Pending
+complaintRouter.get("/citizen/complaintsss/:status", async (req, res) => {
+	try {
+		const getComplaintById = await complaintSchema.find({ status: "Pending" }).count();
+		res.status(200).json(getComplaintById);
+	} catch (error) {
+		res.status(404).json(error);
+	}
+});
 
+// For Citizen - Reviewed
 complaintRouter.get("/citizen/complaintss/:status/:id", async (req, res) => {
 	try {
 		const getComplaintById = await complaintSchema.find({ id: req.params.id, status: "Reviewed" }).count();
@@ -76,9 +87,30 @@ complaintRouter.get("/citizen/complaintss/:status/:id", async (req, res) => {
 	}
 });
 
+// For Police - Reviewed
+complaintRouter.get("/citizen/complaintss/:status", async (req, res) => {
+	try {
+		const getComplaintById = await complaintSchema.find({ status: "Reviewed" }).count();
+		res.status(200).json(getComplaintById);
+	} catch (error) {
+		res.status(404).json(error);
+	}
+});
+
+// For Citizen - For Investigation
 complaintRouter.get("/citizen/complaints/:status/:id", async (req, res) => {
 	try {
 		const getCountByStatus = await complaintSchema.find({ id: req.params.id, status: "ForInvestigation" }).count();
+		res.status(200).json(getCountByStatus);
+	} catch (error) {
+		res.status(404).json(error);
+	}
+});
+
+// For Police - For Investigation
+complaintRouter.get("/citizen/complaints/:status", async (req, res) => {
+	try {
+		const getCountByStatus = await complaintSchema.find({ status: "ForInvestigation" }).count();
 		res.status(200).json(getCountByStatus);
 	} catch (error) {
 		res.status(404).json(error);

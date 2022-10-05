@@ -1,27 +1,37 @@
 const mongoose = require("mongoose");
 
 const stationDetailsSchema = new mongoose.Schema({
-	stationName: {
+	stationdId: {
 		type: String,
 		required: true,
 		trim: true,
 	},
-	stationAddress: {
+	latdec: {
 		type: String,
 		required: true,
 		trim: true,
 	},
-	municipal: {
+	londec: {
 		type: String,
 		required: true,
 		trim: true,
 	},
-	officerInCharge: {
+	Municipal: {
 		type: String,
 		required: true,
 		trim: true,
 	},
-	contact: {
+	details: {
+		type: String,
+		required: true,
+		trim: true,
+	},
+	MunicipalOIC: {
+		type: String,
+		required: true,
+		trim: true,
+	},
+	contactnumber: {
 		type: String,
 		required: true,
 		trim: true,

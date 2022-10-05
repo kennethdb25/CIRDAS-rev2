@@ -5,7 +5,7 @@ const missingPersonSchema = require("../../models/missing-personSchema/missing-p
 
 const imgconfig = multer.diskStorage({
 	destination: (req, file, callback) => {
-		callback(null, "./client/src/components/CitizenDashboard/components/MissingPerson/uploads");
+		callback(null, "./client/src/components/CitizenDashboard/assets/MissingPersonUploads");
 	},
 	filename: (req, file, callback) => {
 		callback(null, `${Date.now()}. ${file.originalname}`);
