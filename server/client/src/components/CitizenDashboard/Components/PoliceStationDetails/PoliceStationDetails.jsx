@@ -29,10 +29,10 @@ export default function PoliceStationDetails() {
 		<Section>
 			<Navbar />
 			<div className="grid">
-				<div className="row__one">
+				<div className="row__two">
 					<Analytics />
 				</div>
-				<div className="row__one">
+				<div className="row__two">
 					<iframe
 						className="iframe"
 						style={{ height: "500px", width: "100%", border: "none", borderRadius: "2px", boxShadow: "0 2px 10px 0 rgba(70, 76, 79, .2)" }}
@@ -62,7 +62,7 @@ const Section = styled.section`
 		}
 		.row__two {
 			display: grid;
-			grid-template-columns: repeat(2, 1fr);
+			grid-template-columns: 1fr;
 			gap: 1rem;
 			height: 50%;
 		}

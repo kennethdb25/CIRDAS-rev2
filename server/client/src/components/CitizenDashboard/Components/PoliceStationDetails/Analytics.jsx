@@ -202,7 +202,9 @@ export default function Analytics() {
 
 	return (
 		<Section>
-			<Table columns={columns} dataSource={data[0]?.body} pagination={pagination} loading={loading} />
+			<div className="table">
+				<Table columns={columns} dataSource={data[0]?.body} pagination={pagination} loading={loading} />
+			</div>
 			<Modal title="Police Station Location Details" open={isView} onCancel={() => setIsView(false)} onOk={() => setIsView(false)}>
 				<Typography>Station ID</Typography>
 				<Input style={{ marginBottom: "15px" }} value={viewData?.stationdId} disabled />
@@ -227,6 +229,21 @@ modal: {
 	weight: 1000px
 	input: {
 		color: None;
+	}
+}
+@media screen and (min-width: 280px) and (max-width: 1080px) {
+	.table {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		width: 310px;
+		.ant-table-wrapper {
+			display: Grid;
+			grid-template-columns: 1fr;
+			right: -100vw;
+			overflow-x: auto;
+			width: 100%;
+		}
 	}
 }
 `;

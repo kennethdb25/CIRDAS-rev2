@@ -227,7 +227,7 @@ const MissingPersonForm = (props) => {
 						</Col>
 						<Col xs={{ span: 24 }} md={{ span: 8 }}>
 							<Form.Item
-								label="Race"
+								label="Nationality"
 								name="race"
 								labelCol={{
 									span: 24,
