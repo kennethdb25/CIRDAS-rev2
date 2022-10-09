@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
 import scrollreveal from "scrollreveal";
@@ -6,6 +7,7 @@ import Analytics from "./Analytics";
 import FAQ from "./FAQ";
 import ComplaintTable from "./ComplaintTable";
 import { LoginContext } from "../../../../context/Context";
+import { getFiledComplaint, getPendingComplaints, getReviewedComplaints, getUnderInvestigation } from "../Services/Complaint/APICall";
 
 export default function Complaints() {
 	const [data, setData] = useState("");
@@ -14,55 +16,11 @@ export default function Complaints() {
 	const [getUnder, setGetUnder] = useState("");
 	const { loginData } = useContext(LoginContext);
 
-	const getFiledComplaint = async () => {
-		const res = await fetch(`/citizen/complaint/${loginData.validcitizen?._id}`, {
-			method: "GET",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
-		const dataComp = await res.json();
-		setData(dataComp.body.length);
-	};
-
-	const getPendingComplaints = async () => {
-		const res = await fetch(`/citizen/complaint/Pending/${loginData.validcitizen?._id}`, {
-			method: "GET",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
-		const pending = await res.json();
-		setGetPending(pending);
-	};
-
-	const getReviewedComplaints = async () => {
-		const res = await fetch(`/citizen/complaintss/Reviewed/${loginData.validcitizen?._id}`, {
-			method: "GET",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
-		const pending = await res.json();
-		setGetReviewed(pending);
-	};
-
-	const getUnderInvestigation = async () => {
-		const res = await fetch(`/citizen/complaints/ForInvestigation/${loginData.validcitizen?._id}`, {
-			method: "GET",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
-		const pending = await res.json();
-		setGetUnder(pending);
-	};
-
 	useEffect(() => {
-		getFiledComplaint();
-		getPendingComplaints();
-		getReviewedComplaints();
-		getUnderInvestigation();
+		getFiledComplaint(loginData, setData);
+		getPendingComplaints(loginData, setGetPending);
+		getReviewedComplaints(loginData, setGetReviewed);
+		getUnderInvestigation(loginData, setGetUnder);
 		const sr = scrollreveal({
 			origin: "bottom",
 			distance: "80px",

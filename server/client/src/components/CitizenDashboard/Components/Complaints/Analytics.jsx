@@ -32,13 +32,13 @@ export default function Analytics(props) {
 					<BiGroup />
 				</div>
 				<div className="content">
-					<h4>Reviewed Complaints</h4>
+					<h4>Checked Complaints</h4>
 					<h2>{getReviewed}</h2>
 				</div>
 			</div>
 			<div className="analytic ">
 				<div className="content">
-					<h4>For Investigation</h4>
+					<h4>Under Investigation</h4>
 					<h2>{getUnder}</h2>
 				</div>
 				<div className="logo">

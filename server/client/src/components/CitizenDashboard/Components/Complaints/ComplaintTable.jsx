@@ -1,15 +1,17 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useRef, useState, useContext } from "react";
 import styled from "styled-components";
-import { SearchOutlined, PlusCircleOutlined, EyeOutlined, EditOutlined } from "@ant-design/icons";
-import Highlighter from "react-highlight-words";
+import { PlusCircleOutlined, EyeOutlined, EditOutlined } from "@ant-design/icons";
 import { Button, Input, Space, Table, Modal, Typography, Drawer, Form } from "antd";
-
+import { fetchData } from "../Services/Complaint/APICall";
+import { getColumnSearchProps } from "../Services/Complaint/TableService";
 import { LoginContext } from "../../../../context/Context";
 import ComplaintForm from "./ComplaintForm";
+import ComplaintUpdateForm from "./ComplaintUpdateForm";
 
 export default function ComplaintTable(props) {
 	const [data, setData] = useState([]);
+	const [updateData, setUpdateData] = useState(null);
 	const searchInput = useRef(null);
 	const { loginData, setLoginData } = useContext(LoginContext);
 	const [loading, setLoading] = useState(false);
@@ -18,6 +20,7 @@ export default function ComplaintTable(props) {
 	const [searchedColumn, setSearchedColumn] = useState("");
 	const [viewData, setViewData] = useState(null);
 	const [isView, setIsView] = useState(false);
+	const [isEdit, setIsEdit] = useState(false);
 	const [pagination, setPagination] = useState({
 		defaultCurrent: 1,
 		pageSize: 6,
@@ -28,33 +31,9 @@ export default function ComplaintTable(props) {
 
 	const [form] = Form.useForm();
 
-	useEffect(() => {
-		fetchData();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
-
-	const fetchData = async () => {
-		setLoading(true);
-		const res = await fetch(`/citizen/complaint/${loginData.validcitizen?._id}`, {
-			method: "GET",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
-		const dataComp = await res.json();
-		setData([dataComp]);
-		setLoading(false);
-	};
-
 	const onClose = () => {
 		setVisible(false);
 		form.resetFields();
-	};
-
-	const handleSearch = (selectedKeys, confirm, dataIndex) => {
-		confirm();
-		setSearchText(selectedKeys[0]);
-		setSearchedColumn(dataIndex);
 	};
 
 	const handleReset = (clearFilters) => {
@@ -62,89 +41,11 @@ export default function ComplaintTable(props) {
 		setSearchText("");
 	};
 
-	const getColumnSearchProps = (dataIndex) => ({
-		filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
-			<div
-				style={{
-					padding: 8,
-				}}
-			>
-				<Input
-					ref={searchInput}
-					placeholder={`Search ${dataIndex}`}
-					value={selectedKeys[0]}
-					onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-					onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
-					style={{
-						marginBottom: 8,
-						display: "block",
-					}}
-				/>
-				<Space>
-					<Button
-						type="primary"
-						onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
-						icon={<SearchOutlined />}
-						size="small"
-						style={{
-							width: 90,
-						}}
-					>
-						Search
-					</Button>
-					<Button
-						onClick={() => clearFilters && handleReset(clearFilters)}
-						size="small"
-						style={{
-							width: 90,
-						}}
-					>
-						Reset
-					</Button>
-					<Button
-						type="link"
-						size="small"
-						onClick={() => {
-							confirm({
-								closeDropdown: false,
-							});
-							setSearchText(selectedKeys[0]);
-							setSearchedColumn(dataIndex);
-						}}
-					>
-						Filter
-					</Button>
-				</Space>
-			</div>
-		),
-		filterIcon: (filtered) => (
-			<SearchOutlined
-				style={{
-					color: filtered ? "#1890ff" : undefined,
-				}}
-			/>
-		),
-		onFilter: (value, record) => record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
-		onFilterDropdownVisibleChange: (visible) => {
-			if (visible) {
-				setTimeout(() => searchInput.current?.select(), 100);
-			}
-		},
-		render: (text) =>
-			searchedColumn === dataIndex ? (
-				<Highlighter
-					highlightStyle={{
-						backgroundColor: "#ffc069",
-						padding: 0,
-					}}
-					searchWords={[searchText]}
-					autoEscape
-					textToHighlight={text ? text.toString() : ""}
-				/>
-			) : (
-				text
-			),
-	});
+	const UpdateRecord = (record) => {
+		setIsEdit(true);
+		setVisible(true);
+		setUpdateData(record);
+	};
 
 	const ViewRecord = (record) => {
 		setIsView(true);
@@ -157,14 +58,14 @@ export default function ComplaintTable(props) {
 			dataIndex: "complaintid",
 			key: "complaintid",
 			width: "10%",
-			...getColumnSearchProps("complaintid"),
+			...getColumnSearchProps("complaintid", searchInput, setSearchText, setSearchedColumn, handleReset, searchedColumn, searchText),
 		},
 		{
 			title: "Complainant Name",
 			dataIndex: "complainantname",
 			key: "complainantname",
 			width: "30%",
-			...getColumnSearchProps("complainantname"),
+			...getColumnSearchProps("complainantname", searchInput, setSearchText, setSearchedColumn, handleReset, searchedColumn, searchText),
 		},
 		{
 			title: "What",
@@ -176,7 +77,7 @@ export default function ComplaintTable(props) {
 			title: "Where",
 			dataIndex: "address",
 			key: "address",
-			...getColumnSearchProps("address"),
+			...getColumnSearchProps("address", searchInput, setSearchText, setSearchedColumn, handleReset, searchedColumn, searchText),
 			width: "20%",
 		},
 		{
@@ -189,7 +90,7 @@ export default function ComplaintTable(props) {
 			title: "Who(Suspect)",
 			dataIndex: "suspect",
 			key: "suspect",
-			...getColumnSearchProps("suspect"),
+			...getColumnSearchProps("suspect", searchInput, setSearchText, setSearchedColumn, handleReset, searchedColumn, searchText),
 			width: "30%",
 		},
 		{
@@ -221,7 +122,14 @@ export default function ComplaintTable(props) {
 							View
 						</Button>
 						{record.status === "Pending" ? (
-							<Button type="success" shape="round" icon={<EditOutlined />}>
+							<Button
+								type="success"
+								shape="round"
+								icon={<EditOutlined />}
+								onClick={() => {
+									UpdateRecord(record);
+								}}
+							>
 								Edit
 							</Button>
 						) : (
@@ -233,13 +141,18 @@ export default function ComplaintTable(props) {
 		},
 	];
 
+	useEffect(() => {
+		fetchData(setLoading, loginData, setData);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
 	return (
 		<Section>
 			<div className="table">
 				<Table columns={columns} dataSource={data[0]?.body} pagination={pagination} loading={loading} />
 			</div>
 			<Drawer
-				title="File A Complaint"
+				title={isEdit ? "Update Complaint" : "File A Complaint"}
 				placement="top"
 				width={500}
 				onClose={onClose}
@@ -251,14 +164,22 @@ export default function ComplaintTable(props) {
 				}}
 				extra={<Space></Space>}
 			>
-				<ComplaintForm
-					onClose={onClose}
-					fetchData={fetchData}
-					getFiledComplaint={getFiledComplaint}
-					getPendingComplaints={getPendingComplaints}
-					getReviewedComplaints={getReviewedComplaints}
-					getUnderInvestigation={getUnderInvestigation}
-				/>
+				{isEdit ? (
+					<>
+						<ComplaintUpdateForm onClose={onClose} fetchData={fetchData} updateData={updateData} />
+					</>
+				) : (
+					<>
+						<ComplaintForm
+							onClose={onClose}
+							fetchData={fetchData}
+							getFiledComplaint={getFiledComplaint}
+							getPendingComplaints={getPendingComplaints}
+							getReviewedComplaints={getReviewedComplaints}
+							getUnderInvestigation={getUnderInvestigation}
+						/>
+					</>
+				)}
 			</Drawer>
 			<Modal title="Complaint Details" open={isView} onCancel={() => setIsView(false)} onOk={() => setIsView(false)}>
 				<Typography>Complainant</Typography>

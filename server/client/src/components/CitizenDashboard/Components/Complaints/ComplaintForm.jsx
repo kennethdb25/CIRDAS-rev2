@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { LoginContext } from "../../../../context/Context";
 import { MunicipalData } from "../../../../data/CitizensData";
 import useStyles from "../../../Login/CitizenContent/styles";
+import { sendNotification } from "../Services/Complaint/SendNotifcation";
 
 const { TextArea } = Input;
 
@@ -31,13 +32,14 @@ const ComplaintForm = (props) => {
 		const res = await data.json();
 		if (res.status === 201) {
 			toast.success("Filed Successfully", { position: toast.POSITION.TOP_CENTER, autoClose: 1000 });
-			onClose();
 			fetchData();
 			getFiledComplaint();
 			getPendingComplaints();
 			getReviewedComplaints();
 			getUnderInvestigation();
+			sendNotification(values.municipal, values.complainantname, values.complaint);
 			form.resetFields();
+			onClose();
 		} else {
 			toast.error(res.error, { position: toast.POSITION.TOP_CENTER, autoClose: 3000 });
 		}
@@ -53,7 +55,7 @@ const ComplaintForm = (props) => {
 			labelCol={{
 				span: 8,
 			}}
-			initialValues={{ complainantname: complainantname, id: complainantid, timeAndDate: timeAndDate }}
+			initialValues={{ complainantname: complainantname, userId: complainantid, timeAndDate: timeAndDate }}
 			layout="horizontal"
 			onFinish={onFinish}
 			onFinishFailed={onFinishFailed}
@@ -219,7 +221,7 @@ const ComplaintForm = (props) => {
 												message: "Please enter victim name!",
 											},
 											{
-												pattern: /^[a-zA-Z_ ]*$/,
+												pattern: /^[a-zA-Z._ ]*$/,
 												message: "Victim name should be a letter",
 											},
 										]}
@@ -245,7 +247,7 @@ const ComplaintForm = (props) => {
 												message: "Please enter witness name!",
 											},
 											{
-												pattern: /^[a-zA-Z_ ]*$/,
+												pattern: /^[a-zA-Z._ ]*$/,
 												message: "Witness name should be a letter",
 											},
 										]}
@@ -271,7 +273,7 @@ const ComplaintForm = (props) => {
 												message: "Please enter suspect name!",
 											},
 											{
-												pattern: /^[a-zA-Z_ ]*$/,
+												pattern: /^[a-zA-Z._ ]*$/,
 												message: "Suspect name should be a letter",
 											},
 										]}
@@ -282,7 +284,7 @@ const ComplaintForm = (props) => {
 							</Row>
 						</Box>
 					</Row>
-					<Form.Item name="id">
+					<Form.Item name="userId">
 						<Input hidden defaultValue={complainantid} />
 					</Form.Item>
 					<Row gutter={12}>

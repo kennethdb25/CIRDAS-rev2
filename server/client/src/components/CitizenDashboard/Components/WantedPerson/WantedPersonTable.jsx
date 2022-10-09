@@ -28,7 +28,7 @@ export default function WantedPersonTable() {
 
 	const fetchData = async () => {
 		setLoading(true);
-		const res = await fetch("/wanted-person", {
+		const res = await fetch("/wanted-person/status", {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -184,7 +184,7 @@ export default function WantedPersonTable() {
 			width: "5%",
 		},
 		{
-			title: "Action",
+			title: "",
 			dataIndex: "",
 			key: "x",
 			width: "15%",

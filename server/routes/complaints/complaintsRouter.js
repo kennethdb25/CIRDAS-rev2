@@ -3,16 +3,16 @@ const complaintRouter = new express.Router();
 const complaintSchema = require("../../models/complaintSchema/complaintSchema");
 
 complaintRouter.post("/citizen/complaint", async (req, res) => {
-	const { id, complainantname, complaint, contact, municipal, address, victim, witness, suspect, description, timeAndDate } = req.body;
+	const { userId, complainantname, complaint, contact, municipal, address, victim, witness, suspect, description, timeAndDate } = req.body;
 
 	const complaintcount = await complaintSchema.find().count();
 
-	if (!id || !complainantname || !complaint || !contact || !municipal || !address || !witness) {
+	if (!userId || !complainantname || !complaint || !contact || !municipal || !address || !witness) {
 		res.status(422).json({ error: "Fill all required details" });
 	} else {
 		try {
 			const finalComplaint = new complaintSchema({
-				id,
+				userId,
 				complaintid: `COMP-${complaintcount + 1}`,
 				complainantname,
 				complaint,
@@ -51,7 +51,7 @@ complaintRouter.get("/citizen/complaint", async (req, res) => {
 
 complaintRouter.get("/citizen/complaint/:id", async (req, res) => {
 	try {
-		const getComplaintById = await complaintSchema.find({ id: req.params.id });
+		const getComplaintById = await complaintSchema.find({ userId: req.params.id });
 		res.status(200).json({ status: 200, body: getComplaintById });
 	} catch (error) {
 		res.status(404).json(error);
@@ -59,9 +59,9 @@ complaintRouter.get("/citizen/complaint/:id", async (req, res) => {
 });
 
 // For Citizen - Pending
-complaintRouter.get("/citizen/complaint/:status/:id", async (req, res) => {
+complaintRouter.get("/citizen/complaint/:status/:userId", async (req, res) => {
 	try {
-		const getComplaintById = await complaintSchema.find({ id: req.params.id, status: "Pending" }).count();
+		const getComplaintById = await complaintSchema.find({ userId: req.params.userId, status: "Pending" }).count();
 		res.status(200).json(getComplaintById);
 	} catch (error) {
 		res.status(404).json(error);
@@ -80,7 +80,7 @@ complaintRouter.get("/citizen/complaintsss/:status", async (req, res) => {
 // For Citizen - Reviewed
 complaintRouter.get("/citizen/complaintss/:status/:id", async (req, res) => {
 	try {
-		const getComplaintById = await complaintSchema.find({ id: req.params.id, status: "Reviewed" }).count();
+		const getComplaintById = await complaintSchema.find({ id: req.params.id, status: "Checked" }).count();
 		res.status(200).json(getComplaintById);
 	} catch (error) {
 		res.status(404).json(error);
@@ -89,6 +89,7 @@ complaintRouter.get("/citizen/complaintss/:status/:id", async (req, res) => {
 
 // For Police - Reviewed
 complaintRouter.get("/citizen/complaintss/:status", async (req, res) => {
+	// kuys try to create a condtion for this API (if req.params.status === Reviewed)
 	try {
 		const getComplaintById = await complaintSchema.find({ status: "Reviewed" }).count();
 		res.status(200).json(getComplaintById);
@@ -100,7 +101,7 @@ complaintRouter.get("/citizen/complaintss/:status", async (req, res) => {
 // For Citizen - For Investigation
 complaintRouter.get("/citizen/complaints/:status/:id", async (req, res) => {
 	try {
-		const getCountByStatus = await complaintSchema.find({ id: req.params.id, status: "ForInvestigation" }).count();
+		const getCountByStatus = await complaintSchema.find({ id: req.params.id, status: "UnderInvestigation" }).count();
 		res.status(200).json(getCountByStatus);
 	} catch (error) {
 		res.status(404).json(error);
@@ -110,11 +111,13 @@ complaintRouter.get("/citizen/complaints/:status/:id", async (req, res) => {
 // For Police - For Investigation
 complaintRouter.get("/citizen/complaints/:status", async (req, res) => {
 	try {
-		const getCountByStatus = await complaintSchema.find({ status: "ForInvestigation" }).count();
+		const getCountByStatus = await complaintSchema.find({ status: "UnderInvestigation" }).count();
 		res.status(200).json(getCountByStatus);
 	} catch (error) {
 		res.status(404).json(error);
 	}
 });
+
+// end of condition
 
 module.exports = complaintRouter;

@@ -21,7 +21,7 @@ router.post("/citizen/login", async (req, res) => {
 			const isMatch = await bcrypt.compare(password, userValid.password);
 
 			if (!isMatch) {
-				res.status(422).json({ error: "Invalid Email or Password" });
+				res.status(422).json({ error: "Invalid Password" });
 			} else {
 				// condition for user validation
 				if (userValid.validuser === "false" && userValid.accountstatus === "Pending") {
@@ -46,7 +46,7 @@ router.post("/citizen/login", async (req, res) => {
 				}
 			}
 		} else {
-			res.status(422).json({ error: "Invalid Details" });
+			res.status(422).json({ error: "Invalid Email or Password" });
 		}
 	} catch (error) {
 		console.log(error);
