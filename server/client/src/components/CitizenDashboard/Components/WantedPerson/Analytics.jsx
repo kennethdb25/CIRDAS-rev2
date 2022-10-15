@@ -6,20 +6,19 @@ import { cardStyles } from "./ReusableStyles";
 export default function Analytics() {
 	return (
 		<Section>
-			<div className="analytic ">
-				<iframe
-					className="iframe"
-					style={{ height: "200px", border: "none", borderRadius: "2px", boxShadow: "0 2px 10px 0 rgba(70, 76, 79, .2)" }}
-					title="Wanted Person Status Rate"
-					src="https://charts.mongodb.com/charts-cirdas-ngmsy/embed/charts?id=63076239-5045-4e80-84ac-660c238b3510&maxDataAge=10&theme=light&autoRefresh=true"
-				></iframe>
-			</div>
 			<div className="analytic">
 				<iframe
 					className="iframe"
-					style={{ height: "200px", border: "none", borderRadius: "2px", boxShadow: "0 2px 10px 0 rgba(70, 76, 79, .2)" }}
+					style={{
+						height: "400px",
+						border: "none",
+						borderRadius: "2px",
+						width: "100%",
+						boxShadow: "0 2px 10px 0 rgba(70, 76, 79, .2)",
+						backgroundColor: "white",
+					}}
 					title="Total Count of Wanted Person"
-					src="https://charts.mongodb.com/charts-cirdas-ngmsy/embed/charts?id=6326c127-ebcf-4825-8adf-864e79b72889&maxDataAge=10&theme=light&autoRefresh=true"
+					src="https://charts.mongodb.com/charts-cirdas-ngmsy/embed/charts?id=634ad6b5-847c-4f82-852b-759063dfbf05&maxDataAge=10&theme=light&autoRefresh=true"
 				></iframe>
 			</div>
 		</Section>
@@ -27,11 +26,11 @@ export default function Analytics() {
 }
 const Section = styled.section`
 	display: grid;
-	grid-template-columns: repeat(2, 1fr);
+	grid-template-columns: 1fr;
 	gap: 1rem;
 	.analytic {
 		${cardStyles};
-		padding: 0.5rem 0.5rem;
+		padding: 1.5rem 1.5rem;
 		display: flex;
 		justify-content: space-evenly;
 		align-items: center;

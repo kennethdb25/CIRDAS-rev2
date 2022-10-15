@@ -23,6 +23,7 @@ const Nav = styled.nav`
 	display: flex;
 	justify-content: space-between;
 	color: black;
+	font-family: PT Serif;
 	.title {
 		h4 {
 			color: black;

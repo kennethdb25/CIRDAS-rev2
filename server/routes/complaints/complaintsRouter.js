@@ -20,6 +20,7 @@ complaintRouter.post("/citizen/complaint", async (req, res) => {
 				municipal,
 				address,
 				year: `${new Date().getFullYear()}`,
+				month: `${new Date().getMonth()}`,
 				timeAndDate,
 				victim,
 				witness,
@@ -35,6 +36,36 @@ complaintRouter.post("/citizen/complaint", async (req, res) => {
 			res.status(422).json(error);
 			console.log("catch block error");
 		}
+	}
+});
+
+// updating complaint
+complaintRouter.patch("/citizen/complaint/:complaintid", async (req, res) => {
+	try {
+		const complaintid = req.params.complaintid;
+		const { userId, complaint, contact, municipal, address, victim, witness, suspect, description } = req.body;
+
+		const getcomplaint = await complaintSchema.findOne({ complaintid: complaintid });
+
+		if (!getcomplaint) {
+			res.status(422).json({ error: `No complaint match with ${complaintid}` });
+		} else {
+			if (userId) getcomplaint.userId = userId;
+			if (complaint) getcomplaint.complaint = complaint;
+			if (contact) getcomplaint.contact = contact;
+			if (municipal) getcomplaint.municipal = municipal;
+			if (address) getcomplaint.address = address;
+			if (victim) getcomplaint.victim = victim;
+			if (witness) getcomplaint.witness = witness;
+			if (suspect) getcomplaint.suspect = suspect;
+			if (description) getcomplaint.description = description;
+
+			const updatedData = await getcomplaint.save();
+
+			res.status(201).json({ status: 201, updatedData });
+		}
+	} catch (error) {
+		res.status(404).json(error);
 	}
 });
 
@@ -80,7 +111,7 @@ complaintRouter.get("/citizen/complaintsss/:status", async (req, res) => {
 // For Citizen - Reviewed
 complaintRouter.get("/citizen/complaintss/:status/:id", async (req, res) => {
 	try {
-		const getComplaintById = await complaintSchema.find({ id: req.params.id, status: "Checked" }).count();
+		const getComplaintById = await complaintSchema.find({ id: req.params.id, status: "Cleared" }).count();
 		res.status(200).json(getComplaintById);
 	} catch (error) {
 		res.status(404).json(error);
@@ -91,7 +122,7 @@ complaintRouter.get("/citizen/complaintss/:status/:id", async (req, res) => {
 complaintRouter.get("/citizen/complaintss/:status", async (req, res) => {
 	// kuys try to create a condtion for this API (if req.params.status === Reviewed)
 	try {
-		const getComplaintById = await complaintSchema.find({ status: "Reviewed" }).count();
+		const getComplaintById = await complaintSchema.find({ status: "Cleared" }).count();
 		res.status(200).json(getComplaintById);
 	} catch (error) {
 		res.status(404).json(error);

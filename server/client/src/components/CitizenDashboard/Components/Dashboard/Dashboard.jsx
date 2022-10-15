@@ -2,7 +2,6 @@ import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components";
 import Analytics from "./Analytics";
 import RateMissingPerson from "./RateMissingPerson";
-import FAQ from "./FAQ";
 import Navbar from "./Navbar";
 import Profile from "./Profile";
 import RateWanterdPerson from "./RateWanterdPerson";
@@ -94,7 +93,6 @@ export default function Dashboard() {
 			<div className="grid">
 				<div className="row__one">
 					<Analytics data={data} missing={missing} countMissing={countMissing} countWanted={countWanted} />
-					<FAQ />
 				</div>
 				<div className="row__two">
 					<RateMissingPerson />

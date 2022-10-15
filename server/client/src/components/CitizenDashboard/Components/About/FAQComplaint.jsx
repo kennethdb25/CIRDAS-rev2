@@ -3,26 +3,26 @@ import styled from "styled-components";
 import { IoIosArrowForward } from "react-icons/io";
 import { AiFillFileAdd } from "react-icons/ai";
 import { MdImportantDevices } from "react-icons/md";
-import { cardStyles } from "./ReusableStyles";
-export default function FAQ() {
+import { cardStyles } from "../Complaints/ReusableStyles";
+export default function FAQComplaint() {
 	const faqs = [
 		{
 			icon: <MdImportantDevices />,
-			text: "What is Missing Person's Page?",
+			text: "What is Complaint Page?",
 		},
 		{
 			icon: <AiFillFileAdd />,
-			text: "How to file a missing person?",
+			text: "How to file a complaint?",
 		},
 		{
 			icon: <AiFillFileAdd />,
-			text: "What to know before filing missing person?",
+			text: "What are the complaints that you can file?",
 		},
 	];
 	return (
 		<Section>
 			<div className="title">
-				<h2>Missing Person's Page</h2>
+				<h2>Complaint Page</h2>
 			</div>
 			<div className="faqs">
 				{faqs.map((faq) => {

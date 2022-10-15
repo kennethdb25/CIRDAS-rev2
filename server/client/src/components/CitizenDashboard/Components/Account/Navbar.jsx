@@ -6,14 +6,14 @@ export default function Navbar() {
 	return (
 		<Nav>
 			<div className="title">
-				<h3>Hello {loginData.validcitizen?.firstName},</h3>
+				<h4>Hello {loginData.validcitizen?.firstName},</h4>
 				<h1>
 					Welcome to <span>CIRDAS</span>
 				</h1>
 			</div>
 			<div className="title">
 				<h1>
-					<span>Citizen Dashboard</span>
+					<span>Account Settings</span>
 				</h1>
 			</div>
 		</Nav>
@@ -23,6 +23,7 @@ const Nav = styled.nav`
 	display: flex;
 	justify-content: space-between;
 	color: black;
+	font-family: PT Serif;
 	.title {
 		h4 {
 			color: black;
@@ -32,8 +33,8 @@ const Nav = styled.nav`
 			span {
 				margin-left: 0.5rem;
 				color: black;
-				font-family: PT Serif;
-				// letter-spacing: 0.2rem;
+				font-family: "Permanent Marker", cursive;
+				letter-spacing: 0.2rem;
 			}
 		}
 	}

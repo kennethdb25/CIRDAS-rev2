@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { IoIosArrowForward } from "react-icons/io";
 import { AiFillFileAdd } from "react-icons/ai";
 import { MdImportantDevices } from "react-icons/md";
-import { cardStyles } from "./ReusableStyles";
-export default function FAQ() {
+import { cardStyles } from "../WantedPerson/ReusableStyles";
+export default function FAQWantedPerson() {
 	const faqs = [
 		{
 			icon: <MdImportantDevices />,

@@ -15,21 +15,36 @@ const ComplaintUpdateForm = (props) => {
 	const { loginData } = useContext(LoginContext);
 	const complainantname = `${loginData.validcitizen?.firstName} ${loginData.validcitizen?.lastName}`;
 	const complainantid = `${loginData.validcitizen._id}`;
+	console.log(updateData);
+	const initialValues = {
+		complainantname: complainantname,
+		userId: complainantid,
+		complaint: updateData?.complaint,
+		contact: updateData?.contact,
+		address: updateData?.address,
+		municipal: updateData?.municipal,
+		timeAndDate: updateData?.timeAndDate,
+		victim: updateData?.victim,
+		witness: updateData?.witness,
+		suspect: updateData?.suspect,
+		description: updateData?.description,
+		complaintid: updateData?.complaintid,
+	};
 
 	const classes = useStyles();
 
 	const onFinish = async (values) => {
-		const data = "sample";
-		// const data = await fetch("/citizen/complaint", {
-		// 	method: "POST",
-		// 	headers: {
-		// 		"Content-Type": "application/json",
-		// 	},
-		// 	body: JSON.stringify(values),
-		// });
+		console.log(values);
+		const data = await fetch(`/citizen/complaint/${updateData?.complaintid}`, {
+			method: "PATCH",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(values),
+		});
 		const res = await data.json();
 		if (res.status === 201) {
-			toast.success("Filed Successfully", { position: toast.POSITION.TOP_CENTER, autoClose: 1000 });
+			toast.success("Updated Successfully", { position: toast.POSITION.TOP_CENTER, autoClose: 1000 });
 			onClose();
 			fetchData();
 			form.resetFields();
@@ -48,7 +63,7 @@ const ComplaintUpdateForm = (props) => {
 			labelCol={{
 				span: 8,
 			}}
-			initialValues={{ complainantname: complainantname, userId: complainantid }}
+			initialValues={initialValues}
 			layout="horizontal"
 			onFinish={onFinish}
 			onFinishFailed={onFinishFailed}
@@ -74,7 +89,7 @@ const ComplaintUpdateForm = (props) => {
 								}}
 								hasFeedback
 							>
-								<Input placeholder="Enter your first name" defaultValue={complainantname} disabled />
+								<Input placeholder="Enter your first name" disabled />
 							</Form.Item>
 						</Col>
 						<Col xs={{ span: 24 }} md={{ span: 8 }}>
@@ -99,7 +114,7 @@ const ComplaintUpdateForm = (props) => {
 									},
 								]}
 							>
-								<Input placeholder="Enter your complaint" defaultValue={updateData.complaint} />
+								<Input placeholder="Enter your complaint" />
 							</Form.Item>
 						</Col>
 						<Col xs={{ span: 24 }} md={{ span: 8 }}>
@@ -126,7 +141,7 @@ const ComplaintUpdateForm = (props) => {
 									{ min: 11 },
 								]}
 							>
-								<Input placeholder="Enter your contact number" defaultValue={updateData.contact} />
+								<Input placeholder="Enter your contact number" />
 							</Form.Item>
 						</Col>
 						<Col xs={{ span: 24 }} md={{ span: 8 }}>
@@ -190,7 +205,7 @@ const ComplaintUpdateForm = (props) => {
 								}}
 								hasFeedback
 							>
-								<Input defaultValue={updateData.timeAndDate} disabled />
+								<Input disabled />
 							</Form.Item>
 						</Col>
 						<Box className={classes.whoComplaint}>
@@ -278,7 +293,7 @@ const ComplaintUpdateForm = (props) => {
 						</Box>
 					</Row>
 					<Form.Item name="userId">
-						<Input hidden defaultValue={complainantid} />
+						<Input hidden />
 					</Form.Item>
 					<Row gutter={12}>
 						<Col xs={{ span: 24 }} md={{ span: 24 }}>
@@ -298,10 +313,6 @@ const ComplaintUpdateForm = (props) => {
 										required: true,
 										message: "Please enter how!",
 									},
-									{
-										pattern: /^[a-zA-Z_ ]*$/,
-										message: "How should be a letter",
-									},
 								]}
 							>
 								<TextArea
@@ -314,6 +325,9 @@ const ComplaintUpdateForm = (props) => {
 							</Form.Item>
 						</Col>
 					</Row>
+					<Form.Item name="complaintid">
+						<Input hidden />
+					</Form.Item>
 					<Button type="primary" htmlType="submit">
 						Update Complaint
 					</Button>

@@ -1,11 +1,17 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from "react";
+import { Typography } from "antd";
 import styled from "styled-components";
 import scrollreveal from "scrollreveal";
 import Navbar from "./Navbar";
-import Analytics from "./Analytics";
-import MissingPersonTable from "./MissingPersonTable";
+import FAQComplaint from "./FAQComplaint";
+import ListOfAbout from "./ListOfAbout";
+import FAQMissingPerson from "./FAQMissingPerson";
+import FAQWantedPerson from "./FAQWantedPerson";
 
-export default function MissingPerson() {
+const { Title } = Typography;
+
+export default function About() {
 	useEffect(() => {
 		const sr = scrollreveal({
 			origin: "bottom",
@@ -25,14 +31,18 @@ export default function MissingPerson() {
 			}
 		);
 	}, []);
+
 	return (
 		<Section>
 			<Navbar />
 			<div className="grid">
-				<div className="row__two"></div>
 				<div className="row__one">
-					<Analytics />
-					<MissingPersonTable />
+					<Title level={4}>ABOUT</Title>
+					<ListOfAbout />
+					<Title level={4}>FAQ</Title>
+					<FAQComplaint />
+					<FAQMissingPerson />
+					<FAQWantedPerson />
 				</div>
 			</div>
 		</Section>

@@ -1,11 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import scrollreveal from "scrollreveal";
 import Navbar from "./Navbar";
-import Analytics from "./Analytics";
-import MissingPersonTable from "./MissingPersonTable";
+import Profile from "./Profile";
+import Action from "./Action";
 
-export default function MissingPerson() {
+export default function Account() {
+	// COMPLAINT TABLE
+
 	useEffect(() => {
 		const sr = scrollreveal({
 			origin: "bottom",
@@ -29,11 +32,11 @@ export default function MissingPerson() {
 		<Section>
 			<Navbar />
 			<div className="grid">
-				<div className="row__two"></div>
-				<div className="row__one">
-					<Analytics />
-					<MissingPersonTable />
+				<div className="row__two">
+					<Profile />
+					<Action />
 				</div>
+				<div className="row__one"></div>
 			</div>
 		</Section>
 	);
@@ -58,7 +61,7 @@ const Section = styled.section`
 			display: grid;
 			grid-template-columns: repeat(2, 1fr);
 			gap: 1rem;
-			height: 50%;
+			height: 100%;
 		}
 	}
 	@media screen and (min-width: 280px) and (max-width: 1080px) {

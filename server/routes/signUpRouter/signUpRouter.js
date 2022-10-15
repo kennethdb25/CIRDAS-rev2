@@ -7,7 +7,7 @@ const citizenUser = require("../../models/citizenSchema");
 
 const imgconfig = multer.diskStorage({
 	destination: (req, file, callback) => {
-		callback(null, "./uploads");
+		callback(null, "./client/src/components/AdminDashboard/assets/ValidationIdUploads");
 	},
 	filename: (req, file, callback) => {
 		callback(null, `${Date.now()}. ${file.originalname}`);

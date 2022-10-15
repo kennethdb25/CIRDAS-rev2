@@ -1,8 +1,9 @@
-import React, { useState, useRef, useContext, useEffect } from "react";
+/* eslint-disable no-unused-vars */
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
-import { SearchOutlined, PlusCircleOutlined, EyeOutlined } from "@ant-design/icons";
+import { SearchOutlined, EyeOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
-import { Button, Input, Space, Table, Modal, Typography, Drawer, Form, Row, Col, Image } from "antd";
+import { Button, Input, Space, Table, Modal, Typography, Row, Col, Image } from "antd";
 const { Title, Text } = Typography;
 const { TextArea } = Input;
 
@@ -10,7 +11,6 @@ export default function WantedPersonTable() {
 	const [viewData, setViewData] = useState(null);
 	const [data, setData] = useState([]);
 	const [searchText, setSearchText] = useState("");
-	const [visible, setVisible] = useState(false);
 	const [isView, setIsView] = useState(false);
 	const [searchedColumn, setSearchedColumn] = useState("");
 	const searchInput = useRef(null);
@@ -37,10 +37,6 @@ export default function WantedPersonTable() {
 		const dataComp = await res.json();
 		setData([dataComp]);
 		setLoading(false);
-	};
-
-	const onClose = () => {
-		setVisible(false);
 	};
 
 	const handleSearch = (selectedKeys, confirm, dataIndex) => {

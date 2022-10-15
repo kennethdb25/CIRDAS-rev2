@@ -1,59 +1,36 @@
-import React, { useContext, useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
-import { BsFileEarmarkMedicalFill, BsFillFileEarmarkXFill } from "react-icons/bs";
-import { BiGroup } from "react-icons/bi";
+
 import { cardStyles } from "./ReusableStyles";
-import { LoginContext } from "../../../../context/Context";
 
 export default function Analytics() {
 	return (
 		<Section>
-			<div className="analytic ">
-				<div className="content">
-					<h4>Filed Missing Person</h4>
-					<h2>0</h2>
-				</div>
-				<div className="logo">
-					<BsFileEarmarkMedicalFill />
-				</div>
-			</div>
 			<div className="analytic">
-				<div className="logo">
-					<BsFillFileEarmarkXFill />
-				</div>
-				<div className="content">
-					<h4>Pending Status</h4>
-					<h2>0</h2>
-				</div>
-			</div>
-			<div className="analytic">
-				<div className="logo">
-					<BiGroup />
-				</div>
-				<div className="content">
-					<h4>Missing Status</h4>
-					<h2>0</h2>
-				</div>
-			</div>
-			<div className="analytic ">
-				<div className="content">
-					<h4>Found Status</h4>
-					<h2>0</h2>
-				</div>
-				<div className="logo">
-					<BiGroup />
-				</div>
+				<iframe
+					className="iframe"
+					style={{
+						height: "400px",
+						border: "none",
+						borderRadius: "2px",
+						width: "100%",
+						boxShadow: "0 2px 10px 0 rgba(70, 76, 79, .2)",
+						backgroundColor: "white",
+					}}
+					title="Total Count of Wanted Person"
+					src="https://charts.mongodb.com/charts-cirdas-ngmsy/embed/charts?id=5b210702-76e9-4f47-803b-1d63fc2dc99b&maxDataAge=10&theme=light&autoRefresh=true"
+				></iframe>
 			</div>
 		</Section>
 	);
 }
 const Section = styled.section`
 	display: grid;
-	grid-template-columns: repeat(2, 1fr);
+	grid-template-columns: 1fr;
 	gap: 1rem;
 	.analytic {
 		${cardStyles};
-		padding: 1rem;
+		padding: 1.5rem 1.5rem;
 		display: flex;
 		justify-content: space-evenly;
 		align-items: center;
@@ -65,6 +42,8 @@ const Section = styled.section`
 			svg {
 				color: white;
 			}
+		}
+		
 		}
 		.logo {
 			background-color: black;

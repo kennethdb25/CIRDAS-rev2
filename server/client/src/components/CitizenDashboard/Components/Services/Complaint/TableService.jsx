@@ -68,6 +68,7 @@ export const getColumnSearchProps = (dataIndex, searchInput, setSearchText, setS
 			<SearchOutlined
 				style={{
 					color: filtered ? "#1890ff" : undefined,
+					fontSize: "10px",
 				}}
 			/>
 		</>

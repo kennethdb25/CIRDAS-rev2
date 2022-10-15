@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useRef, useContext, useEffect } from "react";
 import styled from "styled-components";
 import { SearchOutlined, PlusCircleOutlined, EyeOutlined, EditOutlined } from "@ant-design/icons";
@@ -284,7 +285,7 @@ export default function MissingPersonTable(props) {
 		{
 			title: (
 				<Button type="primary" shape="round" icon={<PlusCircleOutlined />} onClick={() => setVisible(true)}>
-					File a Missing Person
+					FILE A MISSING PERSON
 				</Button>
 			),
 			dataIndex: "",
@@ -319,13 +320,13 @@ export default function MissingPersonTable(props) {
 	return (
 		<Section>
 			<div className="table">
-				<Title level={4}>Filed Cases</Title>
+				<Title level={4}>FILED CASES</Title>
 				<Table columns={columns} dataSource={data[0]?.body} pagination={pagination} loading={loading} />
-				<Title level={4}>Provincial List of Missing Person</Title>
+				<Title level={4}>PROVINCIAL LIST OF MISSING PERSON</Title>
 				<Table columns={columnsAll} dataSource={allData[0]?.body} pagination={pagination} loading={loading2} />
 			</div>
 			<Drawer
-				title="File A Missing Person"
+				title="FILE A MISSING PERSON"
 				placement="top"
 				width={500}
 				onClose={onClose}

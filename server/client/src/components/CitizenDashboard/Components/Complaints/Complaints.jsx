@@ -1,26 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import scrollreveal from "scrollreveal";
 import Navbar from "./Navbar";
-import Analytics from "./Analytics";
-import FAQ from "./FAQ";
 import ComplaintTable from "./ComplaintTable";
-import { LoginContext } from "../../../../context/Context";
-import { getFiledComplaint, getPendingComplaints, getReviewedComplaints, getUnderInvestigation } from "../Services/Complaint/APICall";
 
-export default function Complaints() {
-	const [data, setData] = useState("");
-	const [getPending, setGetPending] = useState("");
-	const [getReviewed, setGetReviewed] = useState("");
-	const [getUnder, setGetUnder] = useState("");
-	const { loginData } = useContext(LoginContext);
+export default function Complaints(props) {
+	// COMPLAINT TABLE
+	const { fetchData, data, loading } = props;
 
 	useEffect(() => {
-		getFiledComplaint(loginData, setData);
-		getPendingComplaints(loginData, setGetPending);
-		getReviewedComplaints(loginData, setGetReviewed);
-		getUnderInvestigation(loginData, setGetUnder);
 		const sr = scrollreveal({
 			origin: "bottom",
 			distance: "80px",
@@ -43,17 +32,9 @@ export default function Complaints() {
 		<Section>
 			<Navbar />
 			<div className="grid">
-				<div className="row__two">
-					<Analytics data={data} getPending={getPending} getReviewed={getReviewed} getUnder={getUnder} />
-					<FAQ />
-				</div>
+				<div className="row__two"></div>
 				<div className="row__one">
-					<ComplaintTable
-						getFiledComplaint={getFiledComplaint}
-						getPendingComplaints={getPendingComplaints}
-						getReviewedComplaints={getReviewedComplaints}
-						getUnderInvestigation={getUnderInvestigation}
-					/>
+					<ComplaintTable fetchData={fetchData} data={data} loading={loading} />
 				</div>
 			</div>
 		</Section>
