@@ -27,7 +27,7 @@ export default function ComplaintTable(props) {
 	const [isEdit, setIsEdit] = useState(false);
 	const [pagination, setPagination] = useState({
 		defaultCurrent: 1,
-		pageSize: 6,
+		pageSize: 10,
 		total: data[0]?.body.length,
 	});
 

@@ -26,7 +26,7 @@ export default function ListOfAbout() {
 				<div className="faq">
 					<div className="info">
 						<MdImportantDevices />
-						<h4>How to file a complaint?</h4>
+						<h4>Data Privacy Consent</h4>
 					</div>
 					<IoIosArrowForward />
 				</div>
