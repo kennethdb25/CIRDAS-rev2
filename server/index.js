@@ -1,6 +1,7 @@
 const express = require("express");
 require("./db/conn");
 require("dotenv").config();
+const path = require("path");
 const complaintRouter = require("./routes/complaints/complaintsRouter");
 const signupRouter = require("./routes/signUpRouter/signUpRouter");
 const router = require("./routes/signInRouter/signInRouter");
@@ -32,6 +33,14 @@ app.use(forgotrouter);
 app.use(policeforgot);
 
 app.use("/uploads", express.static("./uploads"));
+
+if (process.env.NODE_ENV === "production") {
+	app.use(express.static(path.join(__dirname, "client/build")));
+
+	app.get("*", function (req, res) {
+		res.sendFile(path.join(__dirname, "client/build", "index.html"));
+	});
+}
 
 app.listen(PORT, () => {
 	console.log(`Server is running at port: ${PORT}`);

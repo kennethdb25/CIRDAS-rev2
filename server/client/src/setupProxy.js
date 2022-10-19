@@ -15,7 +15,7 @@ module.exports = function (app) {
 			"/getAll",
 		],
 		createProxyMiddleware({
-			target: "http://localhost:5000",
+			target: "http://localhost:5000" || "https://cirdasv1.herokuapp.com:5000",
 		})
 	);
 };
