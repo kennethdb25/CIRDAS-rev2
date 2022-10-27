@@ -67,6 +67,68 @@ missingpersonRouter.post("/missing-person", upload.single("photo"), async (req, 
 	}
 });
 
+missingpersonRouter.patch("missing-person/:missingpersonid", async (req, res) => {
+	try {
+		const missingpersonid = req.params.missingpersonid;
+		// const { filename } = req.file;
+		const {
+			id,
+			contactperson,
+			fullname,
+			dob,
+			age,
+			gender,
+			race,
+			eyes,
+			hair,
+			height,
+			weight,
+			wearing,
+			address,
+			year,
+			timeAndDate,
+			municipal,
+			characteristics,
+			contact,
+			lastseen,
+			status,
+		} = req.body;
+
+		const getMissingPerson = await missingPersonSchema.findOne({ miisingpersonid: missingpersonid });
+
+		if (!getMissingPerson) {
+			res.status(422).json({ error: `No missing person match with ${miisingpersonid}` });
+		} else {
+			if (id) getMissingPerson.id = id;
+			if (contactperson) getMissingPerson.contactperson = contactperson;
+			if (fullname) getMissingPerson.fullname = fullname;
+			if (dob) getMissingPerson.dob = dob;
+			if (age) getMissingPerson.age = age;
+			if (gender) getMissingPerson.gender = gender;
+			if (race) getMissingPerson.race = race;
+			if (eyes) getMissingPerson.eyes = eyes;
+			if (hair) getMissingPerson.hair = hair;
+			if (height) getMissingPerson.height = height;
+			if (weight) getMissingPerson.weight = weight;
+			if (wearing) getMissingPerson.wearing = wearing;
+			if (address) getMissingPerson.address = address;
+			if (year) getMissingPerson.year = year;
+			if (municipal) getMissingPerson.municipal = municipal;
+			if (timeAndDate) getMissingPerson.timeAndDate = timeAndDate;
+			if (characteristics) getMissingPerson.characteristics = characteristics;
+			if (contact) getMissingPerson.contact = contact;
+			if (lastseen) getMissingPerson.lastseen = lastseen;
+			if (status) getMissingPerson.status = status;
+
+			const updatedData = await getMissingPerson.save();
+
+			res.status(201).json({ status: 201, updatedData });
+		}
+	} catch (error) {
+		res.status(404).json(error);
+	}
+});
+
 // get all missing person
 missingpersonRouter.get("/missing-person", async (req, res) => {
 	try {
@@ -112,10 +174,10 @@ missingpersonRouter.get("/missing-persons/data", async (req, res) => {
 	try {
 		const getMissingCount = await missingPersonSchema.aggregate([
 			{
-				"$group": {
-					"_id": "$year",
-					"data": {
-						"$count": {},
+				$group: {
+					_id: "$year",
+					data: {
+						$count: {},
 					},
 				},
 			},

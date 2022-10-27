@@ -1,10 +1,12 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useRef, useContext, useEffect } from "react";
 import styled from "styled-components";
-import { SearchOutlined, PlusCircleOutlined, EyeOutlined, EditOutlined } from "@ant-design/icons";
+import { SearchOutlined, PlusCircleOutlined, EyeOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
-import { Button, Input, Space, Table, Modal, Typography, Drawer, Form, Row, Col, Image } from "antd";
+import { toast } from "react-toastify";
 
+import { MunicipalData } from "../../../../data/CitizensData";
+import { Button, Input, Space, Table, Modal, message, Select, DatePicker, Typography, Drawer, Form, Row, Col, Image, Radio, Upload } from "antd";
 import { LoginContext } from "../../../../context/Context";
 import MissingPersonForm from "./MissingPersonForm";
 const { Title, Text } = Typography;
@@ -12,11 +14,13 @@ const { TextArea } = Input;
 
 export default function MissingPersonTable(props) {
 	const [viewData, setViewData] = useState(null);
+	const [updateData, setUpdateData] = useState(null);
 	const [data, setData] = useState([]);
 	const [allData, setAllData] = useState([]);
 	const [searchText, setSearchText] = useState("");
 	const [visible, setVisible] = useState(false);
 	const [isView, setIsView] = useState(false);
+	const [isEdit, setIsEdit] = useState(false);
 	const [searchedColumn, setSearchedColumn] = useState("");
 	const searchInput = useRef(null);
 	const { loginData, setLoginData } = useContext(LoginContext);
@@ -28,12 +32,94 @@ export default function MissingPersonTable(props) {
 		total: data[0]?.body.length,
 	});
 	const [form] = Form.useForm();
+	const initialValues = {
+		address: updateData?.address,
+		age: updateData?.age,
+		characteristics: updateData?.characteristics,
+		contact: updateData?.contact,
+		contactperson: updateData?.contactperson,
+		dob: new Date(updateData?.dob).toLocaleDateString(),
+		eyes: updateData?.eyes,
+		fullname: updateData?.fullname,
+		gender: updateData?.gender,
+		hair: updateData?.hair,
+		height: updateData?.height,
+		id: updateData?.id,
+		lastseen: new Date(updateData?.lastseen).toLocaleDateString(),
+		missingpersonid: updateData?.missingpersonid,
+		municipal: updateData?.municipal,
+		race: updateData?.race,
+		status: updateData?.status,
+		timeAndDate: updateData?.timeAndDate,
+		wearing: updateData?.wearing,
+		weight: updateData?.weight,
+		year: updateData?.year,
+	};
 
 	useEffect(() => {
 		fetchData();
 		fetchAllData();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+
+	const onFinish = async (values) => {
+		console.log(values);
+		const data = await fetch(`/missing-person/${updateData?.missingpersonid}`, {
+			method: "PATCH",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(values),
+		});
+
+		const res = await data.json();
+		if (res.status === 201) {
+			toast.success("Updated Successfully", { position: toast.POSITION.TOP_CENTER, autoClose: 1000 });
+			onClose();
+			fetchData();
+			fetchAllData();
+			form.resetFields();
+		} else {
+			toast.error(res.error, { position: toast.POSITION.TOP_CENTER });
+		}
+	};
+
+	const onFinishFailed = (errorInfo) => {
+		message.error("Please input all the required details");
+	};
+
+	// const imgprops = {
+	// 	beforeUpload: (file) => {
+	// 		const isIMG = file.type.startsWith("image");
+
+	// 		if (!isIMG) {
+	// 			message.error(`${file.name} is not an image`);
+	// 		}
+
+	// 		return isIMG || Upload.LIST_IGNORE;
+	// 	},
+	// 	onChange: (info) => {
+	// 		console.log(info.fileList);
+	// 	},
+	// };
+
+	// const onPreview = async (file) => {
+	// 	let src = file.url;
+
+	// 	if (!src) {
+	// 		src = await new Promise((resolve) => {
+	// 			const reader = new FileReader();
+	// 			reader.readAsDataURL(file.originFileObj);
+
+	// 			reader.onload = () => resolve(reader.result);
+	// 		});
+	// 	}
+
+	// 	const image = new Image();
+	// 	image.src = src;
+	// 	const imgWindow = window.open(src);
+	// 	imgWindow?.document.write(image.outerHTML);
+	// };
 
 	const fetchData = async () => {
 		setLoading(true);
@@ -63,6 +149,7 @@ export default function MissingPersonTable(props) {
 
 	const onClose = () => {
 		setVisible(false);
+		setIsEdit(false);
 		form.resetFields();
 	};
 
@@ -70,6 +157,12 @@ export default function MissingPersonTable(props) {
 		confirm();
 		setSearchText(selectedKeys[0]);
 		setSearchedColumn(dataIndex);
+	};
+
+	const UpdateRecord = (record) => {
+		setIsEdit(true);
+		setVisible(true);
+		setUpdateData(record);
 	};
 
 	const handleReset = (clearFilters) => {
@@ -305,7 +398,18 @@ export default function MissingPersonTable(props) {
 							View
 						</Button>
 						{record.status !== "Found" ? (
-							<Button type="success" shape="round" icon={<EditOutlined />}>
+							<Button
+								type="success"
+								shape="round"
+								icon={<EditOutlined />}
+								onClick={() => {
+									UpdateRecord(record);
+									console.log(record);
+									setTimeout(() => {
+										form.resetFields();
+									}, 10);
+								}}
+							>
 								Edit
 							</Button>
 						) : (
@@ -326,7 +430,7 @@ export default function MissingPersonTable(props) {
 				<Table columns={columnsAll} dataSource={allData[0]?.body} pagination={pagination} loading={loading2} />
 			</div>
 			<Drawer
-				title="FILE A MISSING PERSON"
+				title={isEdit ? "UPDATE MISSING PERSON" : "FILE A MISSING PERSON"}
 				placement="top"
 				width={500}
 				onClose={onClose}
@@ -338,7 +442,450 @@ export default function MissingPersonTable(props) {
 				}}
 				extra={<Space></Space>}
 			>
-				<MissingPersonForm fetchData={fetchData} fetchAllData={fetchAllData} onClose={onClose} />
+				{isEdit ? (
+					<>
+						<Form
+							orm
+							form={form}
+							labelCol={{
+								span: 8,
+							}}
+							initialValues={initialValues}
+							layout="horizontal"
+							onFinish={onFinish}
+							onFinishFailed={onFinishFailed}
+							autoComplete="off"
+							style={{
+								width: "100%",
+								maxHeight: "100vh",
+							}}
+						>
+							<Row>
+								<Col xs={{ span: 0 }} md={{ span: 4 }}></Col>
+								<Col xs={{ span: 24 }} md={{ span: 16 }}>
+									<Row gutter={12}>
+										<Col xs={{ span: 24 }} md={{ span: 8 }} layout="vertical">
+											<Form.Item
+												label="Contact Person Name"
+												name="contactperson"
+												labelCol={{
+													span: 24,
+												}}
+												wrapperCol={{
+													span: 24,
+												}}
+												hasFeedback
+											>
+												<Input placeholder="Enter your first name" disabled />
+											</Form.Item>
+										</Col>
+										<Col xs={{ span: 24 }} md={{ span: 8 }}>
+											<Form.Item
+												label="Missing Person's Fullname"
+												name="fullname"
+												labelCol={{
+													span: 24,
+												}}
+												wrapperCol={{
+													span: 24,
+												}}
+												hasFeedback
+												rules={[
+													{
+														required: true,
+														message: "Please input missing person's fullname!",
+													},
+													{
+														pattern: /^[a-zA-Z_ ]*$/,
+														message: "Fullname should have no number or special character.",
+													},
+												]}
+											>
+												<Input placeholder="Enter missing person's fullname" />
+											</Form.Item>
+										</Col>
+										<Col xs={{ span: 24 }} md={{ span: 8 }}>
+											<Form.Item
+												label="Missing Person's Birth Date"
+												name="dob"
+												labelCol={{
+													span: 24,
+													//offset: 2
+												}}
+												wrapperCol={{
+													span: 24,
+												}}
+												hasFeedback
+												rules={[
+													{
+														required: true,
+														message: "Please enter missing person's birth date!",
+													},
+												]}
+											>
+												<Input />
+											</Form.Item>
+										</Col>
+									</Row>
+									<Row gutter={12}>
+										<Col xs={{ span: 24 }} md={{ span: 8 }}>
+											<Form.Item
+												label="Age"
+												name="age"
+												labelCol={{
+													span: 24,
+												}}
+												wrapperCol={{
+													span: 24,
+												}}
+												hasFeedback
+												rules={[
+													{
+														required: true,
+														message: "Please input missing person's age!",
+													},
+													{
+														pattern: /^[0-9]*$/,
+														message: "Age should be a number.",
+													},
+												]}
+											>
+												<Input placeholder="Enter missing person's age" />
+											</Form.Item>
+										</Col>
+										<Col xs={{ span: 24 }} md={{ span: 8 }}>
+											<Form.Item
+												label="Gender"
+												name="gender"
+												labelCol={{
+													span: 24,
+													//offset: 2
+												}}
+												wrapperCol={{
+													span: 24,
+												}}
+												hasFeedback
+												rules={[
+													{
+														required: true,
+														message: "Please select your gender!",
+													},
+												]}
+											>
+												<Radio.Group style={{ width: "100%" }}>
+													<Radio value="Male">Male</Radio>
+													<Radio value="Female">Female</Radio>
+												</Radio.Group>
+											</Form.Item>
+										</Col>
+										<Col xs={{ span: 24 }} md={{ span: 8 }}>
+											<Form.Item
+												label="Nationality"
+												name="race"
+												labelCol={{
+													span: 24,
+												}}
+												wrapperCol={{
+													span: 24,
+												}}
+												hasFeedback
+												rules={[
+													{
+														required: true,
+														message: "Please input missing person's Race!",
+													},
+													{
+														pattern: /^[a-zA-Z_ ]*$/,
+														message: "Race should have no number or special",
+													},
+												]}
+											>
+												<Input placeholder="Enter missing person's Race" />
+											</Form.Item>
+										</Col>
+									</Row>
+									<Row gutter={12}>
+										<Col xs={{ span: 24 }} md={{ span: 8 }}>
+											<Form.Item
+												label="Eye Color"
+												name="eyes"
+												labelCol={{
+													span: 24,
+												}}
+												wrapperCol={{
+													span: 24,
+												}}
+												hasFeedback
+												rules={[
+													{
+														required: true,
+														message: "Please input missing person's Eye Color!",
+													},
+													{
+														pattern: /^[a-zA-Z_ ]*$/,
+														message: "Eye Color should have no number or special",
+													},
+												]}
+											>
+												<Input placeholder="Enter missing person's Eye Color " />
+											</Form.Item>
+										</Col>
+										<Col xs={{ span: 24 }} md={{ span: 8 }}>
+											<Form.Item
+												label="Hair Color"
+												name="hair"
+												labelCol={{
+													span: 24,
+												}}
+												wrapperCol={{
+													span: 24,
+												}}
+												hasFeedback
+												rules={[
+													{
+														required: true,
+														message: "Please input missing person's Hair Color!",
+													},
+													{
+														pattern: /^[a-zA-Z_ ]*$/,
+														message: "Hair Color should have no number or special",
+													},
+												]}
+											>
+												<Input placeholder="Enter missing person's age" />
+											</Form.Item>
+										</Col>
+										<Col xs={{ span: 24 }} md={{ span: 8 }}>
+											<Form.Item
+												label="Wearing"
+												name="wearing"
+												labelCol={{
+													span: 24,
+												}}
+												wrapperCol={{
+													span: 24,
+												}}
+												hasFeedback
+												rules={[
+													{
+														required: true,
+														message: "Please input missing person's Wearing!",
+													},
+													{
+														pattern: /^[a-zA-Z_ ]*$/,
+														message: "Wearing should have no number or special",
+													},
+												]}
+											>
+												<Input placeholder="Enter missing person's Wearing" />
+											</Form.Item>
+										</Col>
+									</Row>
+									<Row gutter={12}>
+										<Col xs={{ span: 24 }} md={{ span: 8 }}>
+											<Form.Item
+												label="Height (in cm)"
+												name="height"
+												labelCol={{
+													span: 24,
+												}}
+												wrapperCol={{
+													span: 24,
+												}}
+												hasFeedback
+												rules={[
+													{
+														required: true,
+														message: "Please input missing person's height!",
+													},
+													{
+														pattern: /^[0-9]*$/,
+														message: "Height should be a number",
+													},
+												]}
+											>
+												<Input placeholder="Enter missing person's height (in cm)" />
+											</Form.Item>
+										</Col>
+										<Col xs={{ span: 24 }} md={{ span: 8 }}>
+											<Form.Item
+												label="Weight (in kg)"
+												name="weight"
+												labelCol={{
+													span: 24,
+												}}
+												wrapperCol={{
+													span: 24,
+												}}
+												hasFeedback
+												rules={[
+													{
+														required: true,
+														message: "Please input missing person's weight",
+													},
+													{
+														pattern: /^[0-9]*$/,
+														message: "Weight should be a number",
+													},
+												]}
+											>
+												<Input placeholder="Enter missing person's age" />
+											</Form.Item>
+										</Col>
+									</Row>
+									<Row gutter={12}>
+										<Col xs={{ span: 24 }} md={{ span: 8 }}>
+											<Form.Item
+												label="Last Seen Date"
+												name="lastseen"
+												labelCol={{
+													span: 24,
+													//offset: 2
+												}}
+												wrapperCol={{
+													span: 24,
+												}}
+												hasFeedback
+												rules={[
+													{
+														required: true,
+														message: "Please enter missing person's last seen date!",
+													},
+												]}
+											>
+												<Input />
+											</Form.Item>
+										</Col>
+										<Col xs={{ span: 24 }} md={{ span: 8 }}>
+											<Form.Item
+												label="Contact Number"
+												name="contact"
+												labelCol={{
+													span: 24,
+												}}
+												wrapperCol={{
+													span: 24,
+												}}
+												hasFeedback
+												rules={[
+													{
+														required: true,
+														message: "Please input your contact number!",
+													},
+													{
+														pattern: /^[0-9]*$/,
+														message: "Contact number should be number.",
+													},
+													{ max: 11 },
+													{ min: 11 },
+												]}
+											>
+												<Input placeholder="Enter your contact number" />
+											</Form.Item>
+										</Col>
+									</Row>
+									<Row gutter={12}>
+										<Col xs={{ span: 24 }} md={{ span: 16 }}>
+											<Form.Item
+												label="Address"
+												name="address"
+												labelCol={{
+													span: 24,
+													//offset: 2
+												}}
+												wrapperCol={{
+													span: 24,
+												}}
+												hasFeedback
+												rules={[
+													{
+														required: true,
+														message: "Please enter your address!",
+													},
+												]}
+											>
+												<Input placeholder="Enter your House No./Street Name/Barangay" />
+											</Form.Item>
+										</Col>
+										<Col xs={{ span: 24 }} md={{ span: 8 }}>
+											<Form.Item
+												label="Municipality"
+												name="municipal"
+												labelCol={{
+													span: 24,
+												}}
+												wrapperCol={{
+													span: 24,
+												}}
+												hasFeedback
+												rules={[
+													{
+														required: true,
+														message: "Please select your Municipality!",
+													},
+												]}
+											>
+												<Select placeholder="Select your Municipality">
+													{MunicipalData.map((value, index) => (
+														<Select.Option key={index} value={value.name}>
+															{value.label}
+														</Select.Option>
+													))}
+												</Select>
+											</Form.Item>
+										</Col>
+									</Row>
+									<Row gutter={12}>
+										<Col xs={{ span: 24 }} md={{ span: 24 }}>
+											<Form.Item
+												label="How"
+												name="characteristics"
+												labelCol={{
+													span: 24,
+													//offset: 2
+												}}
+												wrapperCol={{
+													span: 24,
+												}}
+												hasFeedback
+												rules={[
+													{
+														required: true,
+														message: "Please enter identifying characteristic",
+													},
+												]}
+											>
+												<TextArea
+													showCount
+													maxLength={500}
+													style={{
+														height: 120,
+													}}
+												/>
+											</Form.Item>
+										</Col>
+									</Row>
+									<Button type="primary" htmlType="submit">
+										Update Missing Person
+									</Button>
+								</Col>
+								<Col xs={{ span: 24 }} md={{ span: 24 }}>
+									<Form.Item name="id">
+										<Input hidden />
+									</Form.Item>
+								</Col>
+								<Col xs={{ span: 24 }} md={{ span: 24 }}>
+									<Input hidden />
+								</Col>
+								<Col xs={{ span: 0 }} md={{ span: 4 }}></Col>
+							</Row>
+						</Form>
+					</>
+				) : (
+					<>
+						<MissingPersonForm fetchData={fetchData} fetchAllData={fetchAllData} onClose={onClose} />
+					</>
+				)}
 			</Drawer>
 			<div className="modal">
 				<Modal title="Missing Person Details" width={800} open={isView} onCancel={() => setIsView(false)} onOk={() => setIsView(false)}>

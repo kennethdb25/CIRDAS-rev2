@@ -51,7 +51,6 @@ export default function ComplaintTable(props) {
 	const classes = useStyles();
 
 	const onFinish = async (values) => {
-		console.log(values);
 		const data = await fetch(`/citizen/complaint/${updateData?.complaintid}`, {
 			method: "PATCH",
 			headers: {
@@ -200,7 +199,7 @@ export default function ComplaintTable(props) {
 				<Table columns={columns} dataSource={data[0]?.body} pagination={pagination} loading={loading} />
 			</div>
 			<Drawer
-				title={isEdit ? "UPDATECOMPLAINT" : "FILE A COMPLAINT"}
+				title={isEdit ? "UPDATE COMPLAINT" : "FILE A COMPLAINT"}
 				placement="top"
 				width={500}
 				onClose={onClose}
