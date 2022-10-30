@@ -103,6 +103,7 @@ const PoliceForgotPasswordContent = () => {
 					<>
 						<Typography fontSize="12px">No worries! Just enter your email and we wil send you a reset</Typography>
 						<Form
+							form={form}
 							name="basic"
 							labelCol={{ span: 24 }}
 							wrapperCol={{ span: 24 }}

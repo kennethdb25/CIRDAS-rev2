@@ -74,6 +74,11 @@ const missingPersonSchema = new mongoose.Schema({
 		required: true,
 		trim: true,
 	},
+	month: {
+		type: String,
+		required: false,
+		trim: true,
+	},
 	year: {
 		type: String,
 		required: false,

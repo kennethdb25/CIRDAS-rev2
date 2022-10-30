@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { IoIosArrowForward } from "react-icons/io";
 import { MdImportantDevices } from "react-icons/md";
-import { cardStyles } from "../Dashboard/ReusableStyles";
+import { cardStyles } from "./ReusableStyles";
 import { Modal, Typography } from "antd";
 export default function ListOfAbout() {
 	const [isView, setIsView] = useState(false);

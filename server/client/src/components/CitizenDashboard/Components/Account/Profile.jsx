@@ -8,7 +8,6 @@ import { LoginContext } from "../../../../context/Context";
 export default function Profile() {
 	// eslint-disable-next-line no-unused-vars
 	const { loginData, setLoginData } = useContext(LoginContext);
-	console.log(loginData);
 	return (
 		<Section>
 			<div className="image">

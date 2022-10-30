@@ -25,6 +25,16 @@ const adminSchema = mongoose.Schema({
 		required: true,
 		trim: true,
 	},
+	dob: {
+		type: String,
+		required: true,
+		trim: true,
+	},
+	gender: {
+		type: String,
+		required: true,
+		trim: true,
+	},
 	year: {
 		type: String,
 		required: true,
@@ -34,7 +44,12 @@ const adminSchema = mongoose.Schema({
 		required: true,
 		trim: true,
 	},
-	provincial: {
+	address: {
+		type: String,
+		required: true,
+		trim: true,
+	},
+	role: {
 		type: String,
 		required: true,
 		trim: true,
@@ -58,6 +73,15 @@ const adminSchema = mongoose.Schema({
 		type: String,
 		required: true,
 		minLength: 8,
+	},
+	validuser: {
+		type: String,
+		required: true,
+	},
+	accountstatus: {
+		type: String,
+		required: true,
+		trim: true,
 	},
 	tokens: [
 		{

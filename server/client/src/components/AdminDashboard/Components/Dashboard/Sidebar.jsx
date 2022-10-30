@@ -12,15 +12,26 @@ import scrollreveal from "scrollreveal";
 import Dashboard from "./Dashboard";
 import { LoginContext } from "../../../../context/Context";
 import { ToastContainer, toast } from "react-toastify";
-import { UilEstate, UilClipboardAlt, UilSearch, UilUsersAlt, UilBuilding, UilSetting, UilUserPlus, UilFileEditAlt } from "@iconscout/react-unicons";
+import {
+	UilEstate,
+	UilClipboardAlt,
+	UilSearch,
+	UilUsersAlt,
+	UilBuilding,
+	UilSetting,
+	UilUserPlus,
+	UilFileEditAlt,
+	UilFileQuestion,
+} from "@iconscout/react-unicons";
+import UserAccount from "../UserAccount/UserAccount";
+import About from "../About/About";
+import PoliceStationDetails from "../PoliceStationDetails/PoliceStationDetails";
 
 export default function Sidebar() {
 	const { loginData, setLoginData } = useContext(LoginContext);
 	const [currentLink, setCurrentLink] = useState(1);
 	const [navbarState, setNavbarState] = useState(false);
 	const [visible, setVisible] = useState(false);
-	const html = document.querySelector("html");
-	html.addEventListener("click", () => setNavbarState(false));
 
 	const history = useNavigate();
 
@@ -31,7 +42,7 @@ export default function Sidebar() {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
-				"Authorization": token,
+				Authorization: token,
 				Accept: "application/json",
 			},
 			credentials: "include",
@@ -57,7 +68,7 @@ export default function Sidebar() {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
-				"Authorization": token,
+				Authorization: token,
 			},
 		});
 		const getData = await res.json();
@@ -94,6 +105,8 @@ export default function Sidebar() {
       .links>ul>li:nth-of-type(4),
       .links>ul>li:nth-of-type(5),
       .links>ul>li:nth-of-type(6),
+			.links>ul>li:nth-of-type(7),
+			.links>ul>li:nth-of-type(8),
       .logout
       `,
 			{
@@ -159,13 +172,7 @@ export default function Sidebar() {
 							<li key={6} className={currentLink === 6 ? "active" : "none"} onClick={() => setCurrentLink(6)}>
 								<a>
 									<UilUserPlus />
-									<span> Accounts</span>
-								</a>
-							</li>
-							<li key={7} className={currentLink === 7 ? "active" : "none"} onClick={() => setCurrentLink(7)}>
-								<a>
-									<UilFileEditAlt />
-									<span> List of Reports</span>
+									<span> User Account</span>
 								</a>
 							</li>
 							<li
@@ -178,7 +185,20 @@ export default function Sidebar() {
 							>
 								<a>
 									<UilSetting />
-									<span> Settings</span>
+									<span> Account</span>
+								</a>
+							</li>
+							<li
+								key={9}
+								className={currentLink === 9 ? "active" : "none"}
+								onClick={() => {
+									setCurrentLink(9);
+									setVisible(true);
+								}}
+							>
+								<a>
+									<UilFileQuestion />
+									<span> About</span>
 								</a>
 							</li>
 						</ul>
@@ -235,13 +255,7 @@ export default function Sidebar() {
 						<li key={6} className={currentLink === 6 ? "active" : "none"} onClick={() => setCurrentLink(6)}>
 							<a>
 								<UilUserPlus />
-								<span> Accounts</span>
-							</a>
-						</li>
-						<li key={7} className={currentLink === 7 ? "active" : "none"} onClick={() => setCurrentLink(7)}>
-							<a>
-								<UilFileEditAlt />
-								<span> List of Reports</span>
+								<span> User Account</span>
 							</a>
 						</li>
 						<li
@@ -254,7 +268,20 @@ export default function Sidebar() {
 						>
 							<a>
 								<UilSetting />
-								<span> Settings</span>
+								<span> Account</span>
+							</a>
+						</li>
+						<li
+							key={9}
+							className={currentLink === 9 ? "active" : "none"}
+							onClick={() => {
+								setCurrentLink(9);
+								setVisible(true);
+							}}
+						>
+							<a>
+								<UilFileQuestion />
+								<span> About</span>
 							</a>
 						</li>
 						<div className="logout">
@@ -278,28 +305,32 @@ export default function Sidebar() {
 					<Dashboard />
 				</>
 			) : currentLink === 2 ? (
-				<>Complaints</>
+				<>
+					<p>MissingPerson</p>
+				</>
 			) : currentLink === 3 ? (
-				<>MissingPerson</>
+				<>
+					<p>MissingPerson</p>
+				</>
 			) : currentLink === 4 ? (
-				<>WantedPerson</>
+				<>
+					<p>MissingPerson</p>
+				</>
 			) : currentLink === 5 ? (
-				<>PoliceStationDetails</>
+				<>
+					<PoliceStationDetails />
+				</>
 			) : currentLink === 6 ? (
 				<>
-					<Drawer
-						title="Account Details"
-						placement="top"
-						width={500}
-						onClose={onClose}
-						open={visible}
-						height={630}
-						style={{
-							display: "flex",
-							justifyContent: "center",
-						}}
-						extra={<Space></Space>}
-					></Drawer>
+					<UserAccount />
+				</>
+			) : currentLink === 8 ? (
+				<>
+					<UserAccount />
+				</>
+			) : currentLink === 9 ? (
+				<>
+					<About />
 				</>
 			) : null}
 		</>

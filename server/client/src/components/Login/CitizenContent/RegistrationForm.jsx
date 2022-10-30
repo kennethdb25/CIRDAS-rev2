@@ -118,6 +118,7 @@ const RegistrationForm = (props) => {
 		<>
 			{step1 ? (
 				<Form
+				form={form}
 					labelCol={{
 						span: 8,
 					}}

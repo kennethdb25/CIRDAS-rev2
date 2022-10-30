@@ -30,6 +30,11 @@ const wantedPersonSchema = new mongoose.Schema({
 		required: false,
 		trim: true,
 	},
+	month: {
+		type: String,
+		required: false,
+		trim: true,
+	},
 	timeAndDate: {
 		type: String,
 		required: false,

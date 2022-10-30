@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Analytics from "./Analytics";
 import RateMissingPerson from "./RateMissingPerson";
@@ -7,7 +7,6 @@ import Navbar from "./Navbar";
 import Profile from "./Profile";
 import RateWanterdPerson from "./RateWanterdPerson";
 import scrollreveal from "scrollreveal";
-import { LoginContext } from "../../../../context/Context";
 
 export default function Dashboard() {
 	const [data, setData] = useState("");
@@ -15,10 +14,9 @@ export default function Dashboard() {
 	const [countMissing, setCountMissing] = useState("");
 	const [countWanted, setCountWanted] = useState("");
 	// const [graphMissing, setGraphMissing] = useState([]);
-	const { loginData } = useContext(LoginContext);
 
-	const getFiledMissingPerson = async () => {
-		const res = await fetch(`/missing-person`, {
+	const provincialFiledMissingPerson = async () => {
+		const res = await fetch(`/missing-person/status`, {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -28,7 +26,7 @@ export default function Dashboard() {
 		setMissing(dataMiss.body.length);
 	};
 
-	const getFiledComplaint = async () => {
+	const provincialFiledComplaint = async () => {
 		const res = await fetch(`/citizen/complaint`, {
 			method: "GET",
 			headers: {
@@ -39,33 +37,33 @@ export default function Dashboard() {
 		setData(dataComp.body.length);
 	};
 
-	const municipalCountMissingPerson = async () => {
-		const res = await fetch(`/missing-person/count/${loginData.validpolice?.municipal}`, {
+	const provincialCountOfMissingPerson = async () => {
+		const res = await fetch("/missing-person", {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
 			},
 		});
 		const compCount = await res.json();
-		setCountMissing(compCount.getMissingCount);
+		setCountMissing(compCount.body.length);
 	};
 
-	const municipalCountWantedPerson = async () => {
-		const res = await fetch(`/wanted-person/count/${loginData.validpolice?.municipal}`, {
+	const provincialCountOfWantedPerson = async () => {
+		const res = await fetch(`/wanted-person`, {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
 			},
 		});
 		const wantedCount = await res.json();
-		setCountWanted(wantedCount.getWantedCount);
+		setCountWanted(wantedCount.body.length);
 	};
 
 	useEffect(() => {
-		getFiledComplaint();
-		getFiledMissingPerson();
-		municipalCountMissingPerson();
-		municipalCountWantedPerson();
+		provincialFiledComplaint();
+		provincialFiledMissingPerson();
+		provincialCountOfMissingPerson();
+		provincialCountOfWantedPerson();
 		const sr = scrollreveal({
 			origin: "bottom",
 			distance: "80px",

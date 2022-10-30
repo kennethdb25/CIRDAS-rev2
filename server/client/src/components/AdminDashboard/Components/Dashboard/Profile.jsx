@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import styled from "styled-components";
 import image from "../../assets/default.png";
 import { HiOutlineLocationMarker } from "react-icons/hi";
+import { RiAdminLine } from "react-icons/ri";
 import { cardStyles } from "./ReusableStyles";
 import { LoginContext } from "../../../../context/Context";
 export default function Profile() {
@@ -13,24 +14,13 @@ export default function Profile() {
 				<img src={image} alt="" />
 			</div>
 			<div className="title">
-				<h2>{`${loginData.validpolice?.rank} ${loginData.validpolice?.firstName} ${loginData.validpolice?.lastName}`}</h2>
+				<h2>{`${loginData.validadmin?.firstName} ${loginData.validadmin?.lastName}`}</h2>
 				<h5>
-					<HiOutlineLocationMarker /> {`${loginData.validpolice?.address}`}
+					<HiOutlineLocationMarker /> {`${loginData.validadmin?.address}`}
 				</h5>
-			</div>
-			<div className="info">
-				<div className="container">
-					<h5>Gender</h5>
-					<h3>{`${loginData.validpolice?.gender}`}</h3>
-				</div>
-				<div className="container">
-					<h5>Birthdate</h5>
-					<h3>{`${new Date(loginData.validpolice?.birthdate).toLocaleDateString()}`}</h3>
-				</div>
-				<div className="container">
-					<h5>Municipality</h5>
-					<h3>{`${loginData.validpolice?.municipal}`}</h3>
-				</div>
+				<h5>
+					<RiAdminLine /> {`${loginData.validadmin?.role}`}
+				</h5>
 			</div>
 		</Section>
 	);

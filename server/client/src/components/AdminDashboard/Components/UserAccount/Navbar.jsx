@@ -1,20 +1,19 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 import { LoginContext } from "../../../../context/Context";
-
 export default function Navbar() {
 	const { loginData } = useContext(LoginContext);
 	return (
 		<Nav>
 			<div className="title">
-				<h4>Hello {loginData.validcitizen?.firstName},</h4>
+				<h4>Hello {loginData.validadmin?.firstName},</h4>
 				<h1>
 					Welcome to <span>CIRDAS</span>
 				</h1>
 			</div>
 			<div className="title">
 				<h1>
-					<span>About</span>
+					<span>User Account</span>
 				</h1>
 			</div>
 		</Nav>
@@ -24,7 +23,6 @@ const Nav = styled.nav`
 	display: flex;
 	justify-content: space-between;
 	color: black;
-	font-family: PT Serif;
 	.title {
 		h4 {
 			color: black;

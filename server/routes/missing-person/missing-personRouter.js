@@ -29,6 +29,7 @@ missingpersonRouter.post("/missing-person", upload.single("photo"), async (req, 
 	const { filename } = req.file;
 	const { id, contactperson, fullname, dob, age, gender, race, eyes, hair, height, weight, wearing, address, municipal, characteristics, contact, lastseen } =
 		req.body;
+	const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 	const missingpersoncount = await missingPersonSchema.find().count();
 
@@ -49,6 +50,7 @@ missingpersonRouter.post("/missing-person", upload.single("photo"), async (req, 
 			wearing,
 			imgpath: filename,
 			address,
+			month: months[new Date().getMonth() + 1],
 			year: `${new Date().getFullYear()}`,
 			timeAndDate: `${new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString()}`,
 			municipal,
@@ -67,10 +69,9 @@ missingpersonRouter.post("/missing-person", upload.single("photo"), async (req, 
 	}
 });
 
-missingpersonRouter.patch("missing-person/:missingpersonid", async (req, res) => {
+missingpersonRouter.patch("/missing-person/update/:missingpersonid", upload.single("photo"), async (req, res) => {
 	try {
-		const missingpersonid = req.params.missingpersonid;
-		// const { filename } = req.file;
+		const missingid = req.params.missingpersonid;
 		const {
 			id,
 			contactperson,
@@ -94,10 +95,10 @@ missingpersonRouter.patch("missing-person/:missingpersonid", async (req, res) =>
 			status,
 		} = req.body;
 
-		const getMissingPerson = await missingPersonSchema.findOne({ miisingpersonid: missingpersonid });
+		const getMissingPerson = await missingPersonSchema.findOne({ miisingpersonid: missingid });
 
 		if (!getMissingPerson) {
-			res.status(422).json({ error: `No missing person match with ${miisingpersonid}` });
+			res.status(422).json({ error: `No missing person match with ${missingid}` });
 		} else {
 			if (id) getMissingPerson.id = id;
 			if (contactperson) getMissingPerson.contactperson = contactperson;

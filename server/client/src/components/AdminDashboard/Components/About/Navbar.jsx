@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 import { LoginContext } from "../../../../context/Context";
-
 export default function Navbar() {
 	const { loginData } = useContext(LoginContext);
 	return (

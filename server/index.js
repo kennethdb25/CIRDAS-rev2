@@ -12,6 +12,8 @@ const routerWantedPerson = require("./routes/wanted-person/wanted-personRouter")
 const getUsers = require("./routes/getAllUser/getUsers");
 const forgotrouter = require("./routes/forgot-password/citizen-forgotpassword/forgotpassword");
 const policeforgot = require("./routes/forgot-password/police-forgotpassword/forgotpassword");
+const changepasswordrouter = require("./routes/changepassword/changepassword");
+const deleteuserrouter = require("./routes/deleteuser/deleteuser");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
@@ -31,6 +33,8 @@ app.use(routerWantedPerson);
 app.use(getUsers);
 app.use(forgotrouter);
 app.use(policeforgot);
+app.use(changepasswordrouter);
+app.use(deleteuserrouter);
 
 app.use("/uploads", express.static("./uploads"));
 

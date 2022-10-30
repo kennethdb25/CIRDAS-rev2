@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 import { LoginContext } from "../../../../context/Context";
-
 export default function Navbar() {
 	const { loginData } = useContext(LoginContext);
 	return (
@@ -14,7 +13,7 @@ export default function Navbar() {
 			</div>
 			<div className="title">
 				<h1>
-					<span>About</span>
+					<span>Police Station Details</span>
 				</h1>
 			</div>
 		</Nav>

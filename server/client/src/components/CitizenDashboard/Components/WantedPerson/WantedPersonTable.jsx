@@ -210,21 +210,23 @@ export default function WantedPersonTable() {
 						<Col xs={{ span: 0 }} md={{ span: 4 }}></Col>
 						<Col xs={{ span: 24 }} md={{ span: 16 }}>
 							<Row gutter={12}>
-								<Col xs={{ span: 0 }} md={{ span: 4 }}></Col>
-								<Col xs={{ span: 24 }} md={{ span: 16 }}>
-									<Title level={2}>{viewData?.name}</Title>
+								<Col xs={{ span: 24 }} md={{ span: 24 }}>
+									<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+										<Title level={2}>{viewData?.name}</Title>
+									</div>
 								</Col>
 							</Row>
 							<Row gutter={12}>
-								<Col xs={{ span: 0 }} md={{ span: 6 }}></Col>
-								<Col xs={{ span: 24 }} md={{ span: 12 }}>
-									<Image
-										style={{ border: "1px solid black" }}
-										height={300}
-										weight={300}
-										src={viewData ? require(`../../assets/WantedPersonUploads/${viewData?.imgpath}`) : ""}
-										alt="view"
-									/>
+								<Col xs={{ span: 24 }} md={{ span: 24 }}>
+									<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+										<Image
+											style={{ border: "1px solid black" }}
+											height={300}
+											weight={300}
+											src={viewData ? require(`../../assets/WantedPersonUploads/${viewData?.imgpath}`) : ""}
+											alt="view"
+										/>
+									</div>
 								</Col>
 							</Row>
 							<Row gutter={12}>

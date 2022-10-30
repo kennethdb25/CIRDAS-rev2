@@ -1,12 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
 import styled from "styled-components";
 import { BsFileEarmarkMedicalFill, BsFillFileEarmarkXFill } from "react-icons/bs";
 import { BiGroup } from "react-icons/bi";
 import { cardStyles } from "./ReusableStyles";
-import { LoginContext } from "../../../../context/Context";
 
 export default function Analytics(props) {
-	const { loginData } = useContext(LoginContext);
 	const { data, missing, countMissing, countWanted } = props;
 	return (
 		<Section>
@@ -33,13 +31,13 @@ export default function Analytics(props) {
 					<BiGroup />
 				</div>
 				<div className="content">
-					<h4>{`${loginData.validpolice?.municipal}`} Count of Missing Person</h4>
+					<h4>Provincial Count of Missing Person</h4>
 					<h2>{countMissing}</h2>
 				</div>
 			</div>
 			<div className="analytic ">
 				<div className="content">
-					<h4>{`${loginData.validpolice?.municipal}`} Count of Wanted Person</h4>
+					<h4>Provincial Count of Wanted Person</h4>
 					<h2>{countWanted}</h2>
 				</div>
 				<div className="logo">

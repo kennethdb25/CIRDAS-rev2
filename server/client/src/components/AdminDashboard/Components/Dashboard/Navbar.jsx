@@ -6,14 +6,14 @@ export default function Navbar() {
 	return (
 		<Nav>
 			<div className="title">
-				<h4>Hello {loginData.validpolice?.firstName},</h4>
+				<h4>Hello {loginData.validadmin?.firstName},</h4>
 				<h1>
 					Welcome to <span>CIRDAS</span>
 				</h1>
 			</div>
 			<div className="title">
 				<h1>
-					<span>Police Dashboard</span>
+					<span>Admin Dashboard</span>
 				</h1>
 			</div>
 		</Nav>

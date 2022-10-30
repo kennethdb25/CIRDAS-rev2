@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useRef, useContext, useEffect } from "react";
 import styled from "styled-components";
-import { SearchOutlined, PlusCircleOutlined, EyeOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
+import { SearchOutlined, PlusCircleOutlined, EyeOutlined, EditOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import { toast } from "react-toastify";
 
@@ -63,13 +63,27 @@ export default function MissingPersonTable(props) {
 	}, []);
 
 	const onFinish = async (values) => {
-		console.log(values);
-		const data = await fetch(`/missing-person/${updateData?.missingpersonid}`, {
+		const newData = new FormData();
+		newData.append("id", values.id);
+		newData.append("address", values.address);
+		newData.append("age", values.age);
+		newData.append("contact", values.contact);
+		newData.append("contactperson", values.contactperson);
+		newData.append("characteristics", values.characteristics);
+		newData.append("dob", values.dob);
+		newData.append("eyes", values.eyes);
+		newData.append("fullname", values.fullname);
+		newData.append("gender", values.gender);
+		newData.append("hair", values.hair);
+		newData.append("height", values.height);
+		newData.append("lastseen", values.lastseen);
+		newData.append("municipal", values.municipal);
+		newData.append("race", values.race);
+		newData.append("wearing", values.wearing);
+		newData.append("weight", values.weight);
+		const data = await fetch(`/missing-person/update/${updateData?.missingpersonid}`, {
 			method: "PATCH",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(values),
+			body: newData,
 		});
 
 		const res = await data.json();
@@ -88,38 +102,38 @@ export default function MissingPersonTable(props) {
 		message.error("Please input all the required details");
 	};
 
-	// const imgprops = {
-	// 	beforeUpload: (file) => {
-	// 		const isIMG = file.type.startsWith("image");
+	const imgprops = {
+		beforeUpload: (file) => {
+			const isIMG = file.type.startsWith("image");
 
-	// 		if (!isIMG) {
-	// 			message.error(`${file.name} is not an image`);
-	// 		}
+			if (!isIMG) {
+				message.error(`${file.name} is not an image`);
+			}
 
-	// 		return isIMG || Upload.LIST_IGNORE;
-	// 	},
-	// 	onChange: (info) => {
-	// 		console.log(info.fileList);
-	// 	},
-	// };
+			return isIMG || Upload.LIST_IGNORE;
+		},
+		onChange: (info) => {
+			console.log(info.fileList);
+		},
+	};
 
-	// const onPreview = async (file) => {
-	// 	let src = file.url;
+	const onPreview = async (file) => {
+		let src = file.url;
 
-	// 	if (!src) {
-	// 		src = await new Promise((resolve) => {
-	// 			const reader = new FileReader();
-	// 			reader.readAsDataURL(file.originFileObj);
+		if (!src) {
+			src = await new Promise((resolve) => {
+				const reader = new FileReader();
+				reader.readAsDataURL(file.originFileObj);
 
-	// 			reader.onload = () => resolve(reader.result);
-	// 		});
-	// 	}
+				reader.onload = () => resolve(reader.result);
+			});
+		}
 
-	// 	const image = new Image();
-	// 	image.src = src;
-	// 	const imgWindow = window.open(src);
-	// 	imgWindow?.document.write(image.outerHTML);
-	// };
+		const image = new Image();
+		image.src = src;
+		const imgWindow = window.open(src);
+		imgWindow?.document.write(image.outerHTML);
+	};
 
 	const fetchData = async () => {
 		setLoading(true);
@@ -152,17 +166,16 @@ export default function MissingPersonTable(props) {
 		setIsEdit(false);
 		form.resetFields();
 	};
+	const UpdateRecord = (record) => {
+		setIsEdit(true);
+		setVisible(true);
+		setUpdateData(record);
+	};
 
 	const handleSearch = (selectedKeys, confirm, dataIndex) => {
 		confirm();
 		setSearchText(selectedKeys[0]);
 		setSearchedColumn(dataIndex);
-	};
-
-	const UpdateRecord = (record) => {
-		setIsEdit(true);
-		setVisible(true);
-		setUpdateData(record);
 	};
 
 	const handleReset = (clearFilters) => {
@@ -893,21 +906,23 @@ export default function MissingPersonTable(props) {
 						<Col xs={{ span: 0 }} md={{ span: 4 }}></Col>
 						<Col xs={{ span: 24 }} md={{ span: 16 }}>
 							<Row gutter={12}>
-								<Col xs={{ span: 0 }} md={{ span: 6 }}></Col>
-								<Col xs={{ span: 24 }} md={{ span: 12 }}>
-									<Title level={2}>{viewData?.fullname}</Title>
+								<Col xs={{ span: 24 }} md={{ span: 24 }}>
+									<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+										<Title level={2}>{viewData?.fullname}</Title>
+									</div>
 								</Col>
 							</Row>
 							<Row gutter={12}>
-								<Col xs={{ span: 0 }} md={{ span: 6 }}></Col>
-								<Col xs={{ span: 24 }} md={{ span: 12 }}>
-									<Image
-										style={{ border: "1px solid black" }}
-										height={300}
-										weight={300}
-										src={viewData ? require(`../../assets/MissingPersonUploads/${viewData?.imgpath}`) : ""}
-										alt="view"
-									/>
+								<Col xs={{ span: 24 }} md={{ span: 24 }}>
+									<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+										<Image
+											style={{ border: "1px solid black" }}
+											height={300}
+											weight={300}
+											src={viewData ? require(`../../assets/MissingPersonUploads/${viewData?.imgpath}`) : ""}
+											alt="view"
+										/>
+									</div>
 								</Col>
 							</Row>
 							<Row gutter={12}>
@@ -966,13 +981,15 @@ export default function MissingPersonTable(props) {
 									<Text strong>Identifying Characteristic:</Text>
 									<TextArea autoSize="false" style={{ marginBottom: "8px" }} value={viewData?.characteristics} disabled />
 								</Col>
-								<Col xs={{ span: 0 }} md={{ span: 1 }}></Col>
-								<Col xs={{ span: 24 }} md={{ span: 22 }}>
-									<Title level={5}>IF YOU HAVE ANY INFORMATION ABOUT {viewData?.fullname.toUpperCase()},</Title>
+								<Col xs={{ span: 24 }} md={{ span: 24 }}>
+									<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+										<Title level={5}>IF YOU HAVE ANY INFORMATION ABOUT {viewData?.fullname.toUpperCase()},</Title>
+									</div>
 								</Col>
-								<Col xs={{ span: 0 }} md={{ span: 4 }}></Col>
-								<Col xs={{ span: 24 }} md={{ span: 18 }}>
-									<Title level={4}> PLEASE CONTACT: {viewData?.contact}</Title>
+								<Col xs={{ span: 24 }} md={{ span: 24 }}>
+									<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+										<Title level={4}> PLEASE CONTACT: {viewData?.contact}</Title>
+									</div>
 								</Col>
 							</Row>
 						</Col>

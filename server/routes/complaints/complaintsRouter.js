@@ -7,6 +7,8 @@ complaintRouter.post("/citizen/complaint", async (req, res) => {
 
 	const complaintcount = await complaintSchema.find().count();
 
+	const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
 	if (!userId || !complainantname || !complaint || !contact || !municipal || !address || !witness) {
 		res.status(422).json({ error: "Fill all required details" });
 	} else {
@@ -20,7 +22,7 @@ complaintRouter.post("/citizen/complaint", async (req, res) => {
 				municipal,
 				address,
 				year: `${new Date().getFullYear()}`,
-				month: `${new Date().getMonth()}`,
+				month: months[new Date().getMonth() + 1],
 				timeAndDate,
 				victim,
 				witness,

@@ -1,24 +1,21 @@
-/* eslint-disable no-unused-vars */
-import React, { useEffect, useRef, useState, useContext } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import { SearchOutlined, EyeOutlined } from "@ant-design/icons";
+import { Button, Input, Space, Table, Modal, Typography, Drawer, Form, Row, Col, Image } from "antd";
+import { SearchOutlined, PlusCircleOutlined, EyeOutlined, EditOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
-import { Button, Input, Space, Table, Modal, Typography } from "antd";
-import { LoginContext } from "../../../../context/Context";
 
-export default function ComplaintTable() {
+export default function Analytics() {
+	const [viewData, setViewData] = useState(null);
 	const [data, setData] = useState([]);
-	const searchInput = useRef(null);
-	const { loginData, setLoginData } = useContext(LoginContext);
+	const [searchText, setSearchText] = useState("");
 	const [loading, setLoading] = useState(false);
 	const [visible, setVisible] = useState(false);
-	const [searchText, setSearchText] = useState("");
-	const [searchedColumn, setSearchedColumn] = useState("");
-	const [viewData, setViewData] = useState(null);
 	const [isView, setIsView] = useState(false);
+	const [searchedColumn, setSearchedColumn] = useState("");
+	const searchInput = useRef(null);
 	const [pagination, setPagination] = useState({
 		defaultCurrent: 1,
-		pageSize: 6,
+		pageSize: 3,
 		total: data[0]?.body.length,
 	});
 
@@ -29,7 +26,7 @@ export default function ComplaintTable() {
 
 	const fetchData = async () => {
 		setLoading(true);
-		const res = await fetch(`/citizen/complaint`, {
+		const res = await fetch("/station-details", {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
@@ -38,6 +35,10 @@ export default function ComplaintTable() {
 		const dataComp = await res.json();
 		setData([dataComp]);
 		setLoading(false);
+	};
+
+	const onClose = () => {
+		setVisible(false);
 	};
 
 	const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -143,49 +144,37 @@ export default function ComplaintTable() {
 	const columns = [
 		{
 			title: "ID",
-			dataIndex: "complaintid",
-			key: "complaintid",
+			dataIndex: "stationdId",
+			key: "stationdId",
 			width: "10%",
-			...getColumnSearchProps("complaintid"),
+			...getColumnSearchProps("stationdId"),
 		},
 		{
-			title: "Complainant Name",
-			dataIndex: "complainantname",
-			key: "complainantname",
-			width: "30%",
-			...getColumnSearchProps("complainantname"),
+			title: "Municipal",
+			dataIndex: "Municipal",
+			key: "Municipal",
+			width: "10%",
+			...getColumnSearchProps("Municipal"),
 		},
 		{
-			title: "What",
-			dataIndex: "complaint",
-			key: "complaint",
+			title: "Contact Number",
+			dataIndex: "contactnumber",
+			key: "contactnumber",
 			width: "20%",
 		},
 		{
-			title: "Where",
-			dataIndex: "address",
-			key: "address",
-			...getColumnSearchProps("address"),
-			width: "20%",
-		},
-		{
-			title: "When",
-			dataIndex: "timeAndDate",
-			key: "timeAndDate",
+			title: "Municipal OIC",
+			dataIndex: "MunicipalOIC",
+			key: "MunicipalOIC",
 			width: "30%",
+			...getColumnSearchProps("MunicipalOIC"),
 		},
 		{
-			title: "Who(Suspect)",
-			dataIndex: "suspect",
-			key: "suspect",
-			...getColumnSearchProps("suspect"),
+			title: "Station Name",
+			dataIndex: "details",
+			key: "details",
 			width: "30%",
-		},
-		{
-			title: "Status",
-			dataIndex: "status",
-			key: "status",
-			width: "10%",
+			...getColumnSearchProps("details"),
 		},
 		{
 			title: "",
@@ -216,54 +205,45 @@ export default function ComplaintTable() {
 			<div className="table">
 				<Table columns={columns} dataSource={data[0]?.body} pagination={pagination} loading={loading} />
 			</div>
-			<Modal title="Complaint Details" open={isView} onCancel={() => setIsView(false)} onOk={() => setIsView(false)}>
-				<Typography>Complainant</Typography>
-				<Input style={{ marginBottom: "15px" }} value={viewData?.complainantname} disabled />
-				<Typography>Complaint</Typography>
-				<Input style={{ marginBottom: "15px" }} value={viewData?.complaint} disabled />
-				<Typography>Address</Typography>
-				<Input style={{ marginBottom: "15px" }} value={viewData?.address} disabled />
+			<Modal title="Police Station Location Details" open={isView} onCancel={() => setIsView(false)} onOk={() => setIsView(false)}>
+				<Typography>Station ID</Typography>
+				<Input style={{ marginBottom: "15px" }} value={viewData?.stationdId} disabled />
 				<Typography>Municipal</Typography>
-				<Input style={{ marginBottom: "15px" }} value={viewData?.municipal} disabled />
-				<Typography>Time and Date</Typography>
-				<Input style={{ marginBottom: "15px" }} value={viewData?.timeAndDate} disabled />
-				<Typography>Witness</Typography>
-				<Input style={{ marginBottom: "15px" }} value={viewData?.witness} disabled />
-				<Typography>Victim</Typography>
-				<Input style={{ marginBottom: "15px" }} value={viewData?.victim} disabled />
-				<Typography>Suspect</Typography>
-				<Input style={{ marginBottom: "15px" }} value={viewData?.suspect} disabled />
-				<Typography>Status</Typography>
-				<Input value={viewData?.status} disabled />
+				<Input style={{ marginBottom: "15px" }} value={viewData?.Municipal} disabled />
+				<Typography>Station Name</Typography>
+				<Input style={{ marginBottom: "15px" }} value={viewData?.details} disabled />
+				<Typography>Municipal OIC</Typography>
+				<Input style={{ marginBottom: "15px" }} value={viewData?.MunicipalOIC} disabled />
+				<Typography>Contact Number</Typography>
+				<Input style={{ marginBottom: "15px" }} value={viewData?.contactnumber} disabled />
 			</Modal>
 		</Section>
 	);
 }
-
 const Section = styled.section`
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	min-height: 20rem;
-	modal: {
-		input: {
-			color: None;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+min-height: 100%;
+modal: {
+	weight: 1000px
+	input: {
+		color: None;
+	}
+}
+@media screen and (min-width: 280px) and (max-width: 1080px) {
+	.table {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		width: 310px;
+		.ant-table-wrapper {
+			display: Grid;
+			grid-template-columns: 1fr;
+			right: -100vw;
+			overflow-x: auto;
+			width: 100%;
 		}
 	}
-
-	@media screen and (min-width: 280px) and (max-width: 1080px) {
-		.table {
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			width: 310px;
-			.ant-table-wrapper {
-				display: Grid;
-				grid-template-columns: 1fr;
-				right: -100vw;
-				overflow-x: auto;
-				width: 100%;
-			}
-		}
-	}
+}
 `;

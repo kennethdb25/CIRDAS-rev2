@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { IoIosArrowForward } from "react-icons/io";
-import { AiFillFileAdd } from "react-icons/ai";
 import { MdImportantDevices } from "react-icons/md";
-import { cardStyles } from "./ReusableStyles";
+import { cardStyles } from "../Dashboard/ReusableStyles";
 import { Modal, Typography } from "antd";
-export default function FAQ() {
+export default function ListOfAbout() {
 	const [isView, setIsView] = useState(false);
 	return (
 		<Section>
@@ -26,20 +25,20 @@ export default function FAQ() {
 				</div>
 				<div className="faq">
 					<div className="info">
-						<AiFillFileAdd />
-						<h4>How to file a complaint?</h4>
+						<MdImportantDevices />
+						<h4>Data Privacy Consent</h4>
 					</div>
 					<IoIosArrowForward />
 				</div>
 				<div className="faq">
 					<div className="info">
-						<AiFillFileAdd />
+						<MdImportantDevices />
 						<h4>People behind CIRDAS System</h4>
 					</div>
 					<IoIosArrowForward />
 				</div>
 			</div>
-			<Modal title="What is the importance of CIRDAS?" open={isView} onCancel={() => setIsView(false)} onOk={() => setIsView(false)}>
+			<Modal title="What is the importance of CIRDAS?" visible={isView} onCancel={() => setIsView(false)} onOk={() => setIsView(false)}>
 				<Typography>Lorem Ipsum</Typography>
 			</Modal>
 		</Section>

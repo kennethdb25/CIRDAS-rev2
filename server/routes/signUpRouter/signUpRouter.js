@@ -32,6 +32,7 @@ const upload = multer({
 router.post("/citizen/register", upload.single("photo"), async (req, res) => {
 	const { filename } = req.file;
 	const { firstName, middleName, lastName, birthdate, gender, address, municipal, email, password, confirmpassword } = req.body;
+	const citizenUserCount = await citizenUser.find().count();
 
 	if (!firstName || !lastName || !birthdate || !gender || !filename || !address || !municipal || !email || !password || !confirmpassword) {
 		res.status(422).json({ error: "Fill all the details" });
@@ -45,6 +46,7 @@ router.post("/citizen/register", upload.single("photo"), async (req, res) => {
 			res.status(422).json({ error: "Password and Confirm Password Not Match" });
 		} else {
 			const finalUser = new citizenUser({
+				citizenId: `CTZ-${citizenUserCount + 1}`,
 				firstName,
 				middleName,
 				lastName,
@@ -64,7 +66,6 @@ router.post("/citizen/register", upload.single("photo"), async (req, res) => {
 			// hashing password
 
 			const storeData = await finalUser.save();
-			// console.log(storeData);
 
 			res.status(201).json({ status: 201, storeData });
 		}
@@ -105,7 +106,6 @@ router.post("/police/register", async (req, res) => {
 			// hashing password
 
 			const storeData = await finalUser.save();
-			// console.log(storeData);
 
 			res.status(201).json({ status: 201, storeData });
 		}
@@ -146,7 +146,6 @@ router.post("/admin/register", async (req, res) => {
 			// hashing password
 
 			const storeData = await finalUser.save();
-			// console.log(storeData);
 
 			res.status(201).json({ status: 201, storeData });
 		}

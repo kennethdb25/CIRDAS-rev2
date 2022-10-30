@@ -5,6 +5,11 @@ const jwt = require("jsonwebtoken");
 const keys = require("../config/keys");
 
 const userSchema = new mongoose.Schema({
+	citizenId: {
+		type: String,
+		required: true,
+		trim: true,
+	},
 	firstName: {
 		type: String,
 		required: true,

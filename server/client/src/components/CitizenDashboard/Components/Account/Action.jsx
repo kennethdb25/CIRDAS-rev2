@@ -1,10 +1,85 @@
-import React, { useState } from "react";
-import { Drawer, Space } from "antd";
+import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { Drawer, Space, Modal, Form, Input, Row, Col, Button, Image } from "antd";
+import { DeleteOutlined, FileImageOutlined, LockOutlined, SyncOutlined } from "@ant-design/icons";
 import styled from "styled-components";
-import { Button } from "antd";
+import { toast } from "react-toastify";
+import { LoginContext } from "../../../../context/Context";
 
 export default function Action() {
 	const [visible, setVisible] = useState(false);
+	const [isDelete, setIsDelete] = useState(false);
+	const [isUploaded, setIsUploaded] = useState(false);
+	const [isChangePassowrd, setIsChangePassword] = useState(false);
+	const { loginData } = useContext(LoginContext);
+
+	const [form] = Form.useForm();
+	const history = useNavigate();
+
+	const email = loginData.validcitizen?.email;
+
+	const onChangePassword = async (values) => {
+		const data = await fetch(`/citizen/change-password/${email}`, {
+			method: "PATCH",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(values),
+		});
+		const res = await data.json();
+
+		if (res.status === 201) {
+			form.resetFields();
+			toast.success("Password Change Successfully", { position: toast.POSITION.TOP_CENTER, autoClose: 1000 });
+			setIsChangePassword(false);
+		} else {
+			toast.error(res.error, { position: toast.POSITION.TOP_CENTER });
+		}
+	};
+
+	const onChangePasswordFailed = async (error) => {
+		console.log(error);
+	};
+
+	const onDeleteAccount = async () => {
+		console.log("Deleting Account");
+		const data = await fetch(`/citizen/delete/${email}`, {
+			method: "PATCH",
+		});
+
+		const res = await data.json();
+		if (res.status === 201) {
+			toast.success("Deleted Successfully", { position: toast.POSITION.TOP_CENTER, autoClose: 1000 });
+			setIsDelete(false);
+			setTimeout(async () => {
+				let token = localStorage.getItem("citizenUserDataToken");
+
+				const res = await fetch("/citizen/logout", {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: token,
+						Accept: "application/json",
+					},
+					credentials: "include",
+				});
+
+				const dataPol = await res.json();
+
+				if (dataPol.status === 201) {
+					toast.warn("Logging Out", { position: toast.POSITION.TOP_CENTER });
+					setTimeout(() => {
+						localStorage.removeItem("citizenUserDataToken");
+						history("/");
+					}, 4000);
+				} else {
+					toast.error("Error Occured", { position: toast.POSITION.TOP_CENTER });
+				}
+			}, 2000);
+		} else {
+			toast.error(res.error, { position: toast.POSITION.TOP_CENTER });
+		}
+	};
 
 	const onClose = () => {
 		setVisible(false);
@@ -14,32 +89,35 @@ export default function Action() {
 		<Section>
 			<div className="analytic ">
 				<div className="content">
-					<Button type="primary" onClick={() => setVisible(true)}>
-						UPDATE PROFILE
+					<Button type="primary" icon={<SyncOutlined />} shape="round" onClick={() => setVisible(true)}>
+						UPDATE ACCOUNT DETAILS
 					</Button>
 				</div>
 			</div>
 			<div className="analytic">
 				<div className="content">
-					<Button type="primary" danger>
+					<Button type="primary" icon={<FileImageOutlined />} shape="round" onClick={() => setIsUploaded(true)}>
+						UPLOADED DOCUMENT
+					</Button>
+				</div>
+			</div>
+			<div className="analytic">
+				<div className="content">
+					<Button type="primary" icon={<LockOutlined />} shape="round" onClick={() => setIsChangePassword(true)}>
 						CHANGE PASSWORD
 					</Button>
 				</div>
 			</div>
+
 			<div className="analytic">
 				<div className="content">
-					<Button type="primary">UPLOADED DOCUMENTS</Button>
-				</div>
-			</div>
-			<div className="analytic">
-				<div className="content">
-					<Button type="primary" danger>
+					<Button type="primary" icon={<DeleteOutlined />} danger shape="round" onClick={() => setIsDelete(true)}>
 						DELETE ACCOUNT
 					</Button>
 				</div>
 			</div>
 			<Drawer
-				title="Account Details"
+				title="UPDATE ACCOUNT DETAILS"
 				placement="top"
 				width={500}
 				onClose={onClose}
@@ -51,6 +129,138 @@ export default function Action() {
 				}}
 				extra={<Space></Space>}
 			></Drawer>
+			<Modal
+				title="Action"
+				width={400}
+				open={isDelete}
+				onCancel={() => setIsDelete(false)}
+				footer={[
+					<Button key="back" onClick={() => setIsDelete(false)}>
+						CANCEL
+					</Button>,
+					<Button key="submit" type="danger" onClick={onDeleteAccount}>
+						DELETE
+					</Button>,
+				]}
+			>
+				Are you sure to "DELETE" this account?
+			</Modal>
+			<Modal
+				title="UPLOADED DOCUMENT"
+				width={600}
+				open={isUploaded}
+				onCancel={() => setIsUploaded(false)}
+				footer={[
+					<Button key="back" onClick={() => setIsUploaded(false)}>
+						CLOSE
+					</Button>,
+				]}
+			>
+				<Col xs={{ span: 24 }} md={{ span: 24 }}>
+					<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+						<Image
+							style={{ border: "1px solid black" }}
+							height={300}
+							weight={300}
+							src={loginData ? require(`../../../AdminDashboard/assets/ValidationIdUploads/${loginData?.validcitizen?.imgpath}`) : ""}
+							alt="view"
+						/>
+					</div>
+				</Col>
+			</Modal>
+			<Modal
+				title="CHANGE PASSWORD"
+				width={700}
+				open={isChangePassowrd}
+				onCancel={() => setIsChangePassword(false)}
+				footer={[
+					<Button key="back" onClick={() => setIsChangePassword(false)}>
+						CANCEL
+					</Button>,
+				]}
+			>
+				<div>
+					<Form
+						name="basic"
+						form={form}
+						labelCol={{ span: 24 }}
+						wrapperCol={{ span: 24 }}
+						initialValues={{
+							remember: true,
+						}}
+						onFinish={onChangePassword}
+						onFinishFailed={onChangePasswordFailed}
+						autoComplete="off"
+					>
+						<Row gutter={12}>
+							<Col xs={{ span: 24 }} md={{ span: 8 }}>
+								<Form.Item
+									label="Password"
+									name="password"
+									labelCol={{
+										span: 24,
+									}}
+									wrapperCol={{
+										span: 24,
+									}}
+									hasFeedback
+									rules={[
+										{
+											required: true,
+											message: "Please input your password!",
+										},
+										{ whitespace: true },
+										{ min: 8 },
+										{ max: 26 },
+										{
+											pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,26}$/,
+											message: "Must contain 1 uppercase, 1 lowercase, 1 number, and 1 special character.",
+										},
+									]}
+								>
+									<Input.Password placeholder="********" />
+								</Form.Item>
+							</Col>
+							<Col xs={{ span: 24 }} md={{ span: 8 }}>
+								<Form.Item
+									label="Confirm Password"
+									name="confirmpassword"
+									labelCol={{
+										span: 24,
+										//offset: 2
+									}}
+									wrapperCol={{
+										span: 24,
+										//offset: 2
+									}}
+									hasFeedback
+									dependencies={["password"]}
+									rules={[
+										{
+											required: true,
+										},
+										({ getFieldValue }) => ({
+											validator(_, value) {
+												if (!value || getFieldValue("password") === value) {
+													return Promise.resolve();
+												}
+
+												return Promise.reject("Passwords does not matched.");
+											},
+										}),
+									]}
+								>
+									<Input.Password placeholder="********" />
+								</Form.Item>
+							</Col>
+							<Col xs={{ span: 24 }} md={{ span: 8 }}></Col>
+							<Button type="primary" htmlType="submit">
+								CHANGE
+							</Button>
+						</Row>
+					</Form>
+				</div>
+			</Modal>
 		</Section>
 	);
 }
