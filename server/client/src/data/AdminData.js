@@ -8,3 +8,22 @@ export const AdminRole = [
 		value: "Municipal Admin",
 	},
 ];
+
+export const AdminComplaintStatus = [
+	{
+		name: "Pending",
+		value: "Pending",
+	},
+	{
+		name: "Reviewed",
+		value: "Reviewed",
+	},
+	{
+		name: "UnderInvestigation",
+		value: "UnderInvestigation",
+	},
+	{
+		name: "Cleared",
+		value: "Cleared",
+	},
+];

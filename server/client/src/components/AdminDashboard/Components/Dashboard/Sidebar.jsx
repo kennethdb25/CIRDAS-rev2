@@ -23,10 +23,13 @@ import {
 	UilFileEditAlt,
 	UilFileQuestion,
 } from "@iconscout/react-unicons";
+import Complaints from "../Complaints/Complaints";
+import MissingPerson from "../MissingPerson/MissingPerson";
+import WantedPerson from "../WantedPerson/WantedPerson";
 import UserAccount from "../UserAccount/UserAccount";
-import About from "../About/About";
 import PoliceStationDetails from "../PoliceStationDetails/PoliceStationDetails";
-
+import Account from "../Account/Account";
+import About from "../About/About";
 export default function Sidebar() {
 	const { loginData, setLoginData } = useContext(LoginContext);
 	const [currentLink, setCurrentLink] = useState(1);
@@ -306,15 +309,15 @@ export default function Sidebar() {
 				</>
 			) : currentLink === 2 ? (
 				<>
-					<p>MissingPerson</p>
+					<Complaints />
 				</>
 			) : currentLink === 3 ? (
 				<>
-					<p>MissingPerson</p>
+					<MissingPerson />
 				</>
 			) : currentLink === 4 ? (
 				<>
-					<p>MissingPerson</p>
+					<WantedPerson />
 				</>
 			) : currentLink === 5 ? (
 				<>
@@ -326,7 +329,7 @@ export default function Sidebar() {
 				</>
 			) : currentLink === 8 ? (
 				<>
-					<UserAccount />
+					<Account />
 				</>
 			) : currentLink === 9 ? (
 				<>
@@ -380,7 +383,7 @@ const Section = styled.section`
 				list-style-type: none;
 				display: flex;
 				flex-direction: column;
-				gap: 1rem;
+				gap: 0.7rem;
 				li {
 					padding: 0.6rem 1rem;
 					border-radius: 0.6rem;

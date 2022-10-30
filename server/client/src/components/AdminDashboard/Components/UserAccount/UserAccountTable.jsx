@@ -6,14 +6,17 @@ import { toast } from "react-toastify";
 import emailjs from "@emailjs/browser";
 import { MunicipalData } from "../../../../data/CitizensData";
 import { AdminRole } from "../../../../data/AdminData";
-import { Button, Input, Space, Table, Modal, message, Select, DatePicker, Typography, Drawer, Form, Row, Col, Image, Radio, Upload } from "antd";
+import { Button, Input, Space, Table, Modal, message, Select, DatePicker, Typography, Drawer, Form, Row, Col, Image, Radio, Upload, Tabs } from "antd";
 import { LoginContext } from "../../../../context/Context";
 const { Title, Text } = Typography;
 const { TextArea } = Input;
 
 export default function UserAccountTable() {
 	const [getCitizen, setGetCitizen] = useState([]);
+	const [getPolice, setGetPolice] = useState([]);
 	const [validationData, setValidationData] = useState(null);
+	const [isReview, setIsReview] = useState(false);
+	const [showPoliceForm, setShowPoliceForm] = useState(false);
 	const [isValidated, setIsValidated] = useState(false);
 	const [searchedColumn, setSearchedColumn] = useState("");
 	const [searchText, setSearchText] = useState("");
@@ -40,6 +43,19 @@ export default function UserAccountTable() {
 		setLoading(false);
 	};
 
+	const getPoliceUsers = async () => {
+		setLoading(true);
+		const data = await fetch("/police/users", {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+		const res = await data.json();
+		setGetPolice([res]);
+		setLoading(false);
+	};
+
 	// ---------- END API CALL ------------
 
 	const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -59,7 +75,8 @@ export default function UserAccountTable() {
 	};
 
 	const onViewRecord = (record) => {
-		console.log(record);
+		setIsReview(true);
+		setValidationData(record);
 	};
 
 	const onValidateRecord = (record) => {
@@ -256,10 +273,6 @@ export default function UserAccountTable() {
 					text: "Deleted",
 					value: "Deleted",
 				},
-				{
-					text: "Rejected",
-					value: "Rejected",
-				},
 			],
 			filteredValue: filteredInfo.accountstatus || null,
 			onFilter: (value, record) => record.accountstatus.includes(value),
@@ -289,17 +302,526 @@ export default function UserAccountTable() {
 		},
 	];
 
+	// Police User
+
+	const [form] = Form.useForm();
+
+	const onViewPoliceRecord = (record) => {
+		console.log(record);
+	};
+
+	const onClose = () => {
+		setShowPoliceForm(false);
+		form.resetFields();
+	};
+
+	const onSubmitPoliceForm = async (values) => {
+		const data = await fetch("/police/register", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(values),
+		});
+		const res = await data.json();
+		if (res.status === 201) {
+			toast.success("Registered Successfully", { position: toast.POSITION.TOP_CENTER, autoClose: 1000 });
+			onClose();
+			getPoliceUsers();
+			form.resetFields();
+		} else {
+			toast.error(res.error, { position: toast.POSITION.TOP_CENTER, autoClose: 3000 });
+		}
+	};
+
+	const onSubmitPoliceFormFailed = async (error) => {
+		console.log(error);
+	};
+
+	const PoliceColumn = [
+		{
+			title: "ID",
+			dataIndex: "policeId",
+			key: "policeId",
+			width: "5%",
+			...getColumnSearchProps("policeId"),
+		},
+		{
+			title: "Email",
+			dataIndex: "email",
+			key: "email",
+			width: "20%",
+			...getColumnSearchProps("email"),
+		},
+		{
+			title: "Rank",
+			dataIndex: "rank",
+			key: "rank",
+			width: "10%",
+		},
+		{
+			title: "First Name",
+			dataIndex: "firstName",
+			key: "firstName",
+			width: "10%",
+		},
+		{
+			title: "Last Name",
+			dataIndex: "lastName",
+			key: "lastName",
+			width: "10%",
+		},
+		{
+			title: "Municipal",
+			dataIndex: "municipal",
+			key: "municipal",
+			width: "10%",
+		},
+
+		{
+			title: (
+				<Button type="primary" shape="round" icon={<PlusCircleOutlined />} onClick={() => setShowPoliceForm(true)}>
+					Add Police User
+				</Button>
+			),
+			dataIndex: "",
+			key: "x",
+			width: "10%",
+			render: (record) => (
+				<>
+					<div style={{ display: "flex" }}>
+						<Button
+							type="primary"
+							shape="round"
+							icon={<EyeOutlined />}
+							onClick={() => {
+								onViewPoliceRecord(record);
+							}}
+						>
+							Review
+						</Button>
+					</div>
+				</>
+			),
+		},
+	];
+
 	useEffect(() => {
 		getCitizenUsers();
+		getPoliceUsers();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (
 		<Section>
-			<div className="table">
-				<Title level={4}>CITIZEN USERS</Title>
-				<Table columns={CitizenColumn} dataSource={getCitizen[0]?.body} pagination={pagination} loading={loading} onChange={handleChange} />
+			<Tabs>
+				<Tabs.TabPane tab="CITIZEN USERS" key="key1">
+					<div className="table">
+						<Table columns={CitizenColumn} dataSource={getCitizen[0]?.body} pagination={pagination} loading={loading} onChange={handleChange} />
+					</div>
+				</Tabs.TabPane>
+				<Tabs.TabPane tab="POLICE USERS" key="key2">
+					<div className="table">
+						<Table columns={PoliceColumn} dataSource={getPolice[0]?.body} pagination={pagination} loading={loading} onChange={handleChange} />
+					</div>
+				</Tabs.TabPane>
+				<Tabs.TabPane tab="ADMIN USERS" key="key3">
+					<div className="table">Admin</div>
+				</Tabs.TabPane>
+			</Tabs>
+
+			<div className="drawer">
+				<Drawer
+					title="Police User Registration"
+					placement="top"
+					width={500}
+					onClose={onClose}
+					open={showPoliceForm}
+					height={670}
+					style={{
+						display: "flex",
+						justifyContent: "center",
+					}}
+					extra={<Space></Space>}
+				>
+					<Form
+						form={form}
+						labelCol={{
+							span: 8,
+						}}
+						layout="horizontal"
+						onFinish={onSubmitPoliceForm}
+						onFinishFailed={onSubmitPoliceFormFailed}
+						autoComplete="off"
+						style={{
+							width: "100%",
+						}}
+					>
+						<Row>
+							<Col xs={{ span: 0 }} md={{ span: 4 }}></Col>
+							<Col xs={{ span: 24 }} md={{ span: 16 }}>
+								<Row gutter={12}>
+									<Col xs={{ span: 24 }} md={{ span: 8 }} layout="vertical">
+										<Form.Item
+											label="Rank"
+											name="rank"
+											labelCol={{
+												span: 24,
+											}}
+											wrapperCol={{
+												span: 24,
+											}}
+											hasFeedback
+											rules={[
+												{
+													required: true,
+													message: "Please input your rank!",
+												},
+											]}
+										>
+											<Input placeholder="Enter your rank" />
+										</Form.Item>
+									</Col>
+									<Col xs={{ span: 24 }} md={{ span: 8 }} layout="vertical">
+										<Form.Item
+											label="First Name"
+											name="firstName"
+											labelCol={{
+												span: 24,
+											}}
+											wrapperCol={{
+												span: 24,
+											}}
+											hasFeedback
+											rules={[
+												{
+													required: true,
+													message: "Please input your first name!",
+												},
+												{
+													pattern: /^[a-zA-Z_ ]*$/,
+													message: "First name should have no number.",
+												},
+											]}
+										>
+											<Input placeholder="Enter your first name" />
+										</Form.Item>
+									</Col>
+									<Col xs={{ span: 24 }} md={{ span: 8 }}>
+										<Form.Item
+											label="Middle Name"
+											name="middleName"
+											labelCol={{
+												span: 24,
+											}}
+											wrapperCol={{
+												span: 24,
+											}}
+											hasFeedback
+											rules={[
+												{
+													pattern: /^[a-zA-Z]*$/,
+													message: "Middle name should have no number.",
+												},
+											]}
+										>
+											<Input placeholder="Enter your middle name" />
+										</Form.Item>
+									</Col>
+								</Row>
+								<Row gutter={12}>
+									<Col xs={{ span: 24 }} md={{ span: 12 }}>
+										<Form.Item
+											label="Last Name"
+											name="lastName"
+											labelCol={{
+												span: 24,
+											}}
+											wrapperCol={{
+												span: 24,
+											}}
+											hasFeedback
+											rules={[
+												{
+													required: true,
+													message: "Please input your last name!",
+												},
+											]}
+										>
+											<Input placeholder="Enter your last name" />
+										</Form.Item>
+									</Col>
+
+									<Col xs={{ span: 24 }} md={{ span: 12 }}>
+										<Form.Item
+											label="Birth Date"
+											name="birthdate"
+											labelCol={{
+												span: 24,
+												//offset: 2
+											}}
+											wrapperCol={{
+												span: 24,
+											}}
+											hasFeedback
+											rules={[
+												{
+													required: true,
+													message: "Please enter your birth date!",
+												},
+											]}
+										>
+											<DatePicker style={{ width: "100%" }} />
+										</Form.Item>
+									</Col>
+								</Row>
+								<Row gutter={0}>
+									<Col xs={{ span: 24 }} md={{ span: 8 }}>
+										<Form.Item
+											label="Gender"
+											name="gender"
+											labelCol={{
+												span: 24,
+												//offset: 2
+											}}
+											wrapperCol={{
+												span: 24,
+											}}
+											hasFeedback
+											rules={[
+												{
+													required: true,
+													message: "Please select your gender!",
+												},
+											]}
+										>
+											<Radio.Group style={{ width: "100%" }}>
+												<Radio value="Male">Male</Radio>
+												<Radio value="Female">Female</Radio>
+											</Radio.Group>
+										</Form.Item>
+									</Col>
+									<Col xs={{ span: 24 }} md={{ span: 16 }}>
+										<Form.Item
+											label="Email"
+											name="email"
+											labelCol={{
+												span: 24,
+												//offset: 2
+											}}
+											wrapperCol={{
+												span: 24,
+											}}
+											hasFeedback
+											rules={[
+												{
+													type: "email",
+													required: true,
+													message: "Please enter a valid email",
+												},
+											]}
+										>
+											<Input placeholder="Enter your email" />
+										</Form.Item>
+									</Col>
+								</Row>
+								<Row gutter={12}>
+									<Col xs={{ span: 24 }} md={{ span: 16 }}>
+										<Form.Item
+											label="Address"
+											name="address"
+											labelCol={{
+												span: 24,
+												//offset: 2
+											}}
+											wrapperCol={{
+												span: 24,
+											}}
+											hasFeedback
+											rules={[
+												{
+													required: true,
+													message: "Please enter your address!",
+												},
+											]}
+										>
+											<Input placeholder="Enter your House No./Street Name/Barangay" />
+										</Form.Item>
+									</Col>
+									<Col xs={{ span: 24 }} md={{ span: 8 }}>
+										<Form.Item
+											label="Municipality"
+											name="municipal"
+											labelCol={{
+												span: 24,
+											}}
+											wrapperCol={{
+												span: 24,
+											}}
+											hasFeedback
+											rules={[
+												{
+													required: true,
+													message: "Please select your Municipality!",
+												},
+											]}
+										>
+											<Select placeholder="Select your Municipality">
+												{MunicipalData.map((value, index) => (
+													<Select.Option key={index} value={value.name}>
+														{value.label}
+													</Select.Option>
+												))}
+											</Select>
+										</Form.Item>
+									</Col>
+								</Row>
+
+								<Row gutter={12}>
+									<Col xs={{ span: 24 }} md={{ span: 12 }}>
+										<Form.Item
+											label="Password"
+											name="password"
+											labelCol={{
+												span: 24,
+											}}
+											wrapperCol={{
+												span: 24,
+											}}
+											hasFeedback
+											rules={[
+												{
+													required: true,
+													message: "Please input your password!",
+												},
+												{ whitespace: true },
+												{ min: 8 },
+												{ max: 26 },
+												{
+													pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,26}$/,
+													message: "Must contain 1 uppercase, 1 lowercase, 1 number, and 1 special character.",
+												},
+											]}
+										>
+											<Input.Password placeholder="********" />
+										</Form.Item>
+									</Col>
+									<Col xs={{ span: 24 }} md={{ span: 12 }}>
+										<Form.Item
+											label="Confirm Password"
+											name="confirmpassword"
+											labelCol={{
+												span: 24,
+												//offset: 2
+											}}
+											wrapperCol={{
+												span: 24,
+												//offset: 2
+											}}
+											hasFeedback
+											dependencies={["password"]}
+											rules={[
+												{
+													required: true,
+												},
+												({ getFieldValue }) => ({
+													validator(_, value) {
+														if (!value || getFieldValue("password") === value) {
+															return Promise.resolve();
+														}
+
+														return Promise.reject("Passwords does not matched.");
+													},
+												}),
+											]}
+										>
+											<Input.Password placeholder="********" />
+										</Form.Item>
+									</Col>
+								</Row>
+								<Button type="primary" htmlType="submit">
+									Register
+								</Button>
+							</Col>
+							<Col xs={{ span: 0 }} md={{ span: 4 }}></Col>
+						</Row>
+					</Form>
+				</Drawer>
 			</div>
+
+			<div className="modals">
+				<Modal
+					title="Review Citizen User"
+					width={1000}
+					open={isReview}
+					onCancel={() => setIsReview(false)}
+					footer={[
+						<Button key="cancel" onClick={() => setIsReview(false)}>
+							Cancel
+						</Button>,
+					]}
+				>
+					<Row gutter={12}>
+						<Col xs={{ span: 24 }} md={{ span: 8 }}>
+							<br></br>
+							<Text strong>Citizen ID:</Text>
+							<Input style={{ marginBottom: "8px" }} value={validationData?.citizenId} disabled />
+						</Col>
+						<Col xs={{ span: 24 }} md={{ span: 8 }}>
+							<br></br>
+							<Text strong>Email Address:</Text>
+							<Input style={{ marginBottom: "8px" }} value={validationData?.email} disabled />
+						</Col>
+					</Row>
+					<Row gutter={12}>
+						<Col xs={{ span: 24 }} md={{ span: 8 }}>
+							<br></br>
+							<Text strong>First Name:</Text>
+							<Input style={{ marginBottom: "8px" }} value={validationData?.firstName} disabled />
+						</Col>
+						<Col xs={{ span: 24 }} md={{ span: 8 }}>
+							<br></br>
+							<Text strong>Middle Name:</Text>
+							<Input style={{ marginBottom: "8px" }} value={validationData?.middleName === "undefined" ? "N/A" : validationData?.middleName} disabled />
+						</Col>
+						<Col xs={{ span: 24 }} md={{ span: 8 }}>
+							<br></br>
+							<Text strong>Last Name:</Text>
+							<Input style={{ marginBottom: "8px" }} value={validationData?.lastName} disabled />
+						</Col>
+					</Row>
+					<Row gutter={12}>
+						<Col xs={{ span: 24 }} md={{ span: 8 }}>
+							<br></br>
+							<Text strong>Gender:</Text>
+							<Input style={{ marginBottom: "8px" }} value={validationData?.gender} disabled />
+						</Col>
+						<Col xs={{ span: 24 }} md={{ span: 8 }}>
+							<br></br>
+							<Text strong>Date of Birth:</Text>
+							<Input style={{ marginBottom: "8px" }} value={new Date(validationData?.birthdate).toDateString()} disabled />
+						</Col>
+						<Col xs={{ span: 24 }} md={{ span: 8 }}>
+							<br></br>
+							<Text strong>Account Status:</Text>
+							<Input style={{ marginBottom: "8px" }} value={validationData?.accountstatus} disabled />
+						</Col>
+					</Row>
+					<Row gutter={12}>
+						<Col xs={{ span: 24 }} md={{ span: 16 }}>
+							<br></br>
+							<Text strong>Address:</Text>
+							<Input style={{ marginBottom: "8px" }} value={validationData?.address} disabled />
+						</Col>
+						<Col xs={{ span: 24 }} md={{ span: 8 }}>
+							<br></br>
+							<Text strong>Municipality:</Text>
+							<Input style={{ marginBottom: "8px" }} value={validationData?.municipal} disabled />
+						</Col>
+					</Row>
+				</Modal>
+			</div>
+
 			<div className="modals">
 				<Modal
 					title="Validate Citizen User"

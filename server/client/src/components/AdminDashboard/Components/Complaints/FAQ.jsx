@@ -1,47 +1,42 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { IoIosArrowForward } from "react-icons/io";
+import { AiFillFileAdd } from "react-icons/ai";
 import { MdImportantDevices } from "react-icons/md";
 import { cardStyles } from "./ReusableStyles";
-import { Modal, Typography } from "antd";
-export default function ListOfAbout() {
-	const [isView, setIsView] = useState(false);
+export default function FAQ() {
+	const faqs = [
+		{
+			icon: <MdImportantDevices />,
+			text: "What is Complaint Page?",
+		},
+		{
+			icon: <AiFillFileAdd />,
+			text: "How to file a complaint?",
+		},
+		{
+			icon: <AiFillFileAdd />,
+			text: "What are the complaints that you can file?",
+		},
+	];
 	return (
 		<Section>
 			<div className="title">
-				<h2>Information about CIRDAS System</h2>
+				<h2>Complaint Page</h2>
 			</div>
 			<div className="faqs">
-				<div
-					className="faq"
-					onClick={() => {
-						setIsView(true);
-					}}
-				>
-					<div className="info">
-						<MdImportantDevices />
-						<h4>What is the importance of CIRDAS?</h4>
-					</div>
-					<IoIosArrowForward />
-				</div>
-				<div className="faq">
-					<div className="info">
-						<MdImportantDevices />
-						<h4>Data Privacy Consent</h4>
-					</div>
-					<IoIosArrowForward />
-				</div>
-				<div className="faq">
-					<div className="info">
-						<MdImportantDevices />
-						<h4>People behind CIRDAS System</h4>
-					</div>
-					<IoIosArrowForward />
-				</div>
+				{faqs.map((faq) => {
+					return (
+						<div className="faq">
+							<div className="info">
+								{faq.icon}
+								<h4>{faq.text}</h4>
+							</div>
+							<IoIosArrowForward />
+						</div>
+					);
+				})}
 			</div>
-			<Modal title="What is the importance of CIRDAS?" visible={isView} onCancel={() => setIsView(false)} onOk={() => setIsView(false)}>
-				<Typography>Lorem Ipsum</Typography>
-			</Modal>
 		</Section>
 	);
 }

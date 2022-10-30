@@ -6,7 +6,7 @@ import Highlighter from "react-highlight-words";
 import { toast } from "react-toastify";
 
 import { MunicipalData } from "../../../../data/CitizensData";
-import { Button, Input, Space, Table, Modal, message, Select, DatePicker, Typography, Drawer, Form, Row, Col, Image, Radio, Upload } from "antd";
+import { Button, Input, Space, Table, Modal, message, Select, DatePicker, Typography, Drawer, Form, Row, Col, Image, Radio, Upload, Tabs } from "antd";
 import { LoginContext } from "../../../../context/Context";
 import MissingPersonForm from "./MissingPersonForm";
 const { Title, Text } = Typography;
@@ -436,12 +436,21 @@ export default function MissingPersonTable(props) {
 
 	return (
 		<Section>
-			<div className="table">
-				<Title level={4}>FILED CASES</Title>
-				<Table columns={columns} dataSource={data[0]?.body} pagination={pagination} loading={loading} />
-				<Title level={4}>PROVINCIAL LIST OF MISSING PERSON</Title>
-				<Table columns={columnsAll} dataSource={allData[0]?.body} pagination={pagination} loading={loading2} />
-			</div>
+			<Tabs>
+				<Tabs.TabPane tab="FILED CASES" key="key1">
+					<div className="table">
+						<Title level={4}>FILED CASES</Title>
+						<Table columns={columns} dataSource={data[0]?.body} pagination={pagination} loading={loading} />
+					</div>
+				</Tabs.TabPane>
+				<Tabs.TabPane tab="PROVINCIAL LIST" key="key2">
+					<div className="table">
+						<Title level={4}>PROVINCIAL LIST OF MISSING PERSON</Title>
+						<Table columns={columnsAll} dataSource={allData[0]?.body} pagination={pagination} loading={loading2} />
+					</div>
+				</Tabs.TabPane>
+			</Tabs>
+
 			<Drawer
 				title={isEdit ? "UPDATE MISSING PERSON" : "FILE A MISSING PERSON"}
 				placement="top"

@@ -13,7 +13,7 @@ export default function Navbar() {
 			</div>
 			<div className="title">
 				<h1>
-					<span>Police Station Details</span>
+					<span>Complaints</span>
 				</h1>
 			</div>
 		</Nav>
@@ -23,7 +23,6 @@ const Nav = styled.nav`
 	display: flex;
 	justify-content: space-between;
 	color: black;
-	font-family: PT Serif;
 	.title {
 		h4 {
 			color: black;

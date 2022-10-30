@@ -32,6 +32,7 @@ const upload = multer({
 router.post("/citizen/register", upload.single("photo"), async (req, res) => {
 	const { filename } = req.file;
 	const { firstName, middleName, lastName, birthdate, gender, address, municipal, email, password, confirmpassword } = req.body;
+
 	const citizenUserCount = await citizenUser.find().count();
 
 	if (!firstName || !lastName || !birthdate || !gender || !filename || !address || !municipal || !email || !password || !confirmpassword) {
@@ -77,9 +78,11 @@ router.post("/citizen/register", upload.single("photo"), async (req, res) => {
 
 // for police user registration
 router.post("/police/register", async (req, res) => {
-	const { rank, firstName, middleName, lastName, municipal, email, password, confirmPassword } = req.body;
+	const { rank, firstName, middleName, lastName, municipal, email, password, confirmpassword, address, birthdate, gender } = req.body;
 
-	if (!rank || !firstName || !middleName || !lastName || !municipal || !email || !password || !confirmPassword) {
+	const policeUserCount = await policeUser.find().count();
+
+	if (!rank || !firstName || !lastName || !birthdate || !address || !gender || !municipal || !email || !password || !confirmpassword) {
 		res.status(422).json({ error: "Fill all the details" });
 	}
 
@@ -88,19 +91,23 @@ router.post("/police/register", async (req, res) => {
 
 		if (preUser) {
 			res.status(422).json({ error: "This Email is Already Exist" });
-		} else if (password !== confirmPassword) {
+		} else if (password !== confirmpassword) {
 			res.status(422).json({ error: "Password and Confirm Password Not Match" });
 		} else {
 			const finalUser = new policeUser({
+				policeId: `POL-${policeUserCount + 1}`,
 				rank,
 				firstName,
 				middleName,
 				lastName,
+				address,
+				birthdate,
+				gender,
 				year: new Date().getFullYear(),
 				municipal,
 				email,
 				password,
-				confirmPassword,
+				confirmpassword,
 			});
 
 			// hashing password
@@ -110,6 +117,7 @@ router.post("/police/register", async (req, res) => {
 			res.status(201).json({ status: 201, storeData });
 		}
 	} catch (error) {
+		console.log(error);
 		res.status(422).json(error);
 		console.log("catch block error");
 	}

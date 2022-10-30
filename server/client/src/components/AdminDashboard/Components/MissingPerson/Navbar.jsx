@@ -13,7 +13,7 @@ export default function Navbar() {
 			</div>
 			<div className="title">
 				<h1>
-					<span>Police Station Details</span>
+					<span>Missing Person</span>
 				</h1>
 			</div>
 		</Nav>

@@ -5,6 +5,11 @@ const jwt = require("jsonwebtoken");
 const keys = require("../config/keys");
 
 const policeSchema = new mongoose.Schema({
+	policeId: {
+		type: String,
+		required: true,
+		trim: true,
+	},
 	rank: {
 		type: String,
 		required: true,
@@ -21,6 +26,21 @@ const policeSchema = new mongoose.Schema({
 		trim: true,
 	},
 	lastName: {
+		type: String,
+		required: true,
+		trim: true,
+	},
+	address: {
+		type: String,
+		required: true,
+		trim: true,
+	},
+	birthdate: {
+		type: String,
+		required: true,
+		trim: true,
+	},
+	gender: {
 		type: String,
 		required: true,
 		trim: true,
@@ -49,7 +69,7 @@ const policeSchema = new mongoose.Schema({
 		required: true,
 		minLength: 8,
 	},
-	confirmPassword: {
+	confirmpassword: {
 		type: String,
 		required: true,
 		minLength: 8,
@@ -68,7 +88,7 @@ const policeSchema = new mongoose.Schema({
 policeSchema.pre("save", async function (next) {
 	if (this.isModified("password")) {
 		this.password = await bcrypt.hash(this.password, 12);
-		this.confirmPassword = await bcrypt.hash(this.confirmPassword, 12);
+		this.confirmpassword = await bcrypt.hash(this.confirmpassword, 12);
 	}
 	next();
 });

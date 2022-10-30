@@ -24,13 +24,13 @@ const LoginForm = (props) => {
 		});
 		const res = await data.json();
 		if (res.status === 201) {
-			toast.success("Login Successfully", { position: toast.POSITION.TOP_CENTER, autoClose: 3000 });
+			toast.success("Login Successfully", { position: toast.POSITION.TOP_CENTER, autoClose: 1000 });
 			setTimeout(() => {
 				localStorage.setItem("citizenUserDataToken", res.result.token);
 				history("/user-citizen/dashboard");
 			}, 3000);
 		} else {
-			toast.error(res.error, { position: toast.POSITION.TOP_CENTER, autoClose: 3000 });
+			toast.error(res.error, { position: toast.POSITION.TOP_CENTER, autoClose: 1000 });
 		}
 	};
 
