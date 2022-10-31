@@ -1,6 +1,11 @@
 const mongoose = require("mongoose");
 
 const wantedPersonSchema = new mongoose.Schema({
+	wantedId: {
+		type: String,
+		required: true,
+		trim: true,
+	},
 	name: {
 		type: String,
 		required: true,

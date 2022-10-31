@@ -383,10 +383,6 @@ export default function ComplaintTable(props) {
 																required: true,
 																message: "Please enter victim name!",
 															},
-															{
-																pattern: /^[a-zA-Z._ ]*$/,
-																message: "Victim name should be a letter",
-															},
 														]}
 													>
 														<Input placeholder="Enter victim name" />
@@ -409,10 +405,6 @@ export default function ComplaintTable(props) {
 																required: true,
 																message: "Please enter witness name!",
 															},
-															{
-																pattern: /^[a-zA-Z._ ]*$/,
-																message: "Witness name should be a letter",
-															},
 														]}
 													>
 														<Input placeholder="Enter witness name" />
@@ -434,10 +426,6 @@ export default function ComplaintTable(props) {
 															{
 																required: true,
 																message: "Please enter suspect name!",
-															},
-															{
-																pattern: /^[a-zA-Z._ ]*$/,
-																message: "Suspect name should be a letter",
 															},
 														]}
 													>
@@ -497,7 +485,16 @@ export default function ComplaintTable(props) {
 					</>
 				)}
 			</Drawer>
-			<Modal title="Complaint Details" open={isView} onCancel={() => setIsView(false)} onOk={() => setIsView(false)}>
+			<Modal
+				title="Complaint Details"
+				open={isView}
+				onCancel={() => setIsView(false)}
+				footer={[
+					<Button key="cancel" onClick={() => setIsView(false)}>
+						Close
+					</Button>,
+				]}
+			>
 				<Typography>Complainant</Typography>
 				<Input style={{ marginBottom: "15px" }} value={viewData?.complainantname} disabled />
 				<Typography>Complaint</Typography>
@@ -516,6 +513,17 @@ export default function ComplaintTable(props) {
 				<Input style={{ marginBottom: "15px" }} value={viewData?.suspect} disabled />
 				<Typography>Status</Typography>
 				<Input value={viewData?.status} disabled />
+				<Typography>How</Typography>
+				<TextArea
+					value={viewData?.description}
+					showCount
+					autoSize="false"
+					maxLength={300}
+					style={{
+						height: 120,
+					}}
+					disabled
+				/>
 			</Modal>
 		</Section>
 	);

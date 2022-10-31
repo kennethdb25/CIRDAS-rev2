@@ -318,10 +318,6 @@ const MissingPersonForm = (props) => {
 										required: true,
 										message: "Please input missing person's Wearing!",
 									},
-									{
-										pattern: /^[a-zA-Z_ ]*$/,
-										message: "Wearing should have no number or special",
-									},
 								]}
 							>
 								<Input placeholder="Enter missing person's Wearing" />

@@ -62,7 +62,7 @@ const RegistrationForm = (props) => {
 
 			const res = await data.json();
 			if (res.status === 201) {
-				toast.success("Registered Successfully", { position: toast.POSITION.TOP_CENTER });
+				toast.success("Registered Successfully", { position: toast.POSITION.TOP_CENTER, autoClose: 1000 });
 				props.onClose();
 				form.resetFields();
 				setStep1(true);
@@ -70,10 +70,10 @@ const RegistrationForm = (props) => {
 				setSendButtonLabel("Send");
 				setOTP("");
 			} else {
-				toast.error(res.error, { position: toast.POSITION.TOP_CENTER });
+				toast.error(res.error, { position: toast.POSITION.TOP_CENTER, autoClose: 1000 });
 			}
 		} else {
-			toast.error("Invalid Code", { position: toast.POSITION.TOP_CENTER });
+			toast.error("Invalid Code", { position: toast.POSITION.TOP_CENTER, autoClose: 1000 });
 		}
 	};
 
@@ -118,7 +118,7 @@ const RegistrationForm = (props) => {
 		<>
 			{step1 ? (
 				<Form
-				form={form}
+					form={form}
 					labelCol={{
 						span: 8,
 					}}

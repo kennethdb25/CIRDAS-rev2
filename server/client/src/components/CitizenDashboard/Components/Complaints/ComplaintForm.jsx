@@ -216,10 +216,6 @@ const ComplaintForm = (props) => {
 												required: true,
 												message: "Please enter victim name!",
 											},
-											{
-												pattern: /^[a-zA-Z._ ]*$/,
-												message: "Victim name should be a letter",
-											},
 										]}
 									>
 										<Input placeholder="Enter victim name" />
@@ -242,10 +238,6 @@ const ComplaintForm = (props) => {
 												required: true,
 												message: "Please enter witness name!",
 											},
-											{
-												pattern: /^[a-zA-Z._ ]*$/,
-												message: "Witness name should be a letter",
-											},
 										]}
 									>
 										<Input placeholder="Enter witness name" />
@@ -267,10 +259,6 @@ const ComplaintForm = (props) => {
 											{
 												required: true,
 												message: "Please enter suspect name!",
-											},
-											{
-												pattern: /^[a-zA-Z._ ]*$/,
-												message: "Suspect name should be a letter",
 											},
 										]}
 									>

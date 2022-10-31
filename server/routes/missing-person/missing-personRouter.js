@@ -71,7 +71,7 @@ missingpersonRouter.post("/missing-person", upload.single("photo"), async (req, 
 
 missingpersonRouter.patch("/missing-person/update/:missingpersonid", upload.single("photo"), async (req, res) => {
 	try {
-		const missingid = req.params.missingpersonid;
+		const missingpersonid = req.params.missingpersonid;
 		const {
 			id,
 			contactperson,
@@ -95,10 +95,10 @@ missingpersonRouter.patch("/missing-person/update/:missingpersonid", upload.sing
 			status,
 		} = req.body;
 
-		const getMissingPerson = await missingPersonSchema.findOne({ miisingpersonid: missingid });
+		const getMissingPerson = await missingPersonSchema.findOne({ missingpersonid: missingpersonid });
 
 		if (!getMissingPerson) {
-			res.status(422).json({ error: `No missing person match with ${missingid}` });
+			res.status(422).json({ error: `No missing person match with ${missingpersonid}` });
 		} else {
 			if (id) getMissingPerson.id = id;
 			if (contactperson) getMissingPerson.contactperson = contactperson;

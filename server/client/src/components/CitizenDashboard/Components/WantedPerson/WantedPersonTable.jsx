@@ -142,10 +142,10 @@ export default function WantedPersonTable() {
 	const columns = [
 		{
 			title: "ID",
-			dataIndex: "wantedid",
-			key: "wantedid",
+			dataIndex: "wantedId",
+			key: "wantedId",
 			width: "15%",
-			...getColumnSearchProps("wantedid"),
+			...getColumnSearchProps("wantedId"),
 		},
 		{
 			title: "Name",
@@ -260,23 +260,25 @@ export default function WantedPersonTable() {
 									<Text strong>Hair:</Text>
 									<Input style={{ marginBottom: "8px" }} value={viewData?.hair} disabled />
 								</Col>
-
 								<Col xs={{ span: 24 }} md={{ span: 24 }}>
 									<br></br>
 									<Text strong>Identifying Characteristic:</Text>
 									<TextArea autoSize="false" style={{ marginBottom: "8px" }} value={viewData?.description} disabled />
 								</Col>
-								<Col xs={{ span: 0 }} md={{ span: 4 }}></Col>
-								<Col xs={{ span: 24 }} md={{ span: 18 }}>
-									<Title level={5}>IF YOU HAVE ANY INFORMATION ABOUT</Title>
+								<Col xs={{ span: 24 }} md={{ span: 24 }}>
+									<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+										<Title level={5}>IF YOU HAVE ANY INFORMATION ABOUT</Title>
+									</div>
 								</Col>
-								<Col xs={{ span: 0 }} md={{ span: 5 }}></Col>
-								<Col xs={{ span: 24 }} md={{ span: 16 }}>
-									<Title level={4}>{viewData?.name.toUpperCase()},</Title>
+								<Col xs={{ span: 24 }} md={{ span: 24 }}>
+									<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+										<Title level={4}>{viewData?.name.toUpperCase()},</Title>
+									</div>
 								</Col>
-								<Col xs={{ span: 0 }} md={{ span: 4 }}></Col>
-								<Col xs={{ span: 24 }} md={{ span: 18 }}>
-									<Title level={4}> PLEASE CONTACT: {viewData?.contact}</Title>
+								<Col xs={{ span: 24 }} md={{ span: 24 }}>
+									<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+										<Title level={4}> PLEASE CONTACT: {viewData?.contact}</Title>
+									</div>
 								</Col>
 							</Row>
 						</Col>

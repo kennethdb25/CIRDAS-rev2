@@ -27,13 +27,18 @@ const upload = multer({
 
 wantedpersonRouter.post("/wanted-person", upload.single("photo"), async (req, res) => {
 	const { filename } = req.file;
-	const { name, age, cases, address, year, municipal, description, contact, status } = req.body;
+	const { name, age, cases, address, municipal, description, contact, status } = req.body;
 
-	if (!name || !age || !cases || !address || !year || !municipal || !description || !contact || !status || !filename) {
+	const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+	const wantedpersoncount = await wantedPersonSchema.find().count();
+
+	if (!name || !age || !cases || !address || !municipal || !description || !contact) {
 		res.status(422).json({ error: "Fill all required details" });
 	} else {
 		try {
 			const finalWantedPerson = new wantedPersonSchema({
+				wantedId: `WP-${wantedpersoncount + 1}`,
 				name,
 				age,
 				imgpath: filename,
@@ -52,6 +57,7 @@ wantedpersonRouter.post("/wanted-person", upload.single("photo"), async (req, re
 
 			res.status(201).json({ status: 201, storeData });
 		} catch (error) {
+			console.log(error);
 			res.status(422).json(error);
 			console.log("catch block error");
 		}
