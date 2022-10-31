@@ -23,7 +23,7 @@ export default function Analytics(props) {
 				</div>
 				<div className="content">
 					<h4>Filed Missing Person</h4>
-					<h2>{missing}</h2>
+					<h2>{countMissing}</h2>
 				</div>
 			</div>
 			<div className="analytic">
@@ -32,7 +32,7 @@ export default function Analytics(props) {
 				</div>
 				<div className="content">
 					<h4>Provincial Count of Missing Person</h4>
-					<h2>{countMissing}</h2>
+					<h2>{missing}</h2>
 				</div>
 			</div>
 			<div className="analytic ">

@@ -23,7 +23,7 @@ export const AdminComplaintStatus = [
 		value: "UnderInvestigation",
 	},
 	{
-		name: "Cleared",
-		value: "Cleared",
+		name: "Solved",
+		value: "Solved",
 	},
 ];
