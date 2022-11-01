@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Drawer, Space, Modal, Form, Input, Row, Col, Button, Image } from "antd";
 import { DeleteOutlined, FileImageOutlined, LockOutlined, SyncOutlined } from "@ant-design/icons";
@@ -7,14 +7,16 @@ import { toast } from "react-toastify";
 import { LoginContext } from "../../../../context/Context";
 
 export default function Action() {
+	const [img, setImg] = useState();
+	const [uploadParam, setUploadParam] = useState();
 	const [visible, setVisible] = useState(false);
 	const [isDelete, setIsDelete] = useState(false);
 	const [isUploaded, setIsUploaded] = useState(false);
 	const [isChangePassowrd, setIsChangePassword] = useState(false);
-	const { loginData } = useContext(LoginContext);
 
 	const [form] = Form.useForm();
 	const history = useNavigate();
+	const { loginData } = useContext(LoginContext);
 
 	const email = loginData.validcitizen?.email;
 
@@ -35,6 +37,26 @@ export default function Action() {
 		} else {
 			toast.error(res.error, { position: toast.POSITION.TOP_CENTER });
 		}
+	};
+
+	useEffect(() => {
+		fetch(`/uploads/${uploadParam}`)
+			.then((res) => res.blob())
+			.then(
+				(result) => {
+					setImg(URL.createObjectURL(result));
+					console.log(URL.createObjectURL(result));
+				},
+				(error) => {
+					console.log(error);
+				}
+			);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [uploadParam]);
+
+	const onUploaded = () => {
+		setUploadParam(loginData?.validcitizen?.imgpath);
+		setIsUploaded(true);
 	};
 
 	const onChangePasswordFailed = async (error) => {
@@ -96,7 +118,7 @@ export default function Action() {
 			</div>
 			<div className="analytic">
 				<div className="content">
-					<Button type="primary" icon={<FileImageOutlined />} shape="round" onClick={() => setIsUploaded(true)}>
+					<Button type="primary" icon={<FileImageOutlined />} shape="round" onClick={() => onUploaded()}>
 						UPLOADED DOCUMENT
 					</Button>
 				</div>
@@ -149,7 +171,9 @@ export default function Action() {
 				title="UPLOADED DOCUMENT"
 				width={600}
 				open={isUploaded}
-				onCancel={() => setIsUploaded(false)}
+				onCancel={() => {
+					setIsUploaded(false);
+				}}
 				footer={[
 					<Button key="back" onClick={() => setIsUploaded(false)}>
 						CLOSE
@@ -158,13 +182,7 @@ export default function Action() {
 			>
 				<Col xs={{ span: 24 }} md={{ span: 24 }}>
 					<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-						<Image
-							style={{ border: "1px solid black" }}
-							height={300}
-							weight={300}
-							src={loginData ? require(`../../../AdminDashboard/assets/ValidationIdUploads/${loginData?.validcitizen?.imgpath}`) : ""}
-							alt="view"
-						/>
+						<Image style={{ border: "1px solid black" }} height={300} weight={300} src={img} alt="view" />
 					</div>
 				</Col>
 			</Modal>

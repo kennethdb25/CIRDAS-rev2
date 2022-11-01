@@ -38,6 +38,8 @@ const LoginForm = (props) => {
 		console.log("Failed:", error);
 	};
 
+	const width = window.innerWidth;
+
 	return (
 		<Box className={classes.loginCard}>
 			<ToastContainer />
@@ -85,13 +87,36 @@ const LoginForm = (props) => {
 				</Form.Item>
 				<Box className={classes.loginDetails}>
 					<Row gutter={8}>
-						<Col span={24}>
-							<Form.Item>
-								<Typography onClick={showRegistration} sx={{ "&:hover": { cursor: "pointer" } }}>
-									Don't have an account? Register here!
-								</Typography>
-							</Form.Item>
-						</Col>
+						{width >= 450 ? (
+							<>
+								<Col xs={{ span: 24 }} md={{ span: 24 }}>
+									<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+										<Form.Item>
+											<Typography onClick={showRegistration} sx={{ "&:hover": { cursor: "pointer" } }}>
+												Don't have an account? Register here!
+											</Typography>
+										</Form.Item>
+									</div>
+								</Col>
+							</>
+						) : (
+							<>
+								<Col xs={{ span: 24 }} md={{ span: 24 }}>
+									<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+										<Form.Item>
+											<Typography onClick={showRegistration} sx={{ "&:hover": { cursor: "pointer" } }}>
+												Don't have an account?
+											</Typography>
+											<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+												<Typography onClick={showRegistration} sx={{ "&:hover": { cursor: "pointer" } }}>
+													Register here!
+												</Typography>
+											</div>
+										</Form.Item>
+									</div>
+								</Col>
+							</>
+						)}
 					</Row>
 					<Row gutter={8}>
 						<Col span={24}>
