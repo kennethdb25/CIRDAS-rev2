@@ -12,6 +12,7 @@ const { Title, Text } = Typography;
 const { TextArea } = Input;
 
 export default function UserAccountTable() {
+	const [img, setImg] = useState();
 	const [getCitizen, setGetCitizen] = useState([]);
 	const [getPolice, setGetPolice] = useState([]);
 	const [validationData, setValidationData] = useState(null);
@@ -28,6 +29,13 @@ export default function UserAccountTable() {
 		pageSize: 10,
 		total: getCitizen[0]?.body.length,
 	});
+
+	useEffect(() => {
+		getCitizenUsers();
+		getPoliceUsers();
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	// API CALL
 	const getCitizenUsers = async () => {
@@ -56,6 +64,31 @@ export default function UserAccountTable() {
 		setLoading(false);
 	};
 
+	// get image
+
+	// const fetchImage = async () => {
+	// 	const res = await fetch(`/uploads/${validationData?.imgpath}`);
+	// 	console.log(res);
+	// 	const imageBlob = await res.blob();
+	// 	const imageObjectUrl = URL.createObjectURL(imageBlob);
+	// 	setImg(imageObjectUrl);
+	// 	console.log(imageObjectUrl);
+	// };
+
+	useEffect(() => {
+		fetch(`/uploads/${validationData?.imgpath}`)
+			.then((res) => res.blob())
+			.then(
+				(result) => {
+					setImg(URL.createObjectURL(result));
+				},
+				(error) => {
+					console.log(error);
+				}
+			);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [validationData]);
+
 	// ---------- END API CALL ------------
 
 	const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -79,9 +112,9 @@ export default function UserAccountTable() {
 		setValidationData(record);
 	};
 
-	const onValidateRecord = (record) => {
-		setIsValidated(true);
+	const onValidateRecord = async (record) => {
 		setValidationData(record);
+		setIsValidated(true);
 	};
 
 	const ValidationOfRecord = async (email) => {
@@ -405,13 +438,6 @@ export default function UserAccountTable() {
 			),
 		},
 	];
-
-	useEffect(() => {
-		getCitizenUsers();
-		getPoliceUsers();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
-
 	return (
 		<Section>
 			<Tabs>
@@ -756,7 +782,7 @@ export default function UserAccountTable() {
 					open={isReview}
 					onCancel={() => setIsReview(false)}
 					footer={[
-						<Button key="cancel" onClick={() => setIsReview(false)}>
+						<Button key="cancel1" onClick={() => setIsReview(false)}>
 							Cancel
 						</Button>,
 					]}
@@ -827,12 +853,21 @@ export default function UserAccountTable() {
 					title="Validate Citizen User"
 					width={1000}
 					open={isValidated}
-					onCancel={() => setIsValidated(false)}
+					onCancel={() => {
+						setIsValidated(false);
+						setImg();
+					}}
 					footer={[
-						<Button key="cancel" onClick={() => setIsValidated(false)}>
+						<Button
+							key="cancel"
+							onClick={() => {
+								setIsValidated(false);
+								setImg();
+							}}
+						>
 							Cancel
 						</Button>,
-						<Button key="cancel" type="danger" onClick={() => RejectionOfRecord(validationData?.email)}>
+						<Button key="reject" type="danger" onClick={() => RejectionOfRecord(validationData?.email)}>
 							Reject
 						</Button>,
 						<Button key="validate" type="primary" onClick={() => ValidationOfRecord(validationData?.email)}>
@@ -845,13 +880,7 @@ export default function UserAccountTable() {
 							<Text strong>Uploaded Document</Text>
 							<br />
 							<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-								<Image
-									style={{ border: "1px solid black", marginTop: "10px" }}
-									height={100}
-									width={100}
-									src={validationData ? require(`../../../AdminDashboard/assets/ValidationIdUploads/${validationData?.imgpath}`) : ""}
-									alt="view"
-								/>
+								<Image style={{ border: "1px solid black", marginTop: "10px" }} height={100} width={100} src={img} alt="view" />
 							</div>
 						</Col>
 						<Col xs={{ span: 24 }} md={{ span: 8 }}>

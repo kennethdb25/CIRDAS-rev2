@@ -9,6 +9,7 @@ const { Title, Text } = Typography;
 const { TextArea } = Input;
 
 export default function MissingPersonTable(props) {
+	const [img, setImg] = useState();
 	const [viewData, setViewData] = useState(null);
 	const [data, setData] = useState([]);
 	const [allData, setAllData] = useState([]);
@@ -55,6 +56,20 @@ export default function MissingPersonTable(props) {
 		setAllData([dataComp]);
 		setLoading(false);
 	};
+
+	useEffect(() => {
+		fetch(`/uploads/${viewData?.imgpath}`)
+			.then((res) => res.blob())
+			.then(
+				(result) => {
+					setImg(URL.createObjectURL(result));
+				},
+				(error) => {
+					console.log(error);
+				}
+			);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [viewData]);
 
 	const handleSearch = (selectedKeys, confirm, dataIndex) => {
 		confirm();
@@ -226,83 +241,6 @@ export default function MissingPersonTable(props) {
 		},
 	];
 
-	const columns = [
-		{
-			title: "ID",
-			dataIndex: "missingpersonid",
-			key: "missingpersonid",
-			width: "10%",
-			...getColumnSearchProps("missingpersonid"),
-		},
-		{
-			title: "Name",
-			dataIndex: "fullname",
-			key: "fullname",
-			width: "10%",
-			...getColumnSearchProps("fullname"),
-		},
-		{
-			title: "Age",
-			dataIndex: "age",
-			key: "age",
-			width: "10%",
-		},
-		{
-			title: "Address",
-			dataIndex: "address",
-			key: "address",
-			width: "20%",
-			...getColumnSearchProps("address"),
-		},
-		{
-			title: "Municipal",
-			dataIndex: "municipal",
-			key: "municipal",
-			width: "10%",
-		},
-		{
-			title: "Contact",
-			dataIndex: "contact",
-			key: "contact",
-			width: "10%",
-		},
-		{
-			title: "Status",
-			dataIndex: "status",
-			key: "status",
-			width: "5%",
-		},
-		{
-			title: "",
-			dataIndex: "",
-			key: "x",
-			width: "10%",
-			render: (record) => (
-				<>
-					<div style={{ display: "flex" }}>
-						<Button
-							type="primary"
-							shape="round"
-							icon={<EyeOutlined />}
-							onClick={() => {
-								ViewRecord(record);
-							}}
-						>
-							View
-						</Button>
-						{record.status !== "Found" ? (
-							<Button type="success" shape="round" icon={<EditOutlined />}>
-								Edit
-							</Button>
-						) : (
-							<></>
-						)}
-					</div>
-				</>
-			),
-		},
-	];
-
 	return (
 		<Section>
 			<div className="table">
@@ -311,26 +249,34 @@ export default function MissingPersonTable(props) {
 			</div>
 
 			<div className="modal">
-				<Modal title="Missing Person Details" width={800} open={isView} onCancel={() => setIsView(false)} onOk={() => setIsView(false)}>
+				<Modal
+					title="Missing Person Details"
+					width={800}
+					open={isView}
+					onCancel={() => {
+						setIsView(false);
+						setImg();
+					}}
+					onOk={() => {
+						setIsView(false);
+						setImg();
+					}}
+				>
 					<Row>
 						<Col xs={{ span: 0 }} md={{ span: 4 }}></Col>
 						<Col xs={{ span: 24 }} md={{ span: 16 }}>
 							<Row gutter={12}>
-								<Col xs={{ span: 0 }} md={{ span: 6 }}></Col>
-								<Col xs={{ span: 24 }} md={{ span: 12 }}>
-									<Title level={2}>{viewData?.fullname}</Title>
+								<Col xs={{ span: 24 }} md={{ span: 24 }}>
+									<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+										<Title level={2}>{viewData?.fullname}</Title>
+									</div>
 								</Col>
 							</Row>
 							<Row gutter={12}>
-								<Col xs={{ span: 0 }} md={{ span: 6 }}></Col>
-								<Col xs={{ span: 24 }} md={{ span: 12 }}>
-									<Image
-										style={{ border: "1px solid black" }}
-										height={300}
-										weight={300}
-										src={viewData ? require(`../../../CitizenDashboard/assets/MissingPersonUploads/${viewData?.imgpath}`) : ""}
-										alt="view"
-									/>
+								<Col xs={{ span: 24 }} md={{ span: 24 }}>
+									<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+										<Image style={{ border: "1px solid black" }} height={300} weight={300} src={img} alt="view" />
+									</div>
 								</Col>
 							</Row>
 							<Row gutter={12}>
@@ -389,13 +335,15 @@ export default function MissingPersonTable(props) {
 									<Text strong>Identifying Characteristic:</Text>
 									<TextArea autoSize="false" style={{ marginBottom: "8px" }} value={viewData?.characteristics} disabled />
 								</Col>
-								<Col xs={{ span: 0 }} md={{ span: 1 }}></Col>
-								<Col xs={{ span: 24 }} md={{ span: 22 }}>
-									<Title level={5}>IF YOU HAVE ANY INFORMATION ABOUT {viewData?.fullname.toUpperCase()},</Title>
+								<Col xs={{ span: 24 }} md={{ span: 24 }}>
+									<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+										<Title level={5}>IF YOU HAVE ANY INFORMATION ABOUT {viewData?.fullname.toUpperCase()},</Title>
+									</div>
 								</Col>
-								<Col xs={{ span: 0 }} md={{ span: 4 }}></Col>
-								<Col xs={{ span: 24 }} md={{ span: 18 }}>
-									<Title level={4}> PLEASE CONTACT: {viewData?.contact}</Title>
+								<Col xs={{ span: 24 }} md={{ span: 24 }}>
+									<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+										<Title level={4}> PLEASE CONTACT: {viewData?.contact}</Title>
+									</div>
 								</Col>
 							</Row>
 						</Col>

@@ -14,6 +14,7 @@ const { TextArea } = Input;
 
 export default function MissingPersonTable(props) {
 	const [viewData, setViewData] = useState(null);
+	const [img, setImg] = useState();
 	const [updateData, setUpdateData] = useState(null);
 	const [data, setData] = useState([]);
 	const [allData, setAllData] = useState([]);
@@ -31,6 +32,59 @@ export default function MissingPersonTable(props) {
 		pageSize: 6,
 		total: data[0]?.body.length,
 	});
+
+	useEffect(() => {
+		fetchData();
+		fetchAllData();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	// API CALL
+
+	const fetchData = async () => {
+		setLoading(true);
+		const res = await fetch(`/missing-person/${loginData.validcitizen?._id}`, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+		const dataComp = await res.json();
+		setData([dataComp]);
+		setLoading(false);
+	};
+
+	const fetchAllData = async () => {
+		setLoading2(true);
+		const res = await fetch(`/missing-person/status`, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+		const dataComp = await res.json();
+		setAllData([dataComp]);
+		setLoading2(false);
+	};
+
+	// get image
+
+	useEffect(() => {
+		fetch(`/uploads/${viewData?.imgpath}`)
+			.then((res) => res.blob())
+			.then(
+				(result) => {
+					setImg(URL.createObjectURL(result));
+				},
+				(error) => {
+					console.log(error);
+				}
+			);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [viewData]);
+
+	// ---------- END API CALL ------------
+
 	const [form] = Form.useForm();
 	const initialValues = {
 		address: updateData?.address,
@@ -55,12 +109,6 @@ export default function MissingPersonTable(props) {
 		weight: updateData?.weight,
 		year: updateData?.year,
 	};
-
-	useEffect(() => {
-		fetchData();
-		fetchAllData();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
 
 	const onFinish = async (values) => {
 		const newData = new FormData();
@@ -135,32 +183,6 @@ export default function MissingPersonTable(props) {
 		imgWindow?.document.write(image.outerHTML);
 	};
 
-	const fetchData = async () => {
-		setLoading(true);
-		const res = await fetch(`/missing-person/${loginData.validcitizen?._id}`, {
-			method: "GET",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
-		const dataComp = await res.json();
-		setData([dataComp]);
-		setLoading(false);
-	};
-
-	const fetchAllData = async () => {
-		setLoading2(true);
-		const res = await fetch(`/missing-person/status`, {
-			method: "GET",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
-		const dataComp = await res.json();
-		setAllData([dataComp]);
-		setLoading2(false);
-	};
-
 	const onClose = () => {
 		setVisible(false);
 		setIsEdit(false);
@@ -181,6 +203,11 @@ export default function MissingPersonTable(props) {
 	const handleReset = (clearFilters) => {
 		clearFilters();
 		setSearchText("");
+	};
+
+	const ViewRecord = (record) => {
+		setViewData(record);
+		setIsView(true);
 	};
 
 	const getColumnSearchProps = (dataIndex) => ({
@@ -267,10 +294,7 @@ export default function MissingPersonTable(props) {
 			),
 	});
 
-	const ViewRecord = (record) => {
-		setIsView(true);
-		setViewData(record);
-	};
+	// get image
 
 	const columnsAll = [
 		{
@@ -906,7 +930,26 @@ export default function MissingPersonTable(props) {
 				)}
 			</Drawer>
 			<div className="modal">
-				<Modal title="Missing Person Details" width={800} open={isView} onCancel={() => setIsView(false)} onOk={() => setIsView(false)}>
+				<Modal
+					title="Missing Person Details"
+					width={800}
+					open={isView}
+					onCancel={() => {
+						setIsView(false);
+						setImg();
+					}}
+					footer={[
+						<Button
+							key="cancel23"
+							onClick={() => {
+								setIsView(false);
+								setImg();
+							}}
+						>
+							Cancel
+						</Button>,
+					]}
+				>
 					<Row>
 						<Col xs={{ span: 0 }} md={{ span: 4 }}></Col>
 						<Col xs={{ span: 24 }} md={{ span: 16 }}>
@@ -920,13 +963,7 @@ export default function MissingPersonTable(props) {
 							<Row gutter={12}>
 								<Col xs={{ span: 24 }} md={{ span: 24 }}>
 									<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-										<Image
-											style={{ border: "1px solid black" }}
-											height={300}
-											weight={300}
-											src={viewData ? require(`../../assets/MissingPersonUploads/${viewData?.imgpath}`) : ""}
-											alt="view"
-										/>
+										<Image style={{ border: "1px solid black" }} src={img} alt="view" />
 									</div>
 								</Col>
 							</Row>

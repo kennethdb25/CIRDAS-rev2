@@ -16,11 +16,12 @@ module.exports = function (app) {
 			"/station-details",
 			"/wanted-person",
 			"/getAll",
+			"/uploads",
 		],
 		createProxyMiddleware({
-			target: "http://localhost:5000",
+			target: "http://localhost:5000" || "https://cirdas.herokuapp.com:5000",
 		})
 	);
 };
 
-// || "https://cirdasv1.herokuapp.com:5000",
+// ,

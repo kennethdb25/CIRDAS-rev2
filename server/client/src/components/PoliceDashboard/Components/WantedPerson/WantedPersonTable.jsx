@@ -1,16 +1,16 @@
-import React, { useState, useRef, useContext, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
-import { SearchOutlined, PlusCircleOutlined, EyeOutlined } from "@ant-design/icons";
+import { SearchOutlined, EyeOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
-import { Button, Input, Space, Table, Modal, Typography, Drawer, Form, Row, Col, Image } from "antd";
+import { Button, Input, Space, Table, Modal, Typography, Row, Col, Image } from "antd";
 const { Title, Text } = Typography;
 const { TextArea } = Input;
 
 export default function WantedPersonTable() {
+	const [img, setImg] = useState();
 	const [viewData, setViewData] = useState(null);
 	const [data, setData] = useState([]);
 	const [searchText, setSearchText] = useState("");
-	const [visible, setVisible] = useState(false);
 	const [isView, setIsView] = useState(false);
 	const [searchedColumn, setSearchedColumn] = useState("");
 	const searchInput = useRef(null);
@@ -39,9 +39,19 @@ export default function WantedPersonTable() {
 		setLoading(false);
 	};
 
-	const onClose = () => {
-		setVisible(false);
-	};
+	useEffect(() => {
+		fetch(`/uploads/${viewData?.imgpath}`)
+			.then((res) => res.blob())
+			.then(
+				(result) => {
+					setImg(URL.createObjectURL(result));
+				},
+				(error) => {
+					console.log(error);
+				}
+			);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [viewData]);
 
 	const handleSearch = (selectedKeys, confirm, dataIndex) => {
 		confirm();
@@ -146,10 +156,10 @@ export default function WantedPersonTable() {
 	const columns = [
 		{
 			title: "ID",
-			dataIndex: "wantedid",
-			key: "wantedid",
+			dataIndex: "wantedId",
+			key: "wantedId",
 			width: "15%",
-			...getColumnSearchProps("wantedid"),
+			...getColumnSearchProps("wantedId"),
 		},
 		{
 			title: "Name",
@@ -209,26 +219,34 @@ export default function WantedPersonTable() {
 				<Table columns={columns} dataSource={data[0]?.body} pagination={pagination} loading={loading} />
 			</div>
 			<div className="modal">
-				<Modal title="Wanted Person Details" width={800} open={isView} onCancel={() => setIsView(false)} onOk={() => setIsView(false)}>
+				<Modal
+					title="Wanted Person Details"
+					width={800}
+					open={isView}
+					onCancel={() => {
+						setIsView(false);
+						setImg();
+					}}
+					onOk={() => {
+						setIsView(false);
+						setImg();
+					}}
+				>
 					<Row>
 						<Col xs={{ span: 0 }} md={{ span: 4 }}></Col>
 						<Col xs={{ span: 24 }} md={{ span: 16 }}>
 							<Row gutter={12}>
-								<Col xs={{ span: 0 }} md={{ span: 4 }}></Col>
-								<Col xs={{ span: 24 }} md={{ span: 16 }}>
-									<Title level={2}>{viewData?.name}</Title>
+								<Col xs={{ span: 24 }} md={{ span: 24 }}>
+									<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+										<Title level={2}>{viewData?.name}</Title>
+									</div>
 								</Col>
 							</Row>
 							<Row gutter={12}>
-								<Col xs={{ span: 0 }} md={{ span: 6 }}></Col>
-								<Col xs={{ span: 24 }} md={{ span: 12 }}>
-									<Image
-										style={{ border: "1px solid black" }}
-										height={300}
-										weight={300}
-										src={viewData ? require(`../../../CitizenDashboard/assets/WantedPersonUploads/${viewData?.imgpath}`) : ""}
-										alt="view"
-									/>
+								<Col xs={{ span: 24 }} md={{ span: 24 }}>
+									<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+										<Image style={{ border: "1px solid black" }} height={300} weight={300} src={img} alt="view" />
+									</div>
 								</Col>
 							</Row>
 							<Row gutter={12}>
@@ -268,17 +286,20 @@ export default function WantedPersonTable() {
 									<Text strong>Identifying Characteristic:</Text>
 									<TextArea autoSize="false" style={{ marginBottom: "8px" }} value={viewData?.description} disabled />
 								</Col>
-								<Col xs={{ span: 0 }} md={{ span: 4 }}></Col>
-								<Col xs={{ span: 24 }} md={{ span: 18 }}>
-									<Title level={5}>IF YOU HAVE ANY INFORMATION ABOUT</Title>
+								<Col xs={{ span: 24 }} md={{ span: 24 }}>
+									<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+										<Title level={5}>IF YOU HAVE ANY INFORMATION ABOUT</Title>
+									</div>
 								</Col>
-								<Col xs={{ span: 0 }} md={{ span: 5 }}></Col>
-								<Col xs={{ span: 24 }} md={{ span: 16 }}>
-									<Title level={4}>{viewData?.name.toUpperCase()},</Title>
+								<Col xs={{ span: 24 }} md={{ span: 24 }}>
+									<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+										<Title level={4}>{viewData?.name.toUpperCase()},</Title>
+									</div>
 								</Col>
-								<Col xs={{ span: 0 }} md={{ span: 4 }}></Col>
-								<Col xs={{ span: 24 }} md={{ span: 18 }}>
-									<Title level={4}> PLEASE CONTACT: {viewData?.contact}</Title>
+								<Col xs={{ span: 24 }} md={{ span: 24 }}>
+									<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+										<Title level={4}> PLEASE CONTACT: {viewData?.contact}</Title>
+									</div>
 								</Col>
 							</Row>
 						</Col>

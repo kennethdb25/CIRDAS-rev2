@@ -6,7 +6,7 @@ import { cardStyles } from "./ReusableStyles";
 export default function Analytics() {
 	return (
 		<Section>
-			<div className="analytic ">
+			<div className="analytic">
 				<iframe
 					className="iframe"
 					style={{ height: "200px", border: "none", borderRadius: "2px", boxShadow: "0 2px 10px 0 rgba(70, 76, 79, .2)" }}

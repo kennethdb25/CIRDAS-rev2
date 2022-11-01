@@ -8,6 +8,7 @@ const { Title, Text } = Typography;
 const { TextArea } = Input;
 
 export default function WantedPersonTable() {
+	const [img, setImg] = useState();
 	const [viewData, setViewData] = useState(null);
 	const [data, setData] = useState([]);
 	const [searchText, setSearchText] = useState("");
@@ -38,6 +39,22 @@ export default function WantedPersonTable() {
 		setData([dataComp]);
 		setLoading(false);
 	};
+
+	// get image
+
+	useEffect(() => {
+		fetch(`/uploads/${viewData?.imgpath}`)
+			.then((res) => res.blob())
+			.then(
+				(result) => {
+					setImg(URL.createObjectURL(result));
+				},
+				(error) => {
+					console.log(error);
+				}
+			);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [viewData]);
 
 	const handleSearch = (selectedKeys, confirm, dataIndex) => {
 		confirm();
@@ -205,7 +222,19 @@ export default function WantedPersonTable() {
 				<Table columns={columns} dataSource={data[0]?.body} pagination={pagination} loading={loading} />
 			</div>
 			<div className="modal">
-				<Modal title="Wanted Person Details" width={800} open={isView} onCancel={() => setIsView(false)} onOk={() => setIsView(false)}>
+				<Modal
+					title="Wanted Person Details"
+					width={800}
+					open={isView}
+					onCancel={() => {
+						setIsView(false);
+						setImg();
+					}}
+					onOk={() => {
+						setIsView(false);
+						setImg();
+					}}
+				>
 					<Row>
 						<Col xs={{ span: 0 }} md={{ span: 4 }}></Col>
 						<Col xs={{ span: 24 }} md={{ span: 16 }}>
@@ -219,13 +248,7 @@ export default function WantedPersonTable() {
 							<Row gutter={12}>
 								<Col xs={{ span: 24 }} md={{ span: 24 }}>
 									<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-										<Image
-											style={{ border: "1px solid black" }}
-											height={300}
-											weight={300}
-											src={viewData ? require(`../../assets/WantedPersonUploads/${viewData?.imgpath}`) : ""}
-											alt="view"
-										/>
+										<Image style={{ border: "1px solid black" }} height={300} weight={300} src={img} alt="view" />
 									</div>
 								</Col>
 							</Row>
