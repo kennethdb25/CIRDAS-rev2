@@ -3,158 +3,158 @@ import styled from "styled-components";
 import { AreaChart, Area, Tooltip, ResponsiveContainer } from "recharts";
 import { cardStyles } from "./ReusableStyles";
 const data = [
-	{ data: 4500 },
 	{
-		data: 5000,
+		data: 1,
 	},
 	{
-		data: 4700,
+		data: 1,
 	},
 	{
-		data: 4400,
+		data: 1,
 	},
 	{
-		data: 4800,
+		data: 1,
 	},
 	{
-		data: 5300,
+		data: 1,
 	},
 	{
-		data: 5800,
+		data: 1,
 	},
 	{
-		data: 6000,
+		data: 1,
 	},
 	{
-		data: 6300,
+		data: 2,
 	},
 	{
-		data: 6580,
+		data: 1,
 	},
 	{
-		data: 6780,
+		data: 1,
 	},
 	{
-		data: 6680,
+		data: 1,
 	},
 	{
-		data: 6500,
+		data: 1,
 	},
 	{
-		data: 6300,
+		data: 1,
 	},
 	{
-		data: 5900,
+		data: 1,
 	},
 	{
-		data: 5700,
+		data: 1,
 	},
 	{
-		data: 5500,
+		data: 1,
 	},
 	{
-		data: 5300,
+		data: 1,
 	},
 	{
-		data: 5100,
+		data: 1,
 	},
 	{
-		data: 5090,
+		data: 1,
 	},
 	{
-		data: 5300,
+		data: 1,
 	},
 	{
-		data: 5800,
+		data: 1,
 	},
 	{
-		data: 6000,
+		data: 1,
 	},
 	{
-		data: 6300,
+		data: 1,
 	},
 	{
-		data: 6780,
+		data: 1,
 	},
 	{
-		data: 6500,
+		data: 1,
 	},
 	{
-		data: 6300,
+		data: 1,
 	},
 	{
-		data: 6500,
+		data: 1,
 	},
 	{
-		data: 6700,
+		data: 1,
 	},
 	{
-		data: 7000,
+		data: 1,
 	},
 	{
-		data: 7300,
+		data: 1,
 	},
 	{
-		data: 7500,
+		data: 1,
 	},
 	{
-		data: 7700,
+		data: 1,
 	},
 	{
-		data: 8090,
+		data: 1,
 	},
 	{
-		data: 8190,
+		data: 1,
 	},
 	{
-		data: 7990,
-	},
-
-	{
-		data: 7700,
+		data: 1,
 	},
 	{
-		data: 7500,
+		data: 1,
 	},
 	{
-		data: 7300,
+		data: 1,
 	},
 	{
-		data: 7000,
+		data: 1,
 	},
 	{
-		data: 6700,
+		data: 1,
 	},
 	{
-		data: 6500,
+		data: 1,
 	},
 	{
-		data: 6300,
+		data: 2,
 	},
 	{
-		data: 6500,
+		data: 1,
 	},
 	{
-		data: 6780,
+		data: 1,
 	},
 	{
-		data: 6300,
+		data: 1,
 	},
 	{
-		data: 6000,
+		data: 1,
 	},
 	{
-		data: 5800,
-	},
-
-	{
-		data: 5490,
+		data: 1,
 	},
 	{
-		data: 6000,
+		data: 1,
 	},
 	{
-		data: 8000,
+		data: 1,
+	},
+	{
+		data: 1,
+	},
+	{
+		data: 1,
+	},
+	{
+		data: 1,
 	},
 ];
 export default function RateMissingPerson() {
@@ -163,7 +163,7 @@ export default function RateMissingPerson() {
 			<div className="top">
 				<div className="info">
 					<h4>Provincial Rate for Missing Person</h4>
-					<h1>1121</h1>
+					<h1>2</h1>
 				</div>
 			</div>
 			<div className="chart">

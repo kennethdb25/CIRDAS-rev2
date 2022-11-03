@@ -227,7 +227,7 @@ const RegistrationForm = (props) => {
 									</Form.Item>
 								</Col>
 							</Row>
-							<Row gutter={0}>
+							<Row gutter={12}>
 								<Col xs={{ span: 24 }} md={{ span: 24 }}>
 									<Form.Item
 										label="Gender"

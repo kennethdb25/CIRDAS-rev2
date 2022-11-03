@@ -308,6 +308,9 @@ const ComplaintForm = (props) => {
 					<Button type="primary" htmlType="submit">
 						File Complaint
 					</Button>
+					<Form.Item>
+						<Input hidden />
+					</Form.Item>
 				</Col>
 				<Col xs={{ span: 0 }} md={{ span: 4 }}></Col>
 			</Row>

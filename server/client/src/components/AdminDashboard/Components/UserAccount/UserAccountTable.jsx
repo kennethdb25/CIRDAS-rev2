@@ -260,7 +260,7 @@ export default function UserAccountTable() {
 			title: "ID",
 			dataIndex: "citizenId",
 			key: "citizenId",
-			width: "5%",
+			width: "15%",
 			...getColumnSearchProps("citizenId"),
 		},
 		{
@@ -293,23 +293,6 @@ export default function UserAccountTable() {
 			dataIndex: "accountstatus",
 			key: "accountstatus",
 			width: "10%",
-			filters: [
-				{
-					text: "Pending",
-					value: "Pending",
-				},
-				{
-					text: "Validated",
-					value: "Validated",
-				},
-				{
-					text: "Deleted",
-					value: "Deleted",
-				},
-			],
-			filteredValue: filteredInfo.accountstatus || null,
-			onFilter: (value, record) => record.accountstatus.includes(value),
-			ellipsis: true,
 		},
 		{
 			title: "",
@@ -376,7 +359,7 @@ export default function UserAccountTable() {
 			title: "ID",
 			dataIndex: "policeId",
 			key: "policeId",
-			width: "5%",
+			width: "15%",
 			...getColumnSearchProps("policeId"),
 		},
 		{
@@ -974,3 +957,22 @@ const Section = styled.section`
 		}
 	}
 `;
+
+// filters: [
+// 	{
+// 		text: "Pending",
+// 		value: "Pending",
+// 	},
+// 	{
+// 		text: "Validated",
+// 		value: "Validated",
+// 	},
+// 	{
+// 		text: "Deleted",
+// 		value: "Deleted",
+// 	},
+// ],
+// filteredValue: filteredInfo.accountstatus || null,
+// onFilter: (value, record) => record.accountstatus.includes(value),
+// ellipsis: true,
+// },

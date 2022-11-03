@@ -35,6 +35,8 @@ export default function Sidebar() {
 	const [currentLink, setCurrentLink] = useState(1);
 	const [navbarState, setNavbarState] = useState(false);
 	const [visible, setVisible] = useState(false);
+	const html = document.querySelector("html");
+	html.addEventListener("click", () => setNavbarState(false));
 
 	const history = useNavigate();
 

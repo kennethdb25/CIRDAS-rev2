@@ -86,4 +86,13 @@ const Section = styled.section`
 			text-align: center;
 		}
 	}
+	@media screen and (min-width: 280px) and (max-width: 1080px) {
+		width: 100%;
+		.info {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			gap: 1rem;
+			font-size: 12px;
+		}
+	}
 `;

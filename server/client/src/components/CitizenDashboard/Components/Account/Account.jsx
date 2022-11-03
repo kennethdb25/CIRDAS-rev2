@@ -73,7 +73,7 @@ const Section = styled.section`
 			}
 			.row__two {
 				grid-template-columns: 1fr;
-				width: 100%;
+				width: 40%;
 			}
 		}
 	}

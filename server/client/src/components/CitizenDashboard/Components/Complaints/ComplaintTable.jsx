@@ -204,7 +204,7 @@ export default function ComplaintTable(props) {
 				width={500}
 				onClose={onClose}
 				open={visible}
-				height={730}
+				height={650}
 				style={{
 					display: "flex",
 					justifyContent: "center",
