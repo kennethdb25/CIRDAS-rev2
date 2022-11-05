@@ -1,13 +1,17 @@
-import React, { useContext } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import male from "../../assets/default.png";
 import female from "../../assets/Female.jpg";
 import { HiOutlineLocationMarker, HiOutlineMail } from "react-icons/hi";
 import { cardStyles } from "./ReusableStyles";
-import { LoginContext } from "../../../../context/Context";
-export default function Profile() {
-	// eslint-disable-next-line no-unused-vars
-	const { loginData, setLoginData } = useContext(LoginContext);
+export default function Profile(props) {
+	const { loginData, ValidUser } = props;
+
+	useEffect(() => {
+		ValidUser();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
 	return (
 		<Section>
 			<div className="image">
@@ -48,7 +52,7 @@ const Section = styled.section`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	margin-top: 50px;
+	// margin-top: 50px;
 	gap: 1rem;
 	.image {
 		max-height: 10rem;

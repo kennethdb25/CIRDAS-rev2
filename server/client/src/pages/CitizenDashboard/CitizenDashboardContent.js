@@ -1,10 +1,11 @@
 import React from "react";
 import { CitizenDashboard } from "../../components/Component";
 
-const CitizenDashboardContent = () => {
+const CitizenDashboardContent = (props) => {
+	const { fetchData, complaintData, loading } = props;
 	return (
 		<>
-			<CitizenDashboard />
+			<CitizenDashboard fetchData={fetchData} complaintData={complaintData} loading={loading} />
 		</>
 	);
 };

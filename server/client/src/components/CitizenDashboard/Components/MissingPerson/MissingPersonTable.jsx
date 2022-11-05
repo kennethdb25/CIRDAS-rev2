@@ -477,8 +477,8 @@ export default function MissingPersonTable(props) {
 
 			<Drawer
 				title={isEdit ? "UPDATE MISSING PERSON" : "FILE A MISSING PERSON"}
-				placement="top"
-				width={500}
+				placement="right"
+				width="100%"
 				onClose={onClose}
 				open={visible}
 				height={650}

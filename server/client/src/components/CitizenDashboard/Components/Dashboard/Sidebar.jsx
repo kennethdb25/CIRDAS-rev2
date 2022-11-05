@@ -19,31 +19,16 @@ import PoliceStationDetails from "../PoliceStationDetails/PoliceStationDetails";
 import About from "../About/About";
 import Account from "../Account/Account";
 
-export default function Sidebar() {
+export default function Sidebar(props) {
 	const { loginData, setLoginData } = useContext(LoginContext);
 	const [currentLink, setCurrentLink] = useState(1);
-	const [isView, setIsView] = useState(true);
 	const [navbarState, setNavbarState] = useState(false);
-	const [visible, setVisible] = useState(false);
-	const [loading, setLoading] = useState(false);
-	const [data, setData] = useState([]);
 	const html = document.querySelector("html");
 	html.addEventListener("click", () => setNavbarState(false));
 
 	const history = useNavigate();
 
-	const fetchData = async () => {
-		setLoading(true);
-		const res = await fetch(`/citizen/complaint/${loginData.validcitizen?._id}`, {
-			method: "GET",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
-		const dataComp = await res.json();
-		setData([dataComp]);
-		setLoading(false);
-	};
+	const { fetchData, complaintData, loading } = props;
 
 	const logoutCitizenUser = async () => {
 		let token = localStorage.getItem("citizenUserDataToken");
@@ -92,14 +77,8 @@ export default function Sidebar() {
 		}
 	};
 
-	const onClose = () => {
-		setVisible(false);
-		setCurrentLink(1);
-	};
-
 	useEffect(() => {
 		CitizenDasboardValid();
-		fetchData();
 		const sr = scrollreveal({
 			origin: "left",
 			distance: "80px",
@@ -131,7 +110,7 @@ export default function Sidebar() {
 			<Section>
 				<div className="top">
 					<div className="brand">
-						<MdLocalPolice />
+						<MdLocalPolice onClick={() => setCurrentLink(1)} />
 						<span onClick={() => setCurrentLink(1)}>CIRDAS</span>
 					</div>
 					<div className="toggle">
@@ -177,7 +156,6 @@ export default function Sidebar() {
 								className={currentLink === 5 ? "active" : "none"}
 								onClick={() => {
 									setCurrentLink(5);
-									setVisible(true);
 								}}
 							>
 								<a>
@@ -246,7 +224,6 @@ export default function Sidebar() {
 							className={currentLink === 5 ? "active" : "none"}
 							onClick={() => {
 								setCurrentLink(5);
-								setVisible(true);
 							}}
 						>
 							<a>
@@ -285,7 +262,7 @@ export default function Sidebar() {
 			{currentLink === 1 ? (
 				<>
 					<ToastContainer />
-					<Complaints fetchData={fetchData} data={data} loading={loading} />
+					<Complaints fetchData={fetchData} complaintData={complaintData} loading={loading} />
 				</>
 			) : currentLink === 2 ? (
 				<>
@@ -341,6 +318,7 @@ const Section = styled.section`
 			justify-content: center;
 			align-items: center;
 			gap: 2rem;
+			cursor: pointer;
 			svg {
 				color: #edf6ff;
 				font-size: 2rem;
@@ -424,6 +402,7 @@ const Section = styled.section`
 				}
 			}
 			.brand {
+				cursor: pointer;
 				gap: 1rem;
 				justify-content: flex-start;
 			}

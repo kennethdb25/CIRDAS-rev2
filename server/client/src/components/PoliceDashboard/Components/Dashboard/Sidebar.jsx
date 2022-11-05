@@ -12,17 +12,17 @@ import scrollreveal from "scrollreveal";
 import Dashboard from "./Dashboard";
 import { LoginContext } from "../../../../context/Context";
 import { ToastContainer, toast } from "react-toastify";
-import { UilEstate, UilClipboardAlt, UilSearch, UilUsersAlt, UilBuilding, UilSetting } from "@iconscout/react-unicons";
+import { UilEstate, UilClipboardAlt, UilSearch, UilUsersAlt, UilBuilding, UilSetting, UilFileQuestion } from "@iconscout/react-unicons";
 import Complaints from "../Complaints/Complaints";
 import MissingPerson from "../MissingPerson/MissingPerson";
 import WantedPerson from "../WantedPerson/WantedPerson";
 import PoliceStationDetails from "../PoliceStationDetails/PoliceStationDetails";
+import About from "../About/About";
 
 export default function Sidebar() {
 	const { loginData, setLoginData } = useContext(LoginContext);
 	const [currentLink, setCurrentLink] = useState(1);
 	const [navbarState, setNavbarState] = useState(false);
-	const [visible, setVisible] = useState(false);
 	const html = document.querySelector("html");
 	html.addEventListener("click", () => setNavbarState(false));
 
@@ -35,7 +35,7 @@ export default function Sidebar() {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
-				"Authorization": token,
+				Authorization: token,
 				Accept: "application/json",
 			},
 			credentials: "include",
@@ -61,7 +61,7 @@ export default function Sidebar() {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
-				"Authorization": token,
+				Authorization: token,
 			},
 		});
 		const getData = await res.json();
@@ -76,7 +76,6 @@ export default function Sidebar() {
 	};
 
 	const onClose = () => {
-		setVisible(false);
 		setCurrentLink(1);
 	};
 
@@ -98,6 +97,7 @@ export default function Sidebar() {
       .links>ul>li:nth-of-type(4),
       .links>ul>li:nth-of-type(5),
       .links>ul>li:nth-of-type(6),
+      .links>ul>li:nth-of-type(7),
       .logout
       `,
 			{
@@ -113,8 +113,8 @@ export default function Sidebar() {
 			<Section>
 				<div className="top">
 					<div className="brand">
-						<MdLocalPolice />
-						<span>CIRDAS</span>
+						<MdLocalPolice onClick={() => setCurrentLink(1)} />
+						<span onClick={() => setCurrentLink(1)}>CIRDAS</span>
 					</div>
 					<div className="toggle">
 						{navbarState ? (
@@ -165,12 +165,23 @@ export default function Sidebar() {
 								className={currentLink === 6 ? "active" : "none"}
 								onClick={() => {
 									setCurrentLink(6);
-									setVisible(true);
 								}}
 							>
 								<a>
 									<UilSetting />
-									<span> Settings</span>
+									<span> Account</span>
+								</a>
+							</li>
+							<li
+								key={7}
+								className={currentLink === 7 ? "active" : "none"}
+								onClick={() => {
+									setCurrentLink(7);
+								}}
+							>
+								<a>
+									<UilFileQuestion />
+									<span> About</span>
 								</a>
 							</li>
 						</ul>
@@ -229,12 +240,23 @@ export default function Sidebar() {
 							className={currentLink === 6 ? "active" : "none"}
 							onClick={() => {
 								setCurrentLink(6);
-								setVisible(true);
 							}}
 						>
 							<a>
 								<UilSetting />
 								<span> Settings</span>
+							</a>
+						</li>
+						<li
+							key={7}
+							className={currentLink === 6 ? "active" : "none"}
+							onClick={() => {
+								setCurrentLink(7);
+							}}
+						>
+							<a>
+								<UilFileQuestion />
+								<span> About</span>
 							</a>
 						</li>
 						<div className="logout">
@@ -274,20 +296,10 @@ export default function Sidebar() {
 					<PoliceStationDetails />
 				</>
 			) : currentLink === 6 ? (
+				<></>
+			) : currentLink === 7 ? (
 				<>
-					<Drawer
-						title="Account Details"
-						placement="top"
-						width={500}
-						onClose={onClose}
-						open={visible}
-						height={630}
-						style={{
-							display: "flex",
-							justifyContent: "center",
-						}}
-						extra={<Space></Space>}
-					></Drawer>
+					<About />
 				</>
 			) : null}
 		</>
@@ -320,6 +332,7 @@ const Section = styled.section`
 			justify-content: center;
 			align-items: center;
 			gap: 2rem;
+			cursor: pointer;
 			svg {
 				color: #edf6ff;
 				font-size: 2rem;
@@ -401,6 +414,7 @@ const Section = styled.section`
 				}
 			}
 			.brand {
+				cursor: pointer
 				gap: 1rem;
 				justify-content: flex-start;
 			}

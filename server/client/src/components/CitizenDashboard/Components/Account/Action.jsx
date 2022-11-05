@@ -1,12 +1,10 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Drawer, Space, Modal, Form, Input, Row, Col, Button, Image } from "antd";
+import { Drawer, Space, Modal, Form, Input, Row, Col, Button, Image, message } from "antd";
 import { DeleteOutlined, FileImageOutlined, LockOutlined, SyncOutlined } from "@ant-design/icons";
 import styled from "styled-components";
-import { toast } from "react-toastify";
-import { LoginContext } from "../../../../context/Context";
 
-export default function Action() {
+export default function Action(props) {
 	const [img, setImg] = useState();
 	const [uploadParam, setUploadParam] = useState();
 	const [visible, setVisible] = useState(false);
@@ -16,7 +14,19 @@ export default function Action() {
 
 	const [form] = Form.useForm();
 	const history = useNavigate();
-	const { loginData } = useContext(LoginContext);
+	const { loginData, ValidUser } = props;
+	console.log(loginData);
+
+	const initialValues = {
+		firstName: loginData.validcitizen?.firstName,
+		middleName: loginData.validcitizen?.middleName ? loginData.validcitizen?.middleName : "N/A",
+		lastName: loginData.validcitizen?.lastName,
+		birthdate: new Date(loginData.validcitizen?.birthdate).toLocaleDateString(),
+		gender: loginData.validcitizen?.gender,
+		email: loginData.validcitizen?.email,
+		address: loginData.validcitizen?.address,
+		municipal: loginData.validcitizen?.municipal,
+	};
 
 	const email = loginData.validcitizen?.email;
 
@@ -32,25 +42,54 @@ export default function Action() {
 
 		if (res.status === 201) {
 			form.resetFields();
-			toast.success("Password Change Successfully", { position: toast.POSITION.TOP_CENTER, autoClose: 1000 });
+			message.success("Password Change Successfully");
 			setIsChangePassword(false);
 		} else {
-			toast.error(res.error, { position: toast.POSITION.TOP_CENTER });
+			message.error(res.error);
 		}
 	};
 
+	const onFinish = async (values) => {
+		const data = await fetch(`/citizen/update/${loginData.validcitizen?.citizenId}`, {
+			method: "PATCH",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(values),
+		});
+		const res = await data.json();
+		if (res.status === 201) {
+			message.success("Updated Succesfully");
+			setVisible(false);
+		} else {
+			message.error(res.error);
+		}
+	};
+
+	const onFinishFailed = (error) => {
+		message.error(error);
+	};
+
 	useEffect(() => {
-		fetch(`/uploads/${uploadParam}`)
-			.then((res) => res.blob())
-			.then(
-				(result) => {
-					setImg(URL.createObjectURL(result));
-					console.log(URL.createObjectURL(result));
-				},
-				(error) => {
-					console.log(error);
-				}
-			);
+		ValidUser();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [loginData]);
+
+	useEffect(() => {
+		if (uploadParam) {
+			fetch(`/uploads/${uploadParam}`)
+				.then((res) => res.blob())
+				.then(
+					(result) => {
+						setImg(URL.createObjectURL(result));
+						console.log(URL.createObjectURL(result));
+					},
+					(error) => {
+						console.log(error);
+					}
+				);
+		}
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [uploadParam]);
 
@@ -71,7 +110,7 @@ export default function Action() {
 
 		const res = await data.json();
 		if (res.status === 201) {
-			toast.success("Deleted Successfully", { position: toast.POSITION.TOP_CENTER, autoClose: 1000 });
+			message.success("Deleted Successfully");
 			setIsDelete(false);
 			setTimeout(async () => {
 				let token = localStorage.getItem("citizenUserDataToken");
@@ -89,17 +128,17 @@ export default function Action() {
 				const dataPol = await res.json();
 
 				if (dataPol.status === 201) {
-					toast.warn("Logging Out", { position: toast.POSITION.TOP_CENTER });
+					message.warning("Logging Out");
 					setTimeout(() => {
 						localStorage.removeItem("citizenUserDataToken");
 						history("/");
 					}, 4000);
 				} else {
-					toast.error("Error Occured", { position: toast.POSITION.TOP_CENTER });
+					message.error("Error Occured");
 				}
 			}, 2000);
 		} else {
-			toast.error(res.error, { position: toast.POSITION.TOP_CENTER });
+			message.error(res.error);
 		}
 	};
 
@@ -111,7 +150,16 @@ export default function Action() {
 		<Section>
 			<div className="analytic ">
 				<div className="content">
-					<Button type="primary" icon={<SyncOutlined />} shape="round" onClick={() => setVisible(true)}>
+					<Button
+						type="primary"
+						icon={<SyncOutlined />}
+						shape="round"
+						onClick={() => {
+							form.resetFields();
+							ValidUser();
+							setVisible(true);
+						}}
+					>
 						UPDATE ACCOUNT DETAILS
 					</Button>
 				</div>
@@ -140,8 +188,8 @@ export default function Action() {
 			</div>
 			<Drawer
 				title="UPDATE ACCOUNT DETAILS"
-				placement="top"
-				width={500}
+				placement="right"
+				width="100%"
 				onClose={onClose}
 				open={visible}
 				height={630}
@@ -150,7 +198,218 @@ export default function Action() {
 					justifyContent: "center",
 				}}
 				extra={<Space></Space>}
-			></Drawer>
+			>
+				<Form
+					form={form}
+					labelCol={{
+						span: 8,
+					}}
+					initialValues={initialValues}
+					layout="horizontal"
+					onFinish={onFinish}
+					onFinishFailed={onFinishFailed}
+					autoComplete="off"
+					style={{
+						width: "100%",
+					}}
+				>
+					<Row>
+						<Col xs={{ span: 0 }} md={{ span: 4 }}></Col>
+						<Col xs={{ span: 24 }} md={{ span: 16 }}>
+							<Row gutter={12}>
+								<Col xs={{ span: 24 }} md={{ span: 12 }} layout="vertical">
+									<Form.Item
+										label="First Name"
+										name="firstName"
+										labelCol={{
+											span: 24,
+										}}
+										wrapperCol={{
+											span: 24,
+										}}
+										hasFeedback
+										rules={[
+											{
+												required: true,
+												message: "Please input your first name!",
+											},
+											{
+												pattern: /^[a-zA-Z_ ]*$/,
+												message: "First name should have no number.",
+											},
+										]}
+									>
+										<Input placeholder="Enter your first name" disabled />
+									</Form.Item>
+								</Col>
+								<Col xs={{ span: 24 }} md={{ span: 12 }}>
+									<Form.Item
+										label="Middle Name"
+										name="middleName"
+										labelCol={{
+											span: 24,
+										}}
+										wrapperCol={{
+											span: 24,
+										}}
+										hasFeedback
+										rules={[
+											{
+												pattern: /^[a-zA-Z]*$/,
+												message: "Middle name should have no number.",
+											},
+										]}
+									>
+										<Input placeholder="Enter your middle name" disabled />
+									</Form.Item>
+								</Col>
+							</Row>
+							<Row gutter={12}>
+								<Col xs={{ span: 24 }} md={{ span: 12 }}>
+									<Form.Item
+										label="Last Name"
+										name="lastName"
+										labelCol={{
+											span: 24,
+										}}
+										wrapperCol={{
+											span: 24,
+										}}
+										hasFeedback
+										rules={[
+											{
+												required: true,
+												message: "Please input your last name!",
+											},
+										]}
+									>
+										<Input placeholder="Enter your last name" disabled />
+									</Form.Item>
+								</Col>
+
+								<Col xs={{ span: 24 }} md={{ span: 12 }}>
+									<Form.Item
+										label="Birth Date"
+										name="birthdate"
+										labelCol={{
+											span: 24,
+											//offset: 2
+										}}
+										wrapperCol={{
+											span: 24,
+										}}
+										hasFeedback
+										rules={[
+											{
+												required: true,
+												message: "Please enter your birth date!",
+											},
+										]}
+									>
+										<Input disabled />
+									</Form.Item>
+								</Col>
+							</Row>
+							<Row gutter={12}>
+								<Col xs={{ span: 24 }} md={{ span: 12 }}>
+									<Form.Item
+										label="Gender"
+										name="gender"
+										labelCol={{
+											span: 24,
+											//offset: 2
+										}}
+										wrapperCol={{
+											span: 24,
+										}}
+										hasFeedback
+										rules={[
+											{
+												required: true,
+												message: "Please select your gender!",
+											},
+										]}
+									>
+										<Input disabled />
+									</Form.Item>
+								</Col>
+								<Col xs={{ span: 24 }} md={{ span: 12 }}>
+									<Form.Item
+										label="Email"
+										name="email"
+										labelCol={{
+											span: 24,
+											//offset: 2
+										}}
+										wrapperCol={{
+											span: 24,
+										}}
+										hasFeedback
+										rules={[
+											{
+												type: "email",
+												required: true,
+												message: "Please enter a valid email",
+											},
+										]}
+									>
+										<Input placeholder="Enter your email" />
+									</Form.Item>
+								</Col>
+							</Row>
+							<Row gutter={12}>
+								<Col xs={{ span: 24 }} md={{ span: 12 }}>
+									<Form.Item
+										label="Address"
+										name="address"
+										labelCol={{
+											span: 24,
+											//offset: 2
+										}}
+										wrapperCol={{
+											span: 24,
+										}}
+										hasFeedback
+										rules={[
+											{
+												required: true,
+												message: "Please enter your address!",
+											},
+										]}
+									>
+										<Input placeholder="Enter your House No./Street Name/Barangay" />
+									</Form.Item>
+								</Col>
+								<Col xs={{ span: 24 }} md={{ span: 12 }}>
+									<Form.Item
+										label="Municipality"
+										name="municipal"
+										labelCol={{
+											span: 24,
+										}}
+										wrapperCol={{
+											span: 24,
+										}}
+										hasFeedback
+										rules={[
+											{
+												required: true,
+												message: "Please select your Municipality!",
+											},
+										]}
+									>
+										<Input />
+									</Form.Item>
+								</Col>
+							</Row>
+							<Button type="primary" htmlType="submit">
+								Update Profile
+							</Button>
+						</Col>
+						<Col xs={{ span: 0 }} md={{ span: 4 }}></Col>
+					</Row>
+				</Form>
+			</Drawer>
 			<Modal
 				title="Action"
 				width={400}
@@ -190,9 +449,18 @@ export default function Action() {
 				title="CHANGE PASSWORD"
 				width={700}
 				open={isChangePassowrd}
-				onCancel={() => setIsChangePassword(false)}
+				onCancel={() => {
+					setIsChangePassword(false);
+					form.resetFields();
+				}}
 				footer={[
-					<Button key="back" onClick={() => setIsChangePassword(false)}>
+					<Button
+						key="back"
+						onClick={() => {
+							setIsChangePassword(false);
+							form.resetFields();
+						}}
+					>
 						CANCEL
 					</Button>,
 				]}
@@ -285,7 +553,7 @@ export default function Action() {
 const Section = styled.section`
 	display: grid;
 	grid-template-columns: 1fr
-	margin-top: 2.1rem;
+	margin-top: 2rem;
 	.analytic {
 		padding: 0.7rem;
 		display: flex;

@@ -126,6 +126,29 @@ const MissingPersonForm = (props) => {
 								<Input placeholder="Enter your first name" defaultValue={contactperson} disabled />
 							</Form.Item>
 						</Col>
+						<Col xs={{ span: 24 }} md={{ span: 8 }} layout="vertical">
+							<Form.Item
+								label="Relation"
+								name="relation"
+								labelCol={{
+									span: 24,
+								}}
+								wrapperCol={{
+									span: 24,
+								}}
+								hasFeedback
+								rules={[
+									{
+										required: true,
+										message: "Please enter relation",
+									},
+								]}
+							>
+								<Input placeholder="Relation to the missing person" />
+							</Form.Item>
+						</Col>
+					</Row>
+					<Row gutter={12}>
 						<Col xs={{ span: 24 }} md={{ span: 8 }}>
 							<Form.Item
 								label="Missing Person's Fullname"
@@ -171,6 +194,33 @@ const MissingPersonForm = (props) => {
 								]}
 							>
 								<DatePicker style={{ width: "100%" }} />
+							</Form.Item>
+						</Col>
+						<Col xs={{ span: 24 }} md={{ span: 8 }}>
+							<Form.Item
+								label="Contact Number"
+								name="contact"
+								labelCol={{
+									span: 24,
+								}}
+								wrapperCol={{
+									span: 24,
+								}}
+								hasFeedback
+								rules={[
+									{
+										required: true,
+										message: "Please input your contact number!",
+									},
+									{
+										pattern: /^[0-9]*$/,
+										message: "Contact number should be number.",
+									},
+									{ max: 11 },
+									{ min: 11 },
+								]}
+							>
+								<Input placeholder="Enter your contact number" />
 							</Form.Item>
 						</Col>
 					</Row>
@@ -426,10 +476,10 @@ const MissingPersonForm = (props) => {
 								<DatePicker style={{ width: "100%" }} />
 							</Form.Item>
 						</Col>
-						<Col xs={{ span: 24 }} md={{ span: 8 }}>
+						<Col xs={{ span: 24 }} md={{ span: 8 }} layout="vertical">
 							<Form.Item
-								label="Contact Number"
-								name="contact"
+								label="Last Scene Location"
+								name="lastlocation"
 								labelCol={{
 									span: 24,
 								}}
@@ -440,17 +490,11 @@ const MissingPersonForm = (props) => {
 								rules={[
 									{
 										required: true,
-										message: "Please input your contact number!",
+										message: "Please enter last seen location",
 									},
-									{
-										pattern: /^[0-9]*$/,
-										message: "Contact number should be number.",
-									},
-									{ max: 11 },
-									{ min: 11 },
 								]}
 							>
-								<Input placeholder="Enter your contact number" />
+								<Input placeholder="Enter last seen location" />
 							</Form.Item>
 						</Col>
 					</Row>

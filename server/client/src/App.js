@@ -17,10 +17,25 @@ import {
 } from "./pages/Pages";
 
 function App() {
+	const [complaintData, setComplaintData] = useState([]);
 	const [data, setData] = useState("");
+	const [loading, setLoading] = useState(false);
 	// eslint-disable-next-line no-unused-vars
 	const { loginData, setLoginData } = useContext(LoginContext);
 	const history = useNavigate();
+
+	const fetchData = async () => {
+		setLoading(true);
+		const res = await fetch(`/citizen/complaint/${loginData.validcitizen?._id}`, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+		const dataComp = await res.json();
+		setComplaintData([dataComp]);
+		setLoading(false);
+	};
 
 	const DasboardValid = async () => {
 		if (localStorage.getItem("policeUserDataToken")) {
@@ -29,7 +44,7 @@ function App() {
 				method: "GET",
 				headers: {
 					"Content-Type": "application/json",
-					"Authorization": validToken,
+					Authorization: validToken,
 				},
 			});
 
@@ -48,7 +63,7 @@ function App() {
 				method: "GET",
 				headers: {
 					"Content-Type": "application/json",
-					"Authorization": validToken,
+					Authorization: validToken,
 				},
 			});
 
@@ -67,7 +82,7 @@ function App() {
 				method: "GET",
 				headers: {
 					"Content-Type": "application/json",
-					"Authorization": validToken,
+					Authorization: validToken,
 				},
 			});
 
@@ -88,6 +103,7 @@ function App() {
 			DasboardValid();
 			setData(true);
 		}, 2000);
+		fetchData();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
@@ -101,7 +117,10 @@ function App() {
 						<Route path={PATH.ADMINLOGIN} element={<AdminLogin />} />
 						<Route path={PATH.FORGOTPASSWORD} element={<CitizenForgotPassword />} />
 						<Route path={PATH.POLICEFORGOTPASSWORD} element={<PoliceForgotPassword />} />
-						<Route path={PATH.CITIZENDASHBOARD} element={<CitizenDashboardContent />} />
+						<Route
+							path={PATH.CITIZENDASHBOARD}
+							element={<CitizenDashboardContent fetchData={fetchData} complaintData={complaintData} loading={loading} />}
+						/>
 						<Route path={PATH.POLICEDASHBOARD} element={<PoliceDashboardContent />} />
 						<Route path={PATH.ADMINDASHBOARD} element={<AdminDashboardContent />} />
 						<Route path={PATH.PAGENOTFOUND} element={<NotFoundContent />} />

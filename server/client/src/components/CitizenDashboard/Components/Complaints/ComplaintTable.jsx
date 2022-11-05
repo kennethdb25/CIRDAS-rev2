@@ -15,7 +15,7 @@ import { toast } from "react-toastify";
 const { TextArea } = Input;
 
 export default function ComplaintTable(props) {
-	const { fetchData, data, loading } = props;
+	const { fetchData, complaintData, loading } = props;
 	const [updateData, setUpdateData] = useState(null);
 	const searchInput = useRef(null);
 	const { loginData, setLoginData } = useContext(LoginContext);
@@ -28,7 +28,7 @@ export default function ComplaintTable(props) {
 	const [pagination, setPagination] = useState({
 		defaultCurrent: 1,
 		pageSize: 10,
-		total: data[0]?.body.length,
+		total: complaintData[0]?.body.length,
 	});
 
 	const complainantname = `${loginData.validcitizen?.firstName} ${loginData.validcitizen?.lastName}`;
@@ -196,12 +196,12 @@ export default function ComplaintTable(props) {
 	return (
 		<Section>
 			<div className="table">
-				<Table columns={columns} dataSource={data[0]?.body} pagination={pagination} loading={loading} />
+				<Table columns={columns} dataSource={complaintData[0]?.body} pagination={pagination} loading={loading} />
 			</div>
 			<Drawer
 				title={isEdit ? "UPDATE COMPLAINT" : "FILE A COMPLAINT"}
-				placement="top"
-				width={500}
+				placement="right"
+				width="100%"
 				onClose={onClose}
 				open={visible}
 				height={650}

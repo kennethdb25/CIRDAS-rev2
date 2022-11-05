@@ -7,9 +7,11 @@ import ComplaintTable from "./ComplaintTable";
 
 export default function Complaints(props) {
 	// COMPLAINT TABLE
-	const { fetchData, data, loading } = props;
+
+	const { fetchData, complaintData, loading } = props;
 
 	useEffect(() => {
+		fetchData();
 		const sr = scrollreveal({
 			origin: "bottom",
 			distance: "80px",
@@ -34,7 +36,7 @@ export default function Complaints(props) {
 			<div className="grid">
 				<div className="row__two"></div>
 				<div className="row__one">
-					<ComplaintTable fetchData={fetchData} data={data} loading={loading} />
+					<ComplaintTable fetchData={fetchData} complaintData={complaintData} loading={loading} />
 				</div>
 			</div>
 		</Section>

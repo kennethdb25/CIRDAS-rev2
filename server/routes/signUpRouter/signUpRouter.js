@@ -163,4 +163,29 @@ router.post("/admin/register", async (req, res) => {
 	}
 });
 
+router.patch("/citizen/update/:citizenId", async (req, res) => {
+	try {
+		const citizenId = req.params.citizenId;
+		const { email, address, municipal } = req.body;
+
+		const getCitizenUser = await citizenUser.findOne({ citizenId: citizenId });
+
+		if (!getCitizenUser) {
+			res.status(422).json({ error: `No user match with ${citizenId}` });
+		} else if (email === getCitizenUser?.email && address === getCitizenUser?.address && municipal === getCitizenUser?.municipal) {
+			res.status(422).json({ error: "No changes have been made!" });
+		} else {
+			if (email) getCitizenUser.email = email;
+			if (address) getCitizenUser.address = address;
+			if (municipal) getCitizenUser.municipal = municipal;
+
+			const updatedData = await getCitizenUser.save();
+
+			res.status(201).json({ status: 201, updatedData });
+		}
+	} catch (error) {
+		res.status(404).json(error);
+	}
+});
+
 module.exports = router;

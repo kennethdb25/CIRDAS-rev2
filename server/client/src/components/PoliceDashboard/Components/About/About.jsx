@@ -1,37 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { Typography } from "antd";
 import styled from "styled-components";
 import scrollreveal from "scrollreveal";
 import Navbar from "./Navbar";
-import Profile from "./Profile";
-import Action from "./Action";
+import FAQComplaint from "./FAQComplaint";
+import ListOfAbout from "./ListOfAbout";
+import FAQMissingPerson from "./FAQMissingPerson";
+import FAQWantedPerson from "./FAQWantedPerson";
 
-export default function Account() {
-	const [loginData, setLoginData] = useState([]);
-	// COMPLAINT TABLE
+const { Title } = Typography;
 
-	const ValidUser = async () => {
-		let validToken = localStorage.getItem("citizenUserDataToken");
-		const res = await fetch("/validcitizen", {
-			method: "GET",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: validToken,
-			},
-		});
-
-		const fetchedData = await res.json();
-
-		if (!fetchedData) {
-			console.log("user not valid");
-		} else {
-			console.log("user verified");
-			setLoginData(fetchedData);
-		}
-	};
-
+export default function About() {
 	useEffect(() => {
-		ValidUser();
 		const sr = scrollreveal({
 			origin: "bottom",
 			distance: "80px",
@@ -50,15 +31,19 @@ export default function Account() {
 			}
 		);
 	}, []);
+
 	return (
 		<Section>
 			<Navbar />
 			<div className="grid">
-				<div className="row__two">
-					<Profile ValidUser={ValidUser} loginData={loginData} />
-					<Action ValidUser={ValidUser} loginData={loginData} />
+				<div className="row__one">
+					<Title level={4}>ABOUT</Title>
+					<ListOfAbout />
+					<Title level={4}>FAQ</Title>
+					<FAQComplaint />
+					<FAQMissingPerson />
+					<FAQWantedPerson />
 				</div>
-				<div className="row__one"></div>
 			</div>
 		</Section>
 	);
@@ -83,7 +68,7 @@ const Section = styled.section`
 			display: grid;
 			grid-template-columns: repeat(2, 1fr);
 			gap: 1rem;
-			height: 100%;
+			height: 50%;
 		}
 	}
 	@media screen and (min-width: 280px) and (max-width: 1080px) {
@@ -95,7 +80,7 @@ const Section = styled.section`
 			}
 			.row__two {
 				grid-template-columns: 1fr;
-				width: 40%;
+				width: 100%;
 			}
 		}
 	}

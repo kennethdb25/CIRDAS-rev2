@@ -7,8 +7,7 @@ const citizenUser = require("../../models/citizenSchema");
 changepasswordrouter.patch("/citizen/change-password/:email", async (req, res) => {
 	try {
 		const email = req.params.email;
-		const password = await bcrypt.hash(req.body.password, 12);
-		const confirmpassword = await bcrypt.hash(req.body.confirmpassword, 12);
+		const { password, confirmpassword } = req.body;
 
 		const getEmail = await citizenUser.findOne({ email: email });
 
@@ -16,7 +15,7 @@ changepasswordrouter.patch("/citizen/change-password/:email", async (req, res) =
 			res.status(404).json({ error: "Something went wrong. Please try again later" });
 		} else {
 			const isMatch = await bcrypt.compare(password, getEmail.password);
-			if (req.body.password != getEmail.password) {
+			if (!isMatch) {
 				await getEmail.updateOne({ password: password, confirmpassword: confirmpassword });
 				res.status(201).json({ status: 201, body: "Updated Successfully" });
 			} else {

@@ -38,7 +38,7 @@ export default function ListOfAbout() {
 					<IoIosArrowForward />
 				</div>
 			</div>
-			<Modal title="What is the importance of CIRDAS?" visible={isView} onCancel={() => setIsView(false)} onOk={() => setIsView(false)}>
+			<Modal title="What is the importance of CIRDAS?" open={isView} onCancel={() => setIsView(false)} onOk={() => setIsView(false)}>
 				<Typography>Lorem Ipsum</Typography>
 			</Modal>
 		</Section>
