@@ -16,8 +16,8 @@ export const MunicipalData = [
 		value: "Candaba",
 	},
 	{
-		name: "City of San Fernando",
-		value: "City of San Fenando",
+		name: "San Fernando",
+		value: "San Fenando",
 	},
 	{
 		name: "Floridablanca ",

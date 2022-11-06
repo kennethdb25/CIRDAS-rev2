@@ -512,7 +512,7 @@ export default function ComplaintTable(props) {
 				<Typography>Suspect</Typography>
 				<Input style={{ marginBottom: "15px" }} value={viewData?.suspect} disabled />
 				<Typography>Status</Typography>
-				<Input value={viewData?.status} disabled />
+				<Input style={{ marginBottom: "15px" }} value={viewData?.status} disabled />
 				<Typography>How</Typography>
 				<TextArea
 					value={viewData?.description}

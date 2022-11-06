@@ -9,9 +9,9 @@ export default function Analytics() {
 			<div className="analytic">
 				<iframe
 					className="iframe"
-					style={{ height: "200px", border: "none", borderRadius: "2px", boxShadow: "0 2px 10px 0 rgba(70, 76, 79, .2)" }}
-					title="Wanted Person Status Rate"
-					src="https://charts.mongodb.com/charts-cirdas-ngmsy/embed/charts?id=63076239-5045-4e80-84ac-660c238b3510&maxDataAge=10&theme=light&autoRefresh=true"
+					style={{ height: "200px", border: "none", borderRadius: "2px" }}
+					title="Total Count of Wanted Person"
+					src="https://charts.mongodb.com/charts-cirdas-ngmsy/embed/charts?id=0f653da2-a6aa-4587-ab29-57b7b78ffb7d&maxDataAge=10&theme=light&autoRefresh=true"
 				></iframe>
 			</div>
 			<div className="analytic">
