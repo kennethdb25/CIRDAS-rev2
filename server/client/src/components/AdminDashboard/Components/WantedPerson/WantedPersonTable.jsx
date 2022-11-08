@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
-import { SearchOutlined, EyeOutlined } from "@ant-design/icons";
+import { SearchOutlined, EyeOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import { Button, Input, Space, Table, Modal, Typography, Row, Col, Image } from "antd";
 const { Title, Text } = Typography;
@@ -11,6 +11,7 @@ export default function WantedPersonTable() {
 	const [viewData, setViewData] = useState(null);
 	const [data, setData] = useState([]);
 	const [searchText, setSearchText] = useState("");
+	const [visible, setVisible] = useState(false);
 	const [isView, setIsView] = useState(false);
 	const [searchedColumn, setSearchedColumn] = useState("");
 	const searchInput = useRef(null);
@@ -197,7 +198,11 @@ export default function WantedPersonTable() {
 			width: "5%",
 		},
 		{
-			title: "",
+			title: (
+				<Button type="primary" shape="round" icon={<PlusCircleOutlined />} onClick={() => setVisible(true)}>
+					ADD WANTED PERSON
+				</Button>
+			),
 			dataIndex: "",
 			key: "x",
 			width: "15%",
