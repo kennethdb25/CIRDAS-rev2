@@ -1,15 +1,22 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useRef, useState, useContext } from "react";
 import styled from "styled-components";
-import { SearchOutlined, EyeOutlined } from "@ant-design/icons";
+import { PlusCircleOutlined, SearchOutlined, EyeOutlined, EditOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
-import { Button, Input, Space, Table, Modal, Typography, Select, Form } from "antd";
+import { Button, Input, Space, Table, Modal, Typography, Select, Form, message, Drawer, Row, Col } from "antd";
+import { Box } from "@mui/material";
+import { MunicipalData } from "../../../../data/CitizensData";
 import { LoginContext } from "../../../../context/Context";
+import ComplaintForm from "./ComplaintForm";
 import { AdminComplaintStatus } from "../../../../data/AdminData";
+import useStyles from "../../../Login/CitizenContent/styles";
 
-export default function ComplaintTable() {
-	const [data, setData] = useState([]);
+const { TextArea } = Input;
+
+export default function ComplaintTable(props) {
+	const { getFiledComplaint, getPendingComplaints, getReviewedComplaints, getUnderInvestigation } = props;
 	const [updateData, setUpdateData] = useState(null);
+	const [data, setData] = useState([]);
 	const [status, setStatus] = useState(true);
 	const searchInput = useRef(null);
 	const { loginData, setLoginData } = useContext(LoginContext);
@@ -19,20 +26,17 @@ export default function ComplaintTable() {
 	const [searchedColumn, setSearchedColumn] = useState("");
 	const [viewData, setViewData] = useState(null);
 	const [isView, setIsView] = useState(false);
+	const [isEdit, setIsEdit] = useState(false);
 	const [pagination, setPagination] = useState({
 		defaultCurrent: 1,
 		pageSize: 6,
 		total: data[0]?.body.length,
 	});
 
-	console.log(loginData);
+	const complainantname = `${loginData.validadmin?.firstName} ${loginData.validcitizen?.lastName}`;
+	const complainantid = `${loginData.validcitizen?._id}`;
 
 	const [form] = Form.useForm();
-
-	useEffect(() => {
-		fetchData();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
 
 	const fetchData = async () => {
 		setLoading(true);
@@ -56,6 +60,12 @@ export default function ComplaintTable() {
 	const handleReset = (clearFilters) => {
 		clearFilters();
 		setSearchText("");
+	};
+
+	const UpdateRecord = (record) => {
+		setIsEdit(true);
+		setVisible(true);
+		setUpdateData(record);
 	};
 
 	const getColumnSearchProps = (dataIndex) => ({
@@ -195,7 +205,11 @@ export default function ComplaintTable() {
 			width: "10%",
 		},
 		{
-			title: "",
+			title: (
+				<Button type="primary" shape="round" icon={<PlusCircleOutlined />} onClick={() => setVisible(true)}>
+					FILE A COMPLAINT
+				</Button>
+			),
 			dataIndex: "",
 			key: "x",
 			width: "10%",
@@ -235,15 +249,73 @@ export default function ComplaintTable() {
 	};
 
 	const onFinish = async (values) => {
-		console.log(viewData);
-		console.log(values);
+		const data = await fetch(`/admin/complaint-update/${viewData?._id}`, {
+			method: "PATCH",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(values),
+		});
+		const res = await data.json();
+		if (res.status === 201) {
+			message.success("Updated Successfully");
+			form.resetFields();
+			getFiledComplaint();
+			getPendingComplaints();
+			getReviewedComplaints();
+			getUnderInvestigation();
+			fetchData();
+			onClearForms();
+		} else {
+			message.error(res.error);
+		}
 	};
 
-	const onFinishFailed = async (error) => {};
+	const onClose = () => {
+		setVisible(false);
+		form.resetFields();
+	};
+
+	const onFinishFailed = async (error) => {
+		message.error(error);
+	};
+
+	useEffect(() => {
+		fetchData();
+		form.resetFields();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
 	return (
 		<Section>
 			<div className="table">
 				<Table columns={columns} dataSource={data[0]?.body} pagination={pagination} loading={loading} />
+			</div>
+			<div className="drawe">
+				<Drawer
+					title="FILE A COMPLAINT"
+					placement="right"
+					width="100%"
+					onClose={onClose}
+					open={visible}
+					height={650}
+					style={{
+						display: "flex",
+						justifyContent: "center",
+					}}
+					extra={<Space></Space>}
+				>
+					<>
+						<ComplaintForm
+							onClose={onClose}
+							fetchData={fetchData}
+							getFiledComplaint={getFiledComplaint}
+							getPendingComplaints={getPendingComplaints}
+							getReviewedComplaints={getReviewedComplaints}
+							getUnderInvestigation={getUnderInvestigation}
+						/>
+					</>
+				</Drawer>
 			</div>
 			<div className="modal">
 				<Modal

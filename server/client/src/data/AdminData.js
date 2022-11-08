@@ -27,3 +27,18 @@ export const AdminComplaintStatus = [
 		value: "Solved",
 	},
 ];
+
+export const AdminMissingStatus = [
+	{
+		name: "Pending",
+		value: "Pending",
+	},
+	{
+		name: "Missing",
+		value: "Missing",
+	},
+	{
+		name: "Found",
+		value: "Found",
+	},
+];

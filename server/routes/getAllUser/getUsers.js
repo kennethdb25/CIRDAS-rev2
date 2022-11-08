@@ -59,4 +59,13 @@ getUsers.get("/police/users", async (req, res) => {
 	}
 });
 
+getUsers.get("/admin/users", async (req, res) => {
+	try {
+		const admin = await adminUser.find();
+		res.status(200).json({ status: 201, body: admin });
+	} catch (error) {
+		res.status(404).json({ error });
+	}
+});
+
 module.exports = getUsers;

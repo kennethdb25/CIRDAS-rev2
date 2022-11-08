@@ -15,6 +15,7 @@ export default function UserAccountTable() {
 	const [img, setImg] = useState();
 	const [getCitizen, setGetCitizen] = useState([]);
 	const [getPolice, setGetPolice] = useState([]);
+	const [getAdmin, setGetAdmin] = useState([]);
 	const [validationData, setValidationData] = useState(null);
 	const [isReview, setIsReview] = useState(false);
 	const [showPoliceForm, setShowPoliceForm] = useState(false);
@@ -33,7 +34,7 @@ export default function UserAccountTable() {
 	useEffect(() => {
 		getCitizenUsers();
 		getPoliceUsers();
-
+		getAdminUsers();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
@@ -61,6 +62,19 @@ export default function UserAccountTable() {
 		});
 		const res = await data.json();
 		setGetPolice([res]);
+		setLoading(false);
+	};
+
+	const getAdminUsers = async () => {
+		setLoading(true);
+		const data = await fetch("/admin/users", {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+		const res = await data.json();
+		setGetAdmin([res]);
 		setLoading(false);
 	};
 
@@ -254,6 +268,74 @@ export default function UserAccountTable() {
 				text
 			),
 	});
+
+	const adminColumn = [
+		{
+			title: "ID",
+			dataIndex: "policeId",
+			key: "policeId",
+			width: "15%",
+			...getColumnSearchProps("policeId"),
+		},
+		{
+			title: "Email",
+			dataIndex: "email",
+			key: "email",
+			width: "20%",
+			...getColumnSearchProps("email"),
+		},
+		{
+			title: "Rank",
+			dataIndex: "rank",
+			key: "rank",
+			width: "10%",
+		},
+		{
+			title: "First Name",
+			dataIndex: "firstName",
+			key: "firstName",
+			width: "10%",
+		},
+		{
+			title: "Last Name",
+			dataIndex: "lastName",
+			key: "lastName",
+			width: "10%",
+		},
+		{
+			title: "Municipal",
+			dataIndex: "municipal",
+			key: "municipal",
+			width: "10%",
+		},
+
+		{
+			title: (
+				<Button type="primary" shape="round" icon={<PlusCircleOutlined />} onClick={() => setShowPoliceForm(true)}>
+					Add Admin User
+				</Button>
+			),
+			dataIndex: "",
+			key: "x",
+			width: "10%",
+			render: (record) => (
+				<>
+					<div style={{ display: "flex" }}>
+						<Button
+							type="primary"
+							shape="round"
+							icon={<EyeOutlined />}
+							onClick={() => {
+								onViewPoliceRecord(record);
+							}}
+						>
+							Review
+						</Button>
+					</div>
+				</>
+			),
+		},
+	];
 
 	const CitizenColumn = [
 		{

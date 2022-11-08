@@ -22,7 +22,7 @@ complaintRouter.post("/citizen/complaint", async (req, res) => {
 				municipal,
 				address,
 				year: `${new Date().getFullYear()}`,
-				month: months[new Date().getMonth() + 1],
+				month: months[new Date().getMonth()],
 				timeAndDate,
 				victim,
 				witness,
@@ -38,6 +38,28 @@ complaintRouter.post("/citizen/complaint", async (req, res) => {
 			res.status(422).json(error);
 			console.log("catch block error");
 		}
+	}
+});
+
+// admin - status update
+complaintRouter.patch("/admin/complaint-update/:_id", async (req, res) => {
+	try {
+		const id = req.params._id;
+		const { status } = req.body;
+
+		const getComplaint = await complaintSchema.findOne({ _id: id });
+
+		if (!getComplaint) {
+			res.status(422).json({ error: `No complaint match with ${id}` });
+		} else {
+			if (status) getComplaint.status = status;
+
+			const updatedData = await getComplaint.save();
+
+			res.status(201).json({ status: 201, updatedData });
+		}
+	} catch (error) {
+		res.status(404).json(error);
 	}
 });
 

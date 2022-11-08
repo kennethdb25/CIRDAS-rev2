@@ -90,6 +90,28 @@ missingpersonRouter.post("/missing-person", upload.single("photo"), async (req, 
 	}
 });
 
+// admin - status update
+missingpersonRouter.patch("/admin/missing-person/:_id", async (req, res) => {
+	try {
+		const id = req.params._id;
+		const { status } = req.body;
+
+		const getMissingPerson = await missingPersonSchema.findOne({ _id: id });
+
+		if (!getMissingPerson) {
+			res.status(422).json({ error: `No missing person match with ${id}` });
+		} else {
+			if (status) getMissingPerson.status = status;
+
+			const updatedData = await getMissingPerson.save();
+
+			res.status(201).json({ status: 201, updatedData });
+		}
+	} catch (error) {
+		res.status(404).json(error);
+	}
+});
+
 missingpersonRouter.patch("/missing-person/update/:missingpersonid", upload.single("photo"), async (req, res) => {
 	try {
 		const missingpersonid = req.params.missingpersonid;

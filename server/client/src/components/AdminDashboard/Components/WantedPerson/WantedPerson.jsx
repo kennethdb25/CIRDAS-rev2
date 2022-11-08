@@ -2,6 +2,10 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import scrollreveal from "scrollreveal";
 import Navbar from "./Navbar";
+import Analytics from "./Analytics";
+import FAQ from "./FAQ";
+import WantedPersonTable from "./WantedPersonTable";
+
 export default function WantedPerson() {
 	useEffect(() => {
 		const sr = scrollreveal({
@@ -26,7 +30,13 @@ export default function WantedPerson() {
 		<Section>
 			<Navbar />
 			<div className="grid">
-				<div className="row__one"></div>
+				<div className="row__two">
+					<Analytics />
+					<FAQ />
+				</div>
+				<div className="row__one">
+					<WantedPersonTable />
+				</div>
 			</div>
 		</Section>
 	);
@@ -49,7 +59,7 @@ const Section = styled.section`
 		}
 		.row__two {
 			display: grid;
-			grid-template-columns: 1fr;
+			grid-template-columns: repeat(2, 1fr);
 			gap: 1rem;
 			height: 50%;
 		}

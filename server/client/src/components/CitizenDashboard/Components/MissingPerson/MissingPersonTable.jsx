@@ -987,15 +987,30 @@ export default function MissingPersonTable(props) {
 							<Row gutter={12}>
 								<Col xs={{ span: 24 }} md={{ span: 24 }}>
 									<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-										<Image style={{ border: "1px solid black" }} src={img} alt="view" />
+										<Image style={{ border: "1px solid black" }} height={300} weight={300} src={img} alt="view" />
 									</div>
 								</Col>
 							</Row>
 							<Row gutter={12}>
+								<Col xs={{ span: 24 }} md={{ span: 24 }}>
+									<br></br>
+									<Text strong>Contact Person:</Text>
+									<Input style={{ marginBottom: "8px" }} value={viewData?.contactperson} disabled />
+								</Col>
+								<Col xs={{ span: 24 }} md={{ span: 12 }}>
+									<br></br>
+									<Text strong>Relation to the missing person:</Text>
+									<Input style={{ marginBottom: "8px" }} value={viewData?.relation} disabled />
+								</Col>
 								<Col xs={{ span: 24 }} md={{ span: 12 }}>
 									<br></br>
 									<Text strong>Last Seen:</Text>
 									<Input style={{ marginBottom: "8px" }} value={new Date(viewData?.lastseen).toDateString()} disabled />
+								</Col>
+								<Col xs={{ span: 24 }} md={{ span: 12 }}>
+									<br></br>
+									<Text strong>Last Seen Location:</Text>
+									<Input style={{ marginBottom: "8px" }} value={viewData?.lastlocation} disabled />
 								</Col>
 								<Col xs={{ span: 24 }} md={{ span: 12 }}>
 									<br></br>
@@ -1037,10 +1052,11 @@ export default function MissingPersonTable(props) {
 									<Text strong>Wearing:</Text>
 									<Input style={{ marginBottom: "8px" }} value={viewData?.wearing} disabled />
 								</Col>
+
 								<Col xs={{ span: 24 }} md={{ span: 12 }}>
 									<br></br>
-									<Text strong>Contact Person:</Text>
-									<Input style={{ marginBottom: "8px" }} value={viewData?.contactperson} disabled />
+									<Text strong>Status:</Text>
+									<Input style={{ marginBottom: "8px" }} value={viewData?.status} disabled />
 								</Col>
 								<Col xs={{ span: 24 }} md={{ span: 24 }}>
 									<br></br>

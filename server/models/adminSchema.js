@@ -5,6 +5,11 @@ const jwt = require("jsonwebtoken");
 const keys = require("../config/keys");
 
 const adminSchema = mongoose.Schema({
+	adminId: {
+		type: String,
+		required: true,
+		trim: true,
+	},
 	typeAdmin: {
 		type: String,
 		required: true,

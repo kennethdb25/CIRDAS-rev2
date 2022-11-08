@@ -90,7 +90,12 @@ export default function Complaints() {
 					<FAQ />
 				</div>
 				<div className="row__one">
-					<ComplaintTable />
+					<ComplaintTable
+						getFiledComplaint={getFiledComplaint}
+						getPendingComplaints={getPendingComplaints}
+						getReviewedComplaints={getReviewedComplaints}
+						getUnderInvestigation={getUnderInvestigation}
+					/>
 				</div>
 			</div>
 		</Section>

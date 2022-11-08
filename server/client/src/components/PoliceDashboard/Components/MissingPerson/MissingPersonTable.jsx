@@ -1,8 +1,9 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useRef, useContext, useEffect } from "react";
 import styled from "styled-components";
-import { SearchOutlined, EyeOutlined, EditOutlined } from "@ant-design/icons";
+import { SearchOutlined, EyeOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
-import { Button, Input, Space, Table, Modal, Typography, Form, Row, Col, Image } from "antd";
+import { Button, Input, Space, Table, Modal, Typography, Row, Col, Image } from "antd";
 
 import { LoginContext } from "../../../../context/Context";
 const { Title, Text } = Typography;
@@ -280,10 +281,25 @@ export default function MissingPersonTable(props) {
 								</Col>
 							</Row>
 							<Row gutter={12}>
+								<Col xs={{ span: 24 }} md={{ span: 24 }}>
+									<br></br>
+									<Text strong>Contact Person:</Text>
+									<Input style={{ marginBottom: "8px" }} value={viewData?.contactperson} disabled />
+								</Col>
+								<Col xs={{ span: 24 }} md={{ span: 12 }}>
+									<br></br>
+									<Text strong>Relation to the missing person:</Text>
+									<Input style={{ marginBottom: "8px" }} value={viewData?.relation} disabled />
+								</Col>
 								<Col xs={{ span: 24 }} md={{ span: 12 }}>
 									<br></br>
 									<Text strong>Last Seen:</Text>
 									<Input style={{ marginBottom: "8px" }} value={new Date(viewData?.lastseen).toDateString()} disabled />
+								</Col>
+								<Col xs={{ span: 24 }} md={{ span: 12 }}>
+									<br></br>
+									<Text strong>Last Seen Location:</Text>
+									<Input style={{ marginBottom: "8px" }} value={viewData?.lastlocation} disabled />
 								</Col>
 								<Col xs={{ span: 24 }} md={{ span: 12 }}>
 									<br></br>
@@ -325,10 +341,11 @@ export default function MissingPersonTable(props) {
 									<Text strong>Wearing:</Text>
 									<Input style={{ marginBottom: "8px" }} value={viewData?.wearing} disabled />
 								</Col>
+
 								<Col xs={{ span: 24 }} md={{ span: 12 }}>
 									<br></br>
-									<Text strong>Contact Person:</Text>
-									<Input style={{ marginBottom: "8px" }} value={viewData?.contactperson} disabled />
+									<Text strong>Status:</Text>
+									<Input style={{ marginBottom: "8px" }} value={viewData?.status} disabled />
 								</Col>
 								<Col xs={{ span: 24 }} md={{ span: 24 }}>
 									<br></br>
