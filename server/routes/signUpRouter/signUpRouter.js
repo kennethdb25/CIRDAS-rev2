@@ -130,6 +130,8 @@ router.post("/admin/register", async (req, res) => {
 		res.status(422).json({ error: "Fill all the details" });
 	}
 
+	const getAdminCount = await adminUser.find().count();
+
 	try {
 		const preUser = await adminUser.findOne({ email: email });
 
@@ -139,13 +141,17 @@ router.post("/admin/register", async (req, res) => {
 			res.status(422).json({ error: "Password and Confirm Password Not Match" });
 		} else {
 			const finalUser = new adminUser({
-				typeAdmin,
+				adminId: `ADMIN-${getAdminCount + 1}`,
 				firstName,
 				middleName,
 				lastName,
+				dob,
+				gender,
 				year: new Date().getFullYear(),
 				municipal,
-				provincial,
+				address,
+				role,
+				validuser: "true",
 				email,
 				password,
 				confirmPassword,

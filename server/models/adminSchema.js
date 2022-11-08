@@ -10,11 +10,6 @@ const adminSchema = mongoose.Schema({
 		required: true,
 		trim: true,
 	},
-	typeAdmin: {
-		type: String,
-		required: true,
-		trim: true,
-	},
 	firstName: {
 		type: String,
 		required: true,

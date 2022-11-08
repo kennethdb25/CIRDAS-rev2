@@ -64,6 +64,26 @@ const wantedPersonSchema = new mongoose.Schema({
 		required: true,
 		trim: true,
 	},
+	eyes: {
+		type: String,
+		required: true,
+		trim: true,
+	},
+	gender: {
+		type: String,
+		required: true,
+		trim: true,
+	},
+	hair: {
+		type: String,
+		required: true,
+		trim: true,
+	},
+	height: {
+		type: String,
+		required: true,
+		trim: true,
+	},
 });
 
 const wantedPerson = new mongoose.model("wantedperson", wantedPersonSchema);

@@ -269,13 +269,13 @@ export default function UserAccountTable() {
 			),
 	});
 
-	const adminColumn = [
+	const AdminColumn = [
 		{
 			title: "ID",
-			dataIndex: "policeId",
-			key: "policeId",
+			dataIndex: "adminId",
+			key: "adminId",
 			width: "15%",
-			...getColumnSearchProps("policeId"),
+			...getColumnSearchProps("adminId"),
 		},
 		{
 			title: "Email",
@@ -285,9 +285,9 @@ export default function UserAccountTable() {
 			...getColumnSearchProps("email"),
 		},
 		{
-			title: "Rank",
-			dataIndex: "rank",
-			key: "rank",
+			title: "Role",
+			dataIndex: "role",
+			key: "role",
 			width: "10%",
 		},
 		{
@@ -302,13 +302,6 @@ export default function UserAccountTable() {
 			key: "lastName",
 			width: "10%",
 		},
-		{
-			title: "Municipal",
-			dataIndex: "municipal",
-			key: "municipal",
-			width: "10%",
-		},
-
 		{
 			title: (
 				<Button type="primary" shape="round" icon={<PlusCircleOutlined />} onClick={() => setShowPoliceForm(true)}>
@@ -517,7 +510,7 @@ export default function UserAccountTable() {
 					</div>
 				</Tabs.TabPane>
 				<Tabs.TabPane tab="ADMIN USERS" key="key3">
-					<div className="table">Admin</div>
+					<Table columns={AdminColumn} dataSource={getAdmin[0]?.body} pagination={pagination} loading={loading} onChange={handleChange} />
 				</Tabs.TabPane>
 			</Tabs>
 

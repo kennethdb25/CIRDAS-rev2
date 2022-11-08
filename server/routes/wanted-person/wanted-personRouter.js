@@ -27,7 +27,7 @@ const upload = multer({
 
 wantedpersonRouter.post("/wanted-person", upload.single("photo"), async (req, res) => {
 	const { filename } = req.file;
-	const { name, age, cases, address, municipal, description, contact, status } = req.body;
+	const { name, age, cases, address, municipal, description, contact, eyes, gender, hair, height } = req.body;
 
 	const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
@@ -48,6 +48,10 @@ wantedpersonRouter.post("/wanted-person", upload.single("photo"), async (req, re
 				month: months[new Date().getMonth() + 1],
 				timeAndDate: `${new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString()}`,
 				municipal,
+				eyes,
+				gender,
+				hair,
+				height,
 				description,
 				contact,
 				status: "Wanted",

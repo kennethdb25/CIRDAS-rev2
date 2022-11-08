@@ -40,16 +40,19 @@ export default function WantedPersonTable() {
 	};
 
 	useEffect(() => {
-		fetch(`/uploads/${viewData?.imgpath}`)
-			.then((res) => res.blob())
-			.then(
-				(result) => {
-					setImg(URL.createObjectURL(result));
-				},
-				(error) => {
-					console.log(error);
-				}
-			);
+		if (viewData) {
+			fetch(`/uploads/${viewData?.imgpath}`)
+				.then((res) => res.blob())
+				.then(
+					(result) => {
+						setImg(URL.createObjectURL(result));
+					},
+					(error) => {
+						console.log(error);
+					}
+				);
+		}
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [viewData]);
 
@@ -194,7 +197,7 @@ export default function WantedPersonTable() {
 			width: "5%",
 		},
 		{
-			title: "Action",
+			title: "",
 			dataIndex: "",
 			key: "x",
 			width: "15%",
