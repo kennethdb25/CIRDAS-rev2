@@ -9,7 +9,7 @@ export default function Analytics() {
 			<div className="analytic">
 				<iframe
 					className="iframe"
-					style={{ height: "200px", border: "none", borderRadius: "2px" }}
+					style={{ height: "40vh", border: "none", borderRadius: "2px", boxShadow: "0 2px 10px 0 rgba(70, 76, 79, .2)", backgroundColor: "white" }}
 					title="Total Count of Wanted Person"
 					src="https://charts.mongodb.com/charts-cirdas-ngmsy/embed/charts?id=0f653da2-a6aa-4587-ab29-57b7b78ffb7d&maxDataAge=10&theme=light&autoRefresh=true"
 				></iframe>
@@ -17,7 +17,7 @@ export default function Analytics() {
 			<div className="analytic">
 				<iframe
 					className="iframe"
-					style={{ height: "200px", border: "none", borderRadius: "2px", boxShadow: "0 2px 10px 0 rgba(70, 76, 79, .2)" }}
+					style={{ height: "40vh", border: "none", borderRadius: "2px", boxShadow: "0 2px 10px 0 rgba(70, 76, 79, .2)", backgroundColor: "white" }}
 					title="Total Count of Wanted Person"
 					src="https://charts.mongodb.com/charts-cirdas-ngmsy/embed/charts?id=6326c127-ebcf-4825-8adf-864e79b72889&maxDataAge=10&theme=light&autoRefresh=true"
 				></iframe>

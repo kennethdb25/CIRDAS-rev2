@@ -22,7 +22,7 @@ export default function MonthlyRateMissing() {
 }
 const Section = styled.section`
 	${cardStyles};
-	height: 45vh;
+	height: 60vh;
 	display: flex;
 	.title {
 		h2 {

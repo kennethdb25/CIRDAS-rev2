@@ -1,17 +1,17 @@
-import React, { useContext, useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { BsFileEarmarkMedicalFill, BsFillFileEarmarkXFill } from "react-icons/bs";
 import { BiGroup } from "react-icons/bi";
 import { cardStyles } from "./ReusableStyles";
-import { LoginContext } from "../../../../context/Context";
 
-export default function Analytics() {
+export default function Analytics(props) {
+	const { getAll, getMissing, getPending, getFound } = props;
 	return (
 		<Section>
 			<div className="analytic ">
 				<div className="content">
 					<h4>Filed Missing Person</h4>
-					<h2>0</h2>
+					<h2>{getAll}</h2>
 				</div>
 				<div className="logo">
 					<BsFileEarmarkMedicalFill />
@@ -23,7 +23,7 @@ export default function Analytics() {
 				</div>
 				<div className="content">
 					<h4>Pending Status</h4>
-					<h2>0</h2>
+					<h2>{getPending}</h2>
 				</div>
 			</div>
 			<div className="analytic">
@@ -32,13 +32,13 @@ export default function Analytics() {
 				</div>
 				<div className="content">
 					<h4>Missing Status</h4>
-					<h2>0</h2>
+					<h2>{getMissing}</h2>
 				</div>
 			</div>
 			<div className="analytic ">
 				<div className="content">
 					<h4>Found Status</h4>
-					<h2>0</h2>
+					<h2>{getFound}</h2>
 				</div>
 				<div className="logo">
 					<BiGroup />

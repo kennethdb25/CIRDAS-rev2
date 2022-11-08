@@ -188,4 +188,35 @@ router.patch("/citizen/update/:citizenId", async (req, res) => {
 	}
 });
 
+router.patch("/police/update/:policeId", async (req, res) => {
+	try {
+		const policeId = req.params.policeId;
+		const { email, address, municipal, rank } = req.body;
+
+		const getPoliceUser = await policeUser.findOne({ policeId: policeId });
+
+		if (!getPoliceUser) {
+			res.status(422).json({ error: `No user match with ${citizenId}` });
+		} else if (
+			email === getPoliceUser?.email &&
+			address === getPoliceUser?.address &&
+			municipal === getPoliceUser?.municipal &&
+			rank === getPoliceUser?.rank
+		) {
+			res.status(422).json({ error: "No changes have been made!" });
+		} else {
+			if (email) getPoliceUser.email = email;
+			if (address) getPoliceUser.address = address;
+			if (municipal) getPoliceUser.municipal = municipal;
+			if (rank) getPoliceUser.rank = rank;
+
+			const updatedData = await getPoliceUser.save();
+
+			res.status(201).json({ status: 201, updatedData });
+		}
+	} catch (error) {
+		res.status(404).json(error);
+	}
+});
+
 module.exports = router;

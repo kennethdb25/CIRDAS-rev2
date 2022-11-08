@@ -1,47 +1,30 @@
 import React from "react";
 import styled from "styled-components";
-import { IoIosArrowForward } from "react-icons/io";
-import { AiFillFileAdd } from "react-icons/ai";
-import { MdImportantDevices } from "react-icons/md";
-import { cardStyles } from "./ReusableStyles";
 export default function FAQ() {
-	const faqs = [
-		{
-			icon: <MdImportantDevices />,
-			text: "What is Complaint Page?",
-		},
-		{
-			icon: <AiFillFileAdd />,
-			text: "How to file a complaint?",
-		},
-		{
-			icon: <AiFillFileAdd />,
-			text: "What are the complaints that you can file?",
-		},
-	];
 	return (
 		<Section>
-			<div className="title">
-				<h2>Complaint Page</h2>
-			</div>
-			<div className="faqs">
-				{faqs.map((faq) => {
-					return (
-						<div className="faq">
-							<div className="info">
-								{faq.icon}
-								<h4>{faq.text}</h4>
-							</div>
-							<IoIosArrowForward />
-						</div>
-					);
-				})}
-			</div>
+			<iframe
+				className="iframe"
+				style={{
+					height: "40vh",
+					width: "100%",
+					border: "none",
+					borderRadius: "2px",
+					boxShadow: "0 2px 10px 0 rgba(70, 76, 79, .2)",
+					backgroundColor: "white",
+				}}
+				title="Provincial Rate of Complaint (Annual)"
+				src="https://charts.mongodb.com/charts-cirdas-ngmsy/embed/charts?id=6305ca22-602a-4c3b-8c7c-04b18cbc3e65&maxDataAge=10&theme=light&autoRefresh=true"
+			></iframe>
 		</Section>
 	);
 }
 const Section = styled.section`
-	${cardStyles};
+	padding: 1rem 1rem 1rem 1rem;
+	border-radius: 1rem;
+	background-color: #437fc7;
+	color: white;
+	display: flex;
 	.title {
 		h2 {
 			color: white;

@@ -17,6 +17,7 @@ import Complaints from "../Complaints/Complaints";
 import MissingPerson from "../MissingPerson/MissingPerson";
 import WantedPerson from "../WantedPerson/WantedPerson";
 import PoliceStationDetails from "../PoliceStationDetails/PoliceStationDetails";
+import Account from "../Account/Account";
 import About from "../About/About";
 
 export default function Sidebar() {
@@ -296,7 +297,9 @@ export default function Sidebar() {
 					<PoliceStationDetails />
 				</>
 			) : currentLink === 6 ? (
-				<></>
+				<>
+					<Account />
+				</>
 			) : currentLink === 7 ? (
 				<>
 					<About />

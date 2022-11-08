@@ -1,47 +1,28 @@
 import React from "react";
 import styled from "styled-components";
-import { IoIosArrowForward } from "react-icons/io";
-import { AiFillFileAdd } from "react-icons/ai";
-import { MdImportantDevices } from "react-icons/md";
 import { cardStyles } from "./ReusableStyles";
 export default function FAQ() {
-	const faqs = [
-		{
-			icon: <MdImportantDevices />,
-			text: "What is Wanted Persons's Page?",
-		},
-		{
-			icon: <AiFillFileAdd />,
-			text: "What is the importance of this page?",
-		},
-		{
-			icon: <AiFillFileAdd />,
-			text: "What to know before filing missing person?",
-		},
-	];
 	return (
 		<Section>
-			<div className="title">
-				<h2>Wanted Person's Page</h2>
-			</div>
-			<div className="faqs">
-				{faqs.map((faq) => {
-					return (
-						<div className="faq">
-							<div className="info">
-								{faq.icon}
-								<h4>{faq.text}</h4>
-							</div>
-							<IoIosArrowForward />
-						</div>
-					);
-				})}
-			</div>
+			<iframe
+				className="iframe"
+				style={{
+					height: "40vh",
+					width: "100%",
+					border: "none",
+					borderRadius: "2px",
+					boxShadow: "0 2px 10px 0 rgba(70, 76, 79, .2)",
+					backgroundColor: "white",
+				}}
+				title="Provincial Rate of Missing Person (Annual)"
+				src="https://charts.mongodb.com/charts-cirdas-ngmsy/embed/charts?id=6325c723-7e44-4016-837a-fa65c5cc9b3c&maxDataAge=10&theme=light&autoRefresh=true"
+			></iframe>
 		</Section>
 	);
 }
 const Section = styled.section`
 	${cardStyles};
+	display: flex;
 	.title {
 		h2 {
 			color: white;

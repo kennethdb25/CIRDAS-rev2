@@ -103,6 +103,16 @@ const missingPersonSchema = new mongoose.Schema({
 		required: true,
 		trim: true,
 	},
+	relation: {
+		type: String,
+		required: true,
+		trim: true,
+	},
+	lastlocation: {
+		type: String,
+		required: true,
+		trim: true,
+	},
 	lastseen: {
 		type: String,
 		required: true,

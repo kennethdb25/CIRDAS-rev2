@@ -5,6 +5,7 @@ module.exports = function (app) {
 			"/complaint",
 			"/citizen",
 			"/citizen/change-password",
+			"/police/change-password",
 			"/citizen/delete",
 			"/police",
 			"/admin",

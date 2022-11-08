@@ -32,7 +32,9 @@ const MissingPersonForm = (props) => {
 		newData.append("hair", values.hair);
 		newData.append("height", values.height);
 		newData.append("lastseen", values.lastseen);
+		newData.append("lastlocation", values.lastlocation);
 		newData.append("municipal", values.municipal);
+		newData.append("relation", values.relation);
 		newData.append("race", values.race);
 		newData.append("wearing", values.wearing);
 		newData.append("weight", values.weight);

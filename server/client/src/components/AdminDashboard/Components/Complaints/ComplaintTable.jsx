@@ -234,7 +234,10 @@ export default function ComplaintTable() {
 		setStatus(true);
 	};
 
-	const onFinish = async (valuse) => {};
+	const onFinish = async (values) => {
+		console.log(viewData);
+		console.log(values);
+	};
 
 	const onFinishFailed = async (error) => {};
 	return (
@@ -243,40 +246,47 @@ export default function ComplaintTable() {
 				<Table columns={columns} dataSource={data[0]?.body} pagination={pagination} loading={loading} />
 			</div>
 			<div className="modal">
-				<Form
-					form={form}
-					labelCol={{
-						span: 8,
+				<Modal
+					title="Complaint Details"
+					open={isView}
+					onCancel={() => {
+						onClearForms();
 					}}
-					initialValues={initialValues}
-					layout="horizontal"
-					onFinish={onFinish}
-					onFinishFailed={onFinishFailed}
-					autoComplete="off"
-					style={{
-						width: "100%",
-						maxHeight: "100vh",
-					}}
+					footer={[
+						<Button
+							key="cancel"
+							onClick={() => {
+								onClearForms();
+							}}
+						>
+							Cancel
+						</Button>,
+						<>
+							{status ? (
+								<Button type="primary" key="updatestatus" onClick={enableStatus}>
+									Update Status
+								</Button>
+							) : (
+								<></>
+							)}
+							,
+						</>,
+					]}
 				>
-					<Modal
-						title="Complaint Details"
-						open={isView}
-						onCancel={() => {
-							onClearForms();
+					<Form
+						form={form}
+						labelCol={{
+							span: 8,
 						}}
-						footer={[
-							<Button
-								key="cancel"
-								onClick={() => {
-									onClearForms();
-								}}
-							>
-								Cancel
-							</Button>,
-							<Button type="primary" key="updatestatus" onClick={enableStatus}>
-								{status ? "Update Status" : "Submit"}
-							</Button>,
-						]}
+						initialValues={initialValues}
+						layout="horizontal"
+						onFinish={onFinish}
+						onFinishFailed={onFinishFailed}
+						autoComplete="off"
+						style={{
+							width: "100%",
+							maxHeight: "100vh",
+						}}
 					>
 						<Typography>Complainant</Typography>
 						<Input style={{ marginBottom: "15px" }} value={viewData?.complainantname} disabled />
@@ -318,8 +328,18 @@ export default function ComplaintTable() {
 								</Select>
 							)}
 						</Form.Item>
-					</Modal>
-				</Form>
+						{status ? (
+							<></>
+						) : (
+							<>
+								{" "}
+								<Button type="primary" htmlType="submit">
+									Update
+								</Button>
+							</>
+						)}
+					</Form>
+				</Modal>
 			</div>
 		</Section>
 	);

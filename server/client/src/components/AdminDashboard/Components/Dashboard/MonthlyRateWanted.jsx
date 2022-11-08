@@ -23,6 +23,7 @@ export default function MonthlyRateWanted() {
 const Section = styled.section`
 	${cardStyles};
 	display: flex;
+	height: 60vh;
 	.title {
 		h2 {
 			color: white;

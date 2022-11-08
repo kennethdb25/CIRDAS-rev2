@@ -1,70 +1,64 @@
-import React, { useContext } from "react";
+import React from "react";
 import styled from "styled-components";
-import image from "../../assets/default.png";
-import { HiOutlineLocationMarker } from "react-icons/hi";
-import { RiAdminLine } from "react-icons/ri";
 import { cardStyles } from "./ReusableStyles";
-import { LoginContext } from "../../../../context/Context";
-export default function Profile() {
-	// eslint-disable-next-line no-unused-vars
-	const { loginData, setLoginData } = useContext(LoginContext);
+export default function MonthlyRateMissing() {
 	return (
 		<Section>
-			<div className="image">
-				<img src={image} alt="" />
-			</div>
-			<div className="title">
-				<h2>{`${loginData.validadmin?.firstName} ${loginData.validadmin?.lastName}`}</h2>
-				<h5>
-					<HiOutlineLocationMarker /> {`${loginData.validadmin?.address}`}
-				</h5>
-				<h5>
-					<RiAdminLine /> {`${loginData.validadmin?.role}`}
-				</h5>
-			</div>
+			<iframe
+				className="iframe"
+				style={{
+					height: "100%",
+					width: "100%",
+					border: "none",
+					borderRadius: "2px",
+					boxShadow: "0 2px 10px 0 rgba(70, 76, 79, .2)",
+					backgroundColor: "white",
+				}}
+				title="Provincial Rate of Missing Person (Annual)"
+				src="https://charts.mongodb.com/charts-cirdas-ngmsy/embed/charts?id=6325bb56-717b-4ad9-8a7a-ef09c2a6d45e&maxDataAge=10&theme=light&autoRefresh=true"
+			></iframe>
 		</Section>
 	);
 }
 const Section = styled.section`
 	${cardStyles};
+	height: 60vh;
 	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 1rem;
-	.image {
-		max-height: 10rem;
-		overflow: hidden;
-		border-radius: 20rem;
-		img {
-			height: 11rem;
-			width: 10rem;
-			object-fit: cover;
-			border-radius: 20rem;
-			transition: 0.5s ease-in-out;
-		}
-		&:hover {
-			img {
-				transform: scale(1.1);
-			}
-		}
-	}
 	.title {
-		text-align: center;
-		h2,
-		h5 {
+		h2 {
 			color: white;
 			font-family: "Montserrat";
 			letter-spacing: 0.3rem;
 		}
-		h5 {
-			letter-spacing: 0.2rem;
+	}
+	.faqs {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		margin-top: 1rem;
+		.faq {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			cursor: pointer;
+			.info {
+				display: flex;
+				gap: 1rem;
+				align-items: center;
+			}
+			svg {
+				font-size: 1.4rem;
+			}
+			&:nth-of-type(2) {
+				border-top: 0.01rem solid #6c6e6e;
+				border-bottom: 0.01rem solid #6c6e6e;
+				padding: 0.8rem 0;
+			}
 		}
 	}
-	.info {
-		display: flex;
-		gap: 1rem;
-		.container {
-			text-align: center;
+	@media screen and (min-width: 280px) and (max-width: 1080px) {
+		svg {
+			font-size: 2rem !important;
 		}
 	}
 `;

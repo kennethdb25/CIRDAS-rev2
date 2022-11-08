@@ -100,8 +100,10 @@ export default function MissingPersonTable(props) {
 		height: updateData?.height,
 		id: updateData?.id,
 		lastseen: new Date(updateData?.lastseen).toLocaleDateString(),
+		lastlocation: updateData?.lastlocation,
 		missingpersonid: updateData?.missingpersonid,
 		municipal: updateData?.municipal,
+		relation: updateData?.relation,
 		race: updateData?.race,
 		status: updateData?.status,
 		timeAndDate: updateData?.timeAndDate,
@@ -125,7 +127,9 @@ export default function MissingPersonTable(props) {
 		newData.append("hair", values.hair);
 		newData.append("height", values.height);
 		newData.append("lastseen", values.lastseen);
+		newData.append("lastlocation", values.lastlocation);
 		newData.append("municipal", values.municipal);
+		newData.append("relation", values.relation);
 		newData.append("race", values.race);
 		newData.append("wearing", values.wearing);
 		newData.append("weight", values.weight);
@@ -491,7 +495,6 @@ export default function MissingPersonTable(props) {
 				{isEdit ? (
 					<>
 						<Form
-							orm
 							form={form}
 							labelCol={{
 								span: 8,
@@ -550,13 +553,12 @@ export default function MissingPersonTable(props) {
 												<Input placeholder="Enter missing person's fullname" />
 											</Form.Item>
 										</Col>
-										<Col xs={{ span: 24 }} md={{ span: 8 }}>
+										<Col xs={{ span: 24 }} md={{ span: 8 }} layout="vertical">
 											<Form.Item
-												label="Missing Person's Birth Date"
-												name="dob"
+												label="Relation"
+												name="relation"
 												labelCol={{
 													span: 24,
-													//offset: 2
 												}}
 												wrapperCol={{
 													span: 24,
@@ -565,11 +567,11 @@ export default function MissingPersonTable(props) {
 												rules={[
 													{
 														required: true,
-														message: "Please enter missing person's birth date!",
+														message: "Please enter relation",
 													},
 												]}
 											>
-												<Input />
+												<Input placeholder="Relation to the missing person" />
 											</Form.Item>
 										</Col>
 									</Row>
@@ -772,6 +774,28 @@ export default function MissingPersonTable(props) {
 												]}
 											>
 												<Input placeholder="Enter missing person's age" />
+											</Form.Item>
+										</Col>
+										<Col xs={{ span: 24 }} md={{ span: 8 }}>
+											<Form.Item
+												label="Missing Person's Birth Date"
+												name="dob"
+												labelCol={{
+													span: 24,
+													//offset: 2
+												}}
+												wrapperCol={{
+													span: 24,
+												}}
+												hasFeedback
+												rules={[
+													{
+														required: true,
+														message: "Please enter missing person's birth date!",
+													},
+												]}
+											>
+												<Input />
 											</Form.Item>
 										</Col>
 									</Row>

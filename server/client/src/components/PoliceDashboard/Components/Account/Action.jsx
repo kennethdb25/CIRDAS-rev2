@@ -1,37 +1,34 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Drawer, Space, Modal, Form, Input, Row, Col, Button, Image, message } from "antd";
-import { DeleteOutlined, FileImageOutlined, LockOutlined, SyncOutlined } from "@ant-design/icons";
+import { Drawer, Space, Modal, Form, Input, Row, Col, Button, message } from "antd";
+import { DeleteOutlined, LockOutlined, SyncOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 
 export default function Action(props) {
-	const [img, setImg] = useState();
-	const [uploadParam, setUploadParam] = useState();
 	const [visible, setVisible] = useState(false);
 	const [isDelete, setIsDelete] = useState(false);
-	const [isUploaded, setIsUploaded] = useState(false);
 	const [isChangePassowrd, setIsChangePassword] = useState(false);
 
 	const [form] = Form.useForm();
 	const history = useNavigate();
 	const { loginData, ValidUser } = props;
-	console.log(loginData);
 
 	const initialValues = {
-		firstName: loginData.validcitizen?.firstName,
-		middleName: loginData.validcitizen?.middleName ? loginData.validcitizen?.middleName : "N/A",
-		lastName: loginData.validcitizen?.lastName,
-		birthdate: new Date(loginData.validcitizen?.birthdate).toLocaleDateString(),
-		gender: loginData.validcitizen?.gender,
-		email: loginData.validcitizen?.email,
-		address: loginData.validcitizen?.address,
-		municipal: loginData.validcitizen?.municipal,
+		rank: loginData.validpolice?.rank,
+		firstName: loginData.validpolice?.firstName,
+		middleName: loginData.validpolice?.middleName ? loginData.validpolice?.middleName : "N/A",
+		lastName: loginData.validpolice?.lastName,
+		birthdate: new Date(loginData.validpolice?.birthdate).toLocaleDateString(),
+		gender: loginData.validpolice?.gender,
+		email: loginData.validpolice?.email,
+		address: loginData.validpolice?.address,
+		municipal: loginData.validpolice?.municipal,
 	};
 
-	const email = loginData.validcitizen?.email;
+	const email = loginData.validpolice?.email;
 
 	const onChangePassword = async (values) => {
-		const data = await fetch(`/citizen/change-password/${email}`, {
+		const data = await fetch(`/police/change-password/${email}`, {
 			method: "PATCH",
 			headers: {
 				"Content-Type": "application/json",
@@ -50,7 +47,7 @@ export default function Action(props) {
 	};
 
 	const onFinish = async (values) => {
-		const data = await fetch(`/citizen/update/${loginData.validcitizen?.citizenId}`, {
+		const data = await fetch(`/police/update/${loginData.validpolice?.policeId}`, {
 			method: "PATCH",
 			headers: {
 				"Content-Type": "application/json",
@@ -76,36 +73,13 @@ export default function Action(props) {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	useEffect(() => {
-		if (uploadParam) {
-			fetch(`/uploads/${uploadParam}`)
-				.then((res) => res.blob())
-				.then(
-					(result) => {
-						setImg(URL.createObjectURL(result));
-						console.log(URL.createObjectURL(result));
-					},
-					(error) => {
-						console.log(error);
-					}
-				);
-		}
-
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [uploadParam]);
-
-	const onUploaded = () => {
-		setUploadParam(loginData?.validcitizen?.imgpath);
-		setIsUploaded(true);
-	};
-
 	const onChangePasswordFailed = async (error) => {
 		console.log(error);
 	};
 
 	const onDeleteAccount = async () => {
 		console.log("Deleting Account");
-		const data = await fetch(`/citizen/delete/${email}`, {
+		const data = await fetch(`/police/delete/${email}`, {
 			method: "PATCH",
 		});
 
@@ -114,9 +88,9 @@ export default function Action(props) {
 			message.success("Deleted Successfully");
 			setIsDelete(false);
 			setTimeout(async () => {
-				let token = localStorage.getItem("citizenUserDataToken");
+				let token = localStorage.getItem("policeUserDataToken");
 
-				const res = await fetch("/citizen/logout", {
+				const res = await fetch("/police/logout", {
 					method: "GET",
 					headers: {
 						"Content-Type": "application/json",
@@ -131,8 +105,8 @@ export default function Action(props) {
 				if (dataPol.status === 201) {
 					message.warning("Logging Out");
 					setTimeout(() => {
-						localStorage.removeItem("citizenUserDataToken");
-						history("/");
+						localStorage.removeItem("policeUserDataToken");
+						history("/user-police");
 					}, 4000);
 				} else {
 					message.error("Error Occured");
@@ -162,13 +136,6 @@ export default function Action(props) {
 						}}
 					>
 						UPDATE ACCOUNT DETAILS
-					</Button>
-				</div>
-			</div>
-			<div className="analytic">
-				<div className="content">
-					<Button type="primary" icon={<FileImageOutlined />} shape="round" onClick={() => onUploaded()}>
-						UPLOADED DOCUMENT
 					</Button>
 				</div>
 			</div>
@@ -336,6 +303,30 @@ export default function Action(props) {
 								</Col>
 								<Col xs={{ span: 24 }} md={{ span: 12 }}>
 									<Form.Item
+										label="Rank"
+										name="rank"
+										labelCol={{
+											span: 24,
+											//offset: 2
+										}}
+										wrapperCol={{
+											span: 24,
+										}}
+										hasFeedback
+										rules={[
+											{
+												required: true,
+												message: "Please enter you rank",
+											},
+										]}
+									>
+										<Input placeholder="Please enter your rank" />
+									</Form.Item>
+								</Col>
+							</Row>
+							<Row gutter={12}>
+								<Col xs={{ span: 24 }} md={{ span: 24 }}>
+									<Form.Item
 										label="Email"
 										name="email"
 										labelCol={{
@@ -427,25 +418,7 @@ export default function Action(props) {
 			>
 				Are you sure to "DELETE" this account?
 			</Modal>
-			<Modal
-				title="UPLOADED DOCUMENT"
-				width={600}
-				open={isUploaded}
-				onCancel={() => {
-					setIsUploaded(false);
-				}}
-				footer={[
-					<Button key="back" onClick={() => setIsUploaded(false)}>
-						CLOSE
-					</Button>,
-				]}
-			>
-				<Col xs={{ span: 24 }} md={{ span: 24 }}>
-					<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-						<Image style={{ border: "1px solid black" }} height={300} weight={300} src={img} alt="view" />
-					</div>
-				</Col>
-			</Modal>
+
 			<Modal
 				title="CHANGE PASSWORD"
 				width={700}

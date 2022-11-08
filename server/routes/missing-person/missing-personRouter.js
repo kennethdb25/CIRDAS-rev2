@@ -27,8 +27,27 @@ const upload = multer({
 
 missingpersonRouter.post("/missing-person", upload.single("photo"), async (req, res) => {
 	const { filename } = req.file;
-	const { id, contactperson, fullname, dob, age, gender, race, eyes, hair, height, weight, wearing, address, municipal, characteristics, contact, lastseen } =
-		req.body;
+	const {
+		id,
+		contactperson,
+		fullname,
+		dob,
+		age,
+		gender,
+		race,
+		eyes,
+		hair,
+		height,
+		weight,
+		wearing,
+		address,
+		municipal,
+		characteristics,
+		relation,
+		contact,
+		lastseen,
+		lastlocation,
+	} = req.body;
 	const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 	const missingpersoncount = await missingPersonSchema.find().count();
@@ -50,6 +69,7 @@ missingpersonRouter.post("/missing-person", upload.single("photo"), async (req, 
 			wearing,
 			imgpath: filename,
 			address,
+			relation,
 			month: months[new Date().getMonth() + 1],
 			year: `${new Date().getFullYear()}`,
 			timeAndDate: `${new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString()}`,
@@ -57,6 +77,7 @@ missingpersonRouter.post("/missing-person", upload.single("photo"), async (req, 
 			characteristics,
 			contact,
 			lastseen,
+			lastlocation,
 			status: "Pending",
 		});
 
@@ -85,12 +106,14 @@ missingpersonRouter.patch("/missing-person/update/:missingpersonid", upload.sing
 			height,
 			weight,
 			wearing,
+			relation,
 			address,
 			year,
 			timeAndDate,
 			municipal,
 			characteristics,
 			contact,
+			lastlocation,
 			lastseen,
 			status,
 		} = req.body;
@@ -113,12 +136,14 @@ missingpersonRouter.patch("/missing-person/update/:missingpersonid", upload.sing
 			if (weight) getMissingPerson.weight = weight;
 			if (wearing) getMissingPerson.wearing = wearing;
 			if (address) getMissingPerson.address = address;
+			if (relation) getMissingPerson.relation = relation;
 			if (year) getMissingPerson.year = year;
 			if (municipal) getMissingPerson.municipal = municipal;
 			if (timeAndDate) getMissingPerson.timeAndDate = timeAndDate;
 			if (characteristics) getMissingPerson.characteristics = characteristics;
 			if (contact) getMissingPerson.contact = contact;
 			if (lastseen) getMissingPerson.lastseen = lastseen;
+			if (lastlocation) getMissingPerson.lastlocation = lastlocation;
 			if (status) getMissingPerson.status = status;
 
 			const updatedData = await getMissingPerson.save();
@@ -140,10 +165,30 @@ missingpersonRouter.get("/missing-person", async (req, res) => {
 	}
 });
 
+// get all missing by status - Pending
+missingpersonRouter.get("/missing-person/pending", async (req, res) => {
+	try {
+		const missingPerson = await missingPersonSchema.find({ status: "Pending" });
+		res.status(200).json({ status: 200, body: missingPerson });
+	} catch (error) {
+		res.status(404).json(error);
+	}
+});
+
 // get all missing person by status - Missing
 missingpersonRouter.get("/missing-person/status", async (req, res) => {
 	try {
 		const missingPerson = await missingPersonSchema.find({ status: "Missing" });
+		res.status(200).json({ status: 200, body: missingPerson });
+	} catch (error) {
+		res.status(404).json(error);
+	}
+});
+
+// get all missing by status - Found
+missingpersonRouter.get("/missing-person/found", async (req, res) => {
+	try {
+		const missingPerson = await missingPersonSchema.find({ status: "Found" });
 		res.status(200).json({ status: 200, body: missingPerson });
 	} catch (error) {
 		res.status(404).json(error);
