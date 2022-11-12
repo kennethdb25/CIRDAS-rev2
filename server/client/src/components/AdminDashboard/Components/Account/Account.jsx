@@ -1,13 +1,36 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import scrollreveal from "scrollreveal";
 import Navbar from "./Navbar";
+import Profile from "./Profile";
 
 export default function Account() {
+	const [loginData, setLoginData] = useState([]);
 	// COMPLAINT TABLE
 
+	const ValidUser = async () => {
+		let validToken = localStorage.getItem("adminUserDataToken");
+		const res = await fetch("/validadmin", {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: validToken,
+			},
+		});
+
+		const fetchedData = await res.json();
+
+		if (!fetchedData) {
+			console.log("user not valid");
+		} else {
+			console.log("user verified");
+			setLoginData(fetchedData);
+		}
+	};
+
 	useEffect(() => {
+		ValidUser();
 		const sr = scrollreveal({
 			origin: "bottom",
 			distance: "80px",
@@ -30,7 +53,9 @@ export default function Account() {
 		<Section>
 			<Navbar />
 			<div className="grid">
-				<div className="row__two"></div>
+				<div className="row__two">
+					<Profile ValidUser={ValidUser} loginData={loginData} />
+				</div>
 				<div className="row__one"></div>
 			</div>
 		</Section>
@@ -53,9 +78,11 @@ const Section = styled.section`
 			gap: 1rem;
 		}
 		.row__two {
-			display: grid;
-			grid-template-columns: repeat(2, 1fr);
-			gap: 1rem;
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			align-items: center;
+			grid-template-columns: 1fr
 			height: 100%;
 		}
 	}
@@ -68,7 +95,7 @@ const Section = styled.section`
 			}
 			.row__two {
 				grid-template-columns: 1fr;
-				width: 100%;
+				width: 40%;
 			}
 		}
 	}

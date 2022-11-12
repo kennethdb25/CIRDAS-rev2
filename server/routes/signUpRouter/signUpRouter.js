@@ -222,4 +222,31 @@ router.patch("/police/update/:policeId", async (req, res) => {
 	}
 });
 
+router.patch("/admin/update/:adminId", async (req, res) => {
+	try {
+		const adminId = req.params.adminId;
+		const { email, address, municipal, role } = req.body;
+
+		const getAdminUser = await adminUser.findOne({ adminId: adminId });
+
+		if (!getAdminUser) {
+			res.status(422).json({ error: `No user match with ${adminId}` });
+		} else if (email === getAdminUser?.email && address === getAdminUser?.address && municipal === getAdminUser?.municipal && role === getAdminUser?.role) {
+			res.status(422).json({ error: "No changes have been made!" });
+		} else {
+			if (email) getAdminUser.email = email;
+			if (address) getAdminUser.address = address;
+			if (municipal) getAdminUser.municipal = municipal;
+			if (role) getAdminUser.role = role;
+
+			const updatedData = await getAdminUser.save();
+
+			res.status(201).json({ status: 201, updatedData });
+		}
+	} catch (error) {
+		console.log(error);
+		res.status(404).json(error);
+	}
+});
+
 module.exports = router;
