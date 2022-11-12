@@ -1,7 +1,8 @@
-import React, { useContext, useState, useEffect, useRef } from "react";
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import { Button, Input, Space, Table, Modal, Typography, Drawer, Form, Row, Col, Image } from "antd";
-import { SearchOutlined, PlusCircleOutlined, EyeOutlined, EditOutlined } from "@ant-design/icons";
+import { Button, Input, Space, Table, Modal, Typography } from "antd";
+import { SearchOutlined, EyeOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 
 export default function Analytics() {
@@ -9,7 +10,6 @@ export default function Analytics() {
 	const [data, setData] = useState([]);
 	const [searchText, setSearchText] = useState("");
 	const [loading, setLoading] = useState(false);
-	const [visible, setVisible] = useState(false);
 	const [isView, setIsView] = useState(false);
 	const [searchedColumn, setSearchedColumn] = useState("");
 	const searchInput = useRef(null);
@@ -35,10 +35,6 @@ export default function Analytics() {
 		const dataComp = await res.json();
 		setData([dataComp]);
 		setLoading(false);
-	};
-
-	const onClose = () => {
-		setVisible(false);
 	};
 
 	const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -205,7 +201,21 @@ export default function Analytics() {
 			<div className="table">
 				<Table columns={columns} dataSource={data[0]?.body} pagination={pagination} loading={loading} />
 			</div>
-			<Modal title="Police Station Location Details" open={isView} onCancel={() => setIsView(false)} onOk={() => setIsView(false)}>
+			<Modal
+				title="Police Station Location Details"
+				open={isView}
+				onCancel={() => setIsView(false)}
+				footer={[
+					<Button
+						key="cancel23"
+						onClick={() => {
+							setIsView(false);
+						}}
+					>
+						Close
+					</Button>,
+				]}
+			>
 				<Typography>Station ID</Typography>
 				<Input style={{ marginBottom: "15px" }} value={viewData?.stationdId} disabled />
 				<Typography>Municipal</Typography>

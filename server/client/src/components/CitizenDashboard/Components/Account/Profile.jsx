@@ -4,6 +4,7 @@ import male from "../../assets/default.png";
 import female from "../../assets/Female.jpg";
 import { HiOutlineLocationMarker, HiOutlineMail } from "react-icons/hi";
 import { cardStyles } from "./ReusableStyles";
+import Action from "./Action";
 export default function Profile(props) {
 	const { loginData, ValidUser } = props;
 
@@ -43,6 +44,9 @@ export default function Profile(props) {
 					<h5>Account Status</h5>
 					<h3>{`${loginData.validcitizen?.accountstatus}`}</h3>
 				</div>
+			</div>
+			<div className="info">
+				<Action ValidUser={ValidUser} loginData={loginData} />
 			</div>
 		</Section>
 	);

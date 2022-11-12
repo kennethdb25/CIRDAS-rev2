@@ -43,16 +43,18 @@ export default function WantedPersonTable() {
 	// get image
 
 	useEffect(() => {
-		fetch(`/uploads/${viewData?.imgpath}`)
-			.then((res) => res.blob())
-			.then(
-				(result) => {
-					setImg(URL.createObjectURL(result));
-				},
-				(error) => {
-					console.log(error);
-				}
-			);
+		if (viewData) {
+			fetch(`/uploads/${viewData?.imgpath}`)
+				.then((res) => res.blob())
+				.then(
+					(result) => {
+						setImg(URL.createObjectURL(result));
+					},
+					(error) => {
+						console.log(error);
+					}
+				);
+		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [viewData]);
 
@@ -230,10 +232,17 @@ export default function WantedPersonTable() {
 						setIsView(false);
 						setImg();
 					}}
-					onOk={() => {
-						setIsView(false);
-						setImg();
-					}}
+					footer={[
+						<Button
+							key="cancel23"
+							onClick={() => {
+								setIsView(false);
+								setImg();
+							}}
+						>
+							Cancel
+						</Button>,
+					]}
 				>
 					<Row>
 						<Col xs={{ span: 0 }} md={{ span: 4 }}></Col>

@@ -552,7 +552,10 @@ export default function Action(props) {
 	);
 }
 const Section = styled.section`
-	display: grid;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
 	grid-template-columns: 1fr
 	margin-top: 2rem;
 	.analytic {

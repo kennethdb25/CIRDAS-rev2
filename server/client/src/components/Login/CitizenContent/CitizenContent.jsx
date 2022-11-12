@@ -24,7 +24,7 @@ const CitizenContent = () => {
 			<Drawer
 				title="Create An Account"
 				placement="left"
-				width={600}
+				width={900}
 				onClose={onClose}
 				open={visible}
 				height={600}

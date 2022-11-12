@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { SearchOutlined, PlusCircleOutlined, EyeOutlined, EditOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
@@ -6,10 +6,8 @@ import { toast } from "react-toastify";
 import emailjs from "@emailjs/browser";
 import { MunicipalData } from "../../../../data/CitizensData";
 import { AdminRole } from "../../../../data/AdminData";
-import { Button, Input, Space, Table, Modal, message, Select, DatePicker, Typography, Drawer, Form, Row, Col, Image, Radio, Upload, Tabs } from "antd";
-import { LoginContext } from "../../../../context/Context";
-const { Title, Text } = Typography;
-const { TextArea } = Input;
+import { Button, Input, Space, Table, Modal, message, Select, DatePicker, Typography, Drawer, Form, Row, Col, Image, Radio, Tabs } from "antd";
+const { Text } = Typography;
 
 export default function UserAccountTable() {
 	const [img, setImg] = useState();
@@ -19,6 +17,7 @@ export default function UserAccountTable() {
 	const [validationData, setValidationData] = useState(null);
 	const [isReview, setIsReview] = useState(false);
 	const [showPoliceForm, setShowPoliceForm] = useState(false);
+	const [showAdminForm, setShowAdminForm] = useState(false);
 	const [isValidated, setIsValidated] = useState(false);
 	const [searchedColumn, setSearchedColumn] = useState("");
 	const [searchText, setSearchText] = useState("");
@@ -90,16 +89,19 @@ export default function UserAccountTable() {
 	// };
 
 	useEffect(() => {
-		fetch(`/uploads/${validationData?.imgpath}`)
-			.then((res) => res.blob())
-			.then(
-				(result) => {
-					setImg(URL.createObjectURL(result));
-				},
-				(error) => {
-					console.log(error);
-				}
-			);
+		if (validationData) {
+			fetch(`/uploads/${validationData?.imgpath}`)
+				.then((res) => res.blob())
+				.then(
+					(result) => {
+						setImg(URL.createObjectURL(result));
+					},
+					(error) => {
+						console.log(error);
+					}
+				);
+		}
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [validationData]);
 
@@ -304,7 +306,7 @@ export default function UserAccountTable() {
 		},
 		{
 			title: (
-				<Button type="primary" shape="round" icon={<PlusCircleOutlined />} onClick={() => setShowPoliceForm(true)}>
+				<Button type="primary" shape="round" icon={<PlusCircleOutlined />} onClick={() => setShowAdminForm(true)}>
 					Add Admin User
 				</Button>
 			),
@@ -403,6 +405,7 @@ export default function UserAccountTable() {
 
 	const onClose = () => {
 		setShowPoliceForm(false);
+		setShowAdminForm(false);
 		form.resetFields();
 	};
 
@@ -426,6 +429,14 @@ export default function UserAccountTable() {
 	};
 
 	const onSubmitPoliceFormFailed = async (error) => {
+		console.log(error);
+	};
+
+	const onSubmitAdminForm = async (values) => {
+		console.log(values);
+	};
+
+	const onSubmitAdminFormFailed = async (error) => {
 		console.log(error);
 	};
 
@@ -517,8 +528,8 @@ export default function UserAccountTable() {
 			<div className="drawer">
 				<Drawer
 					title="Police User Registration"
-					placement="top"
-					width={500}
+					placement="right"
+					width="100%"
 					onClose={onClose}
 					open={showPoliceForm}
 					height={670}
@@ -640,6 +651,329 @@ export default function UserAccountTable() {
 										<Form.Item
 											label="Birth Date"
 											name="birthdate"
+											labelCol={{
+												span: 24,
+												//offset: 2
+											}}
+											wrapperCol={{
+												span: 24,
+											}}
+											hasFeedback
+											rules={[
+												{
+													required: true,
+													message: "Please enter your birth date!",
+												},
+											]}
+										>
+											<DatePicker style={{ width: "100%" }} />
+										</Form.Item>
+									</Col>
+								</Row>
+								<Row gutter={0}>
+									<Col xs={{ span: 24 }} md={{ span: 8 }}>
+										<Form.Item
+											label="Gender"
+											name="gender"
+											labelCol={{
+												span: 24,
+												//offset: 2
+											}}
+											wrapperCol={{
+												span: 24,
+											}}
+											hasFeedback
+											rules={[
+												{
+													required: true,
+													message: "Please select your gender!",
+												},
+											]}
+										>
+											<Radio.Group style={{ width: "100%" }}>
+												<Radio value="Male">Male</Radio>
+												<Radio value="Female">Female</Radio>
+											</Radio.Group>
+										</Form.Item>
+									</Col>
+									<Col xs={{ span: 24 }} md={{ span: 16 }}>
+										<Form.Item
+											label="Email"
+											name="email"
+											labelCol={{
+												span: 24,
+												//offset: 2
+											}}
+											wrapperCol={{
+												span: 24,
+											}}
+											hasFeedback
+											rules={[
+												{
+													type: "email",
+													required: true,
+													message: "Please enter a valid email",
+												},
+											]}
+										>
+											<Input placeholder="Enter your email" />
+										</Form.Item>
+									</Col>
+								</Row>
+								<Row gutter={12}>
+									<Col xs={{ span: 24 }} md={{ span: 16 }}>
+										<Form.Item
+											label="Address"
+											name="address"
+											labelCol={{
+												span: 24,
+												//offset: 2
+											}}
+											wrapperCol={{
+												span: 24,
+											}}
+											hasFeedback
+											rules={[
+												{
+													required: true,
+													message: "Please enter your address!",
+												},
+											]}
+										>
+											<Input placeholder="Enter your House No./Street Name/Barangay" />
+										</Form.Item>
+									</Col>
+									<Col xs={{ span: 24 }} md={{ span: 8 }}>
+										<Form.Item
+											label="Municipality"
+											name="municipal"
+											labelCol={{
+												span: 24,
+											}}
+											wrapperCol={{
+												span: 24,
+											}}
+											hasFeedback
+											rules={[
+												{
+													required: true,
+													message: "Please select your Municipality!",
+												},
+											]}
+										>
+											<Select placeholder="Select your Municipality">
+												{MunicipalData.map((value, index) => (
+													<Select.Option key={index} value={value.name}>
+														{value.label}
+													</Select.Option>
+												))}
+											</Select>
+										</Form.Item>
+									</Col>
+								</Row>
+
+								<Row gutter={12}>
+									<Col xs={{ span: 24 }} md={{ span: 12 }}>
+										<Form.Item
+											label="Password"
+											name="password"
+											labelCol={{
+												span: 24,
+											}}
+											wrapperCol={{
+												span: 24,
+											}}
+											hasFeedback
+											rules={[
+												{
+													required: true,
+													message: "Please input your password!",
+												},
+												{ whitespace: true },
+												{ min: 8 },
+												{ max: 26 },
+												{
+													pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,26}$/,
+													message: "Must contain 1 uppercase, 1 lowercase, 1 number, and 1 special character.",
+												},
+											]}
+										>
+											<Input.Password placeholder="********" />
+										</Form.Item>
+									</Col>
+									<Col xs={{ span: 24 }} md={{ span: 12 }}>
+										<Form.Item
+											label="Confirm Password"
+											name="confirmpassword"
+											labelCol={{
+												span: 24,
+												//offset: 2
+											}}
+											wrapperCol={{
+												span: 24,
+												//offset: 2
+											}}
+											hasFeedback
+											dependencies={["password"]}
+											rules={[
+												{
+													required: true,
+												},
+												({ getFieldValue }) => ({
+													validator(_, value) {
+														if (!value || getFieldValue("password") === value) {
+															return Promise.resolve();
+														}
+
+														return Promise.reject("Passwords does not matched.");
+													},
+												}),
+											]}
+										>
+											<Input.Password placeholder="********" />
+										</Form.Item>
+									</Col>
+								</Row>
+								<Button type="primary" htmlType="submit">
+									Register
+								</Button>
+							</Col>
+							<Col xs={{ span: 0 }} md={{ span: 4 }}></Col>
+						</Row>
+					</Form>
+				</Drawer>
+
+				<Drawer
+					title="Admin User Registration"
+					placement="right"
+					width="100%"
+					onClose={onClose}
+					open={showAdminForm}
+					height={670}
+					style={{
+						display: "flex",
+						justifyContent: "center",
+					}}
+					extra={<Space></Space>}
+				>
+					<Form
+						form={form}
+						labelCol={{
+							span: 8,
+						}}
+						layout="horizontal"
+						onFinish={onSubmitAdminForm}
+						onFinishFailed={onSubmitAdminFormFailed}
+						autoComplete="off"
+						style={{
+							width: "100%",
+						}}
+					>
+						<Row>
+							<Col xs={{ span: 0 }} md={{ span: 4 }}></Col>
+							<Col xs={{ span: 24 }} md={{ span: 16 }}>
+								<Row gutter={12}>
+									<Col xs={{ span: 24 }} md={{ span: 8 }} layout="vertical">
+										<Form.Item
+											label="Role"
+											name="role"
+											labelCol={{
+												span: 24,
+											}}
+											wrapperCol={{
+												span: 24,
+											}}
+											hasFeedback
+											rules={[
+												{
+													required: true,
+													message: "Please input your role!",
+												},
+											]}
+										>
+											<Select placeholder="Select your role">
+												{AdminRole.map((value, index) => (
+													<Select.Option key={index} value={value.name}>
+														{value.label}
+													</Select.Option>
+												))}
+											</Select>
+										</Form.Item>
+									</Col>
+									<Col xs={{ span: 24 }} md={{ span: 8 }} layout="vertical">
+										<Form.Item
+											label="First Name"
+											name="firstName"
+											labelCol={{
+												span: 24,
+											}}
+											wrapperCol={{
+												span: 24,
+											}}
+											hasFeedback
+											rules={[
+												{
+													required: true,
+													message: "Please input your first name!",
+												},
+												{
+													pattern: /^[a-zA-Z_ ]*$/,
+													message: "First name should have no number.",
+												},
+											]}
+										>
+											<Input placeholder="Enter your first name" />
+										</Form.Item>
+									</Col>
+									<Col xs={{ span: 24 }} md={{ span: 8 }}>
+										<Form.Item
+											label="Middle Name"
+											name="middleName"
+											labelCol={{
+												span: 24,
+											}}
+											wrapperCol={{
+												span: 24,
+											}}
+											hasFeedback
+											rules={[
+												{
+													pattern: /^[a-zA-Z]*$/,
+													message: "Middle name should have no number.",
+												},
+											]}
+										>
+											<Input placeholder="Enter your middle name" />
+										</Form.Item>
+									</Col>
+								</Row>
+								<Row gutter={12}>
+									<Col xs={{ span: 24 }} md={{ span: 12 }}>
+										<Form.Item
+											label="Last Name"
+											name="lastName"
+											labelCol={{
+												span: 24,
+											}}
+											wrapperCol={{
+												span: 24,
+											}}
+											hasFeedback
+											rules={[
+												{
+													required: true,
+													message: "Please input your last name!",
+												},
+											]}
+										>
+											<Input placeholder="Enter your last name" />
+										</Form.Item>
+									</Col>
+
+									<Col xs={{ span: 24 }} md={{ span: 12 }}>
+										<Form.Item
+											label="Birth Date"
+											name="dob"
 											labelCol={{
 												span: 24,
 												//offset: 2

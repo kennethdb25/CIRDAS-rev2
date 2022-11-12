@@ -45,10 +45,6 @@ export default function Dashboard() {
 					<Profile />
 					<AnnualRateWanted />
 				</div>
-				<div className="row__three">
-					<MonthlyRateWanted />
-					<MonthlyRateMissing />
-				</div>
 			</div>
 		</Section>
 	);

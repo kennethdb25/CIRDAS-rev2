@@ -146,7 +146,6 @@ export default function Action(props) {
 					</Button>
 				</div>
 			</div>
-
 			<div className="analytic">
 				<div className="content">
 					<Button type="primary" icon={<DeleteOutlined />} danger shape="round" onClick={() => setIsDelete(true)}>
@@ -525,7 +524,10 @@ export default function Action(props) {
 	);
 }
 const Section = styled.section`
-	display: grid;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
 	grid-template-columns: 1fr
 	margin-top: 2rem;
 	.analytic {

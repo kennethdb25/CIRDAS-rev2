@@ -45,10 +45,6 @@ export default function Dashboard() {
 					<Profile />
 					<AnnualRateWanted />
 				</div>
-				<div className="row__three">
-					<MonthlyRateWanted />
-					<MonthlyRateMissing />
-				</div>
 			</div>
 		</Section>
 	);
@@ -60,7 +56,7 @@ const Section = styled.section`
 	.grid {
 		display: flex;
 		flex-direction: column;
-		height: 150%;
+		height: 100%;
 		gap: 1rem;
 		margin-top: 2rem;
 		.row__one {

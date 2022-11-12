@@ -4,7 +4,6 @@ import styled from "styled-components";
 import scrollreveal from "scrollreveal";
 import Navbar from "./Navbar";
 import Profile from "./Profile";
-import Action from "./Action";
 
 export default function Account() {
 	const [loginData, setLoginData] = useState([]);
@@ -56,7 +55,6 @@ export default function Account() {
 			<div className="grid">
 				<div className="row__two">
 					<Profile ValidUser={ValidUser} loginData={loginData} />
-					<Action ValidUser={ValidUser} loginData={loginData} />
 				</div>
 				<div className="row__one"></div>
 			</div>
@@ -80,9 +78,11 @@ const Section = styled.section`
 			gap: 1rem;
 		}
 		.row__two {
-			display: grid;
-			grid-template-columns: repeat(2, 1fr);
-			gap: 1rem;
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			align-items: center;
+			grid-template-columns: 1fr
 			height: 100%;
 		}
 	}
