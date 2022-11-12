@@ -124,11 +124,7 @@ router.post("/police/register", async (req, res) => {
 });
 
 router.post("/admin/register", async (req, res) => {
-	const { typeAdmin, firstName, middleName, lastName, municipal, provincial, email, password, confirmPassword } = req.body;
-
-	if (!typeAdmin || !firstName || !middleName || !lastName || !municipal || !provincial || !email || !password || !confirmPassword) {
-		res.status(422).json({ error: "Fill all the details" });
-	}
+	const { firstName, middleName, lastName, municipal, email, password, confirmpassword, dob, gender, role, address } = req.body;
 
 	const getAdminCount = await adminUser.find().count();
 
@@ -137,7 +133,7 @@ router.post("/admin/register", async (req, res) => {
 
 		if (preUser) {
 			res.status(422).json({ error: "This Email is Already Exist" });
-		} else if (password !== confirmPassword) {
+		} else if (password !== confirmpassword) {
 			res.status(422).json({ error: "Password and Confirm Password Not Match" });
 		} else {
 			const finalUser = new adminUser({
@@ -152,9 +148,10 @@ router.post("/admin/register", async (req, res) => {
 				address,
 				role,
 				validuser: "true",
+				accountstatus: "Validated",
 				email,
 				password,
-				confirmPassword,
+				confirmpassword,
 			});
 
 			// hashing password
@@ -165,7 +162,7 @@ router.post("/admin/register", async (req, res) => {
 		}
 	} catch (error) {
 		res.status(422).json(error);
-		console.log("catch block error");
+		console.log(error);
 	}
 });
 

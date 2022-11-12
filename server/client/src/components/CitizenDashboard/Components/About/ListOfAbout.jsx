@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { IoIosArrowForward } from "react-icons/io";
 import { MdImportantDevices } from "react-icons/md";
+import { IoIosArrowForward } from "react-icons/io";
+import { GoPrimitiveDot } from "react-icons/go";
 import { cardStyles } from "./ReusableStyles";
 import { Modal, Typography } from "antd";
 export default function ListOfAbout() {
@@ -9,6 +10,7 @@ export default function ListOfAbout() {
 	return (
 		<Section>
 			<div className="title">
+				<MdImportantDevices style={{ fontSize: "25px" }} />
 				<h2>Information about CIRDAS System</h2>
 			</div>
 			<div className="faqs">
@@ -19,21 +21,21 @@ export default function ListOfAbout() {
 					}}
 				>
 					<div className="info">
-						<MdImportantDevices />
+						<GoPrimitiveDot />
 						<h4>What is the importance of CIRDAS?</h4>
 					</div>
 					<IoIosArrowForward />
 				</div>
 				<div className="faq">
 					<div className="info">
-						<MdImportantDevices />
+						<GoPrimitiveDot />
 						<h4>Data Privacy Consent</h4>
 					</div>
 					<IoIosArrowForward />
 				</div>
 				<div className="faq">
 					<div className="info">
-						<MdImportantDevices />
+						<GoPrimitiveDot />
 						<h4>People behind CIRDAS System</h4>
 					</div>
 					<IoIosArrowForward />
@@ -48,6 +50,9 @@ export default function ListOfAbout() {
 const Section = styled.section`
 	${cardStyles};
 	.title {
+		display: flex;
+		align-items: "center";
+		gap: 1rem;
 		h2 {
 			color: white;
 			font-family: "Montserrat";

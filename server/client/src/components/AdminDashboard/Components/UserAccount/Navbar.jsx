@@ -1,6 +1,8 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 import { LoginContext } from "../../../../context/Context";
+import { UilUserPlus } from "@iconscout/react-unicons";
+
 export default function Navbar() {
 	const { loginData } = useContext(LoginContext);
 	return (
@@ -13,7 +15,10 @@ export default function Navbar() {
 			</div>
 			<div className="title">
 				<h1>
-					<span>User Account</span>
+					<span style={{ display: "flex", alignItems: "center", gap: "0.2rem" }}>
+						<UilUserPlus />
+						User Account
+					</span>
 				</h1>
 			</div>
 		</Nav>
@@ -23,6 +28,8 @@ const Nav = styled.nav`
 	display: flex;
 	justify-content: space-between;
 	color: black;
+	font-family: "Garamond";
+	font-size: 15px;
 	.title {
 		h4 {
 			color: black;
@@ -32,7 +39,7 @@ const Nav = styled.nav`
 			span {
 				margin-left: 0.5rem;
 				color: black;
-				font-family: "Permanent Marker", cursive;
+				font-family: "Libre Bodoni";
 				letter-spacing: 0.2rem;
 			}
 		}

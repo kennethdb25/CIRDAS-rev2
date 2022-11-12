@@ -16,7 +16,7 @@ export default function Profile(props) {
 	return (
 		<Section>
 			<div className="image">
-				<img src={loginData.validcitizen?.gender === "Female" ? female : male} alt="" />
+				<img src={loginData.validpolice?.gender === "Female" ? female : male} alt="" />
 			</div>
 			<div className="title">
 				<h2>{`${loginData.validpolice?.rank} ${loginData.validpolice?.firstName} ${loginData.validpolice?.lastName}`}</h2>

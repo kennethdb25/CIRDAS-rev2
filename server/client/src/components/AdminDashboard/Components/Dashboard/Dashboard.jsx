@@ -1,14 +1,7 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import Analytics from "./Analytics";
 import Navbar from "./Navbar";
-import Profile from "./Profile";
 import scrollreveal from "scrollreveal";
-import AnnualRateMissing from "./AnnualRateMissing";
-import AnnualRateWanted from "./AnnualRateWanted";
-import ComplaintRate from "./ComplaintRate";
-import MonthlyRateMissing from "./MonthlyRateMissing";
-import MonthlyRateWanted from "./MonthlyRateWanted";
 
 export default function Dashboard() {
 	useEffect(() => {
@@ -36,15 +29,18 @@ export default function Dashboard() {
 		<Section>
 			<Navbar />
 			<div className="grid">
-				<div className="row__one">
-					<ComplaintRate />
-					<Analytics />
-				</div>
-				<div className="row__two">
-					<AnnualRateMissing />
-					<Profile />
-					<AnnualRateWanted />
-				</div>
+				<iframe
+					title="Dashboard"
+					style={{
+						height: "100%",
+						width: "100%",
+						border: "none",
+						borderRadius: "2px",
+						boxShadow: "0 2px 10px 0 rgba(70, 76, 79, .2)",
+						backgroundColor: "white",
+					}}
+					src="https://charts.mongodb.com/charts-cirdas-ngmsy/embed/dashboards?id=6305a9df-602a-4598-8e3d-04b18cad7b7c&theme=light&autoRefresh=true&maxDataAge=10&showTitleAndDesc=true&scalingWidth=fixed&scalingHeight=fixed"
+				></iframe>
 			</div>
 		</Section>
 	);
@@ -53,6 +49,7 @@ export default function Dashboard() {
 const Section = styled.section`
 	margin-left: 18vw;
 	padding: 2rem;
+	height: 100vh;
 	.grid {
 		display: flex;
 		flex-direction: column;

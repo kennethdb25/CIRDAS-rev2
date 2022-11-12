@@ -2,11 +2,12 @@
 import React, { useState, useRef, useContext, useEffect } from "react";
 import styled from "styled-components";
 import { SearchOutlined, PlusCircleOutlined, EyeOutlined, EditOutlined } from "@ant-design/icons";
+import { UilClipboardAlt, UilListUl } from "@iconscout/react-unicons";
 import Highlighter from "react-highlight-words";
 import { toast } from "react-toastify";
 
 import { MunicipalData } from "../../../../data/CitizensData";
-import { Button, Input, Space, Table, Modal, message, Select, DatePicker, Typography, Drawer, Form, Row, Col, Image, Radio, Upload, Tabs } from "antd";
+import { Button, Input, Space, Table, Modal, message, Select, DatePicker, Typography, Drawer, Form, Row, Col, Image, Radio, Upload, Tabs, Tag } from "antd";
 import { LoginContext } from "../../../../context/Context";
 import MissingPersonForm from "./MissingPersonForm";
 const { Title, Text } = Typography;
@@ -70,16 +71,18 @@ export default function MissingPersonTable(props) {
 	// get image
 
 	useEffect(() => {
-		fetch(`/uploads/${viewData?.imgpath}`)
-			.then((res) => res.blob())
-			.then(
-				(result) => {
-					setImg(URL.createObjectURL(result));
-				},
-				(error) => {
-					console.log(error);
-				}
-			);
+		if (viewData) {
+			fetch(`/uploads/${viewData?.imgpath}`)
+				.then((res) => res.blob())
+				.then(
+					(result) => {
+						setImg(URL.createObjectURL(result));
+					},
+					(error) => {
+						console.log(error);
+					}
+				);
+		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [viewData]);
 
@@ -345,6 +348,23 @@ export default function MissingPersonTable(props) {
 			dataIndex: "status",
 			key: "status",
 			width: "5%",
+			render: (_, { status }) => {
+				let color;
+				if (status === "Missing") {
+					color = "geekblue";
+				} else if (status === "Pending") {
+					color = "volcano";
+				} else {
+					color = "green";
+				}
+				return (
+					<>
+						<Tag color={color} key={status}>
+							{status}
+						</Tag>
+					</>
+				);
+			},
 		},
 		{
 			title: "",
@@ -415,6 +435,23 @@ export default function MissingPersonTable(props) {
 			dataIndex: "status",
 			key: "status",
 			width: "5%",
+			render: (_, { status }) => {
+				let color;
+				if (status === "Missing") {
+					color = "geekblue";
+				} else if (status === "Pending") {
+					color = "volcano";
+				} else {
+					color = "green";
+				}
+				return (
+					<>
+						<Tag color={color} key={status}>
+							{status}
+						</Tag>
+					</>
+				);
+			},
 		},
 		{
 			title: (
@@ -467,13 +504,19 @@ export default function MissingPersonTable(props) {
 			<Tabs>
 				<Tabs.TabPane tab="FILED CASES" key="key1">
 					<div className="table">
-						<Title level={4}>FILED CASES</Title>
+						<div style={{ display: "flex", flexDirection: "row", gap: "0.5rem" }}>
+							<Title level={4}>FILED CASES</Title>
+							<UilClipboardAlt />
+						</div>
 						<Table columns={columns} dataSource={data[0]?.body} pagination={pagination} loading={loading} />
 					</div>
 				</Tabs.TabPane>
 				<Tabs.TabPane tab="PROVINCIAL LIST" key="key2">
 					<div className="table">
-						<Title level={4}>PROVINCIAL LIST OF MISSING PERSON</Title>
+						<div style={{ display: "flex", flexDirection: "row", gap: "0.5rem" }}>
+							<Title level={4}>PROVINCIAL LIST</Title>
+							<UilListUl />
+						</div>
 						<Table columns={columnsAll} dataSource={allData[0]?.body} pagination={pagination} loading={loading2} />
 					</div>
 				</Tabs.TabPane>

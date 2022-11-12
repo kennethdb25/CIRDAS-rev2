@@ -1,14 +1,16 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Permanent+Marker&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=PT+Serif&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Lato:wght@100;300;400;700&family=Libre+Bodoni:wght@600&family=PT+Serif&display=swap");
 
 body {
-	font-family: "Montserrat", sans-serif, "PT Serif", serif;
+	font-family: "Montrat", sans-serif, "PT Serif", serif, Garamond;
 }
 
 * {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
+	font-family: Garamond, "Libre Bodoni";
 }
 
 ::-webkit-scrollbar {

@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { SearchOutlined, EyeOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
-import { Button, Input, Space, Table, Modal, Typography, Row, Col, Image } from "antd";
+import { Button, Input, Space, Table, Modal, Typography, Row, Col, Image, Tag } from "antd";
 const { Title, Text } = Typography;
 const { TextArea } = Input;
 
@@ -192,6 +192,23 @@ export default function WantedPersonTable() {
 			dataIndex: "status",
 			key: "status",
 			width: "5%",
+			render: (_, { status }) => {
+				let color;
+				if (status === "Wanted") {
+					color = "volcano";
+				} else if (status === "Pending") {
+					color = "geekblue";
+				} else {
+					color = "green";
+				}
+				return (
+					<>
+						<Tag color={color} key={status}>
+							{status}
+						</Tag>
+					</>
+				);
+			},
 		},
 		{
 			title: "Action",

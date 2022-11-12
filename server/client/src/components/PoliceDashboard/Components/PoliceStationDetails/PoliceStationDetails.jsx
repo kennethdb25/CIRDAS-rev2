@@ -3,6 +3,10 @@ import styled from "styled-components";
 import scrollreveal from "scrollreveal";
 import Navbar from "./Navbar";
 import Analytics from "./Analytics";
+import { Typography } from "antd";
+import { UilMapMarker } from "@iconscout/react-unicons";
+
+const { Title } = Typography;
 
 export default function PoliceStationDetails() {
 	useEffect(() => {
@@ -32,6 +36,10 @@ export default function PoliceStationDetails() {
 					<Analytics />
 				</div>
 				<div className="row__one">
+					<div style={{ display: "flex", flexDirection: "row", gap: "0.5rem" }}>
+						<Title level={4}>STATION MAP LOCATION</Title>
+						<UilMapMarker />
+					</div>
 					<iframe
 						className="iframe"
 						style={{ height: "500px", width: "100%", border: "none", borderRadius: "2px", boxShadow: "0 2px 10px 0 rgba(70, 76, 79, .2)" }}

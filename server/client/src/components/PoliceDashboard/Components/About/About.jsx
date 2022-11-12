@@ -63,6 +63,7 @@ const Section = styled.section`
 			grid-template-columns: 1fr;
 			height: 50%;
 			gap: 1rem;
+			width: 100%;
 		}
 		.row__two {
 			display: grid;

@@ -8,6 +8,7 @@ import FAQComplaint from "./FAQComplaint";
 import ListOfAbout from "./ListOfAbout";
 import FAQMissingPerson from "./FAQMissingPerson";
 import FAQWantedPerson from "./FAQWantedPerson";
+import { FcAbout } from "react-icons/fc";
 
 const { Title } = Typography;
 
@@ -37,9 +38,15 @@ export default function About() {
 			<Navbar />
 			<div className="grid">
 				<div className="row__one">
-					<Title level={4}>ABOUT</Title>
+					<div style={{ display: "flex", flexDirection: "row", gap: "0.5rem" }}>
+						<Title level={4}>ABOUT</Title>
+						<FcAbout style={{ fontSize: "25px" }} />
+					</div>
 					<ListOfAbout />
-					<Title level={4}>FAQ</Title>
+					<div style={{ display: "flex", flexDirection: "row", gap: "0.5rem" }}>
+						<Title level={4}>FAQ</Title>
+						<FcAbout style={{ fontSize: "25px" }} />
+					</div>
 					<FAQComplaint />
 					<FAQMissingPerson />
 					<FAQWantedPerson />

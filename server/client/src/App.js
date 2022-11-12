@@ -24,19 +24,6 @@ function App() {
 	const { loginData, setLoginData } = useContext(LoginContext);
 	const history = useNavigate();
 
-	const fetchData = async () => {
-		setLoading(true);
-		const res = await fetch(`/citizen/complaint/${loginData.validcitizen?._id}`, {
-			method: "GET",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
-		const dataComp = await res.json();
-		setComplaintData([dataComp]);
-		setLoading(false);
-	};
-
 	const DasboardValid = async () => {
 		if (localStorage.getItem("policeUserDataToken")) {
 			let validToken = localStorage.getItem("policeUserDataToken");
@@ -98,15 +85,33 @@ function App() {
 		}
 	};
 
+	const fetchData = async () => {
+		setLoading(true);
+		const res = await fetch(`/citizen/complaint/${loginData.validcitizen?._id}`, {
+			method: "GET",
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+		const dataComp = await res.json();
+		setComplaintData([dataComp]);
+		setLoading(false);
+	};
+
 	useEffect(() => {
 		setTimeout(() => {
 			DasboardValid();
 			setData(true);
 		}, 2000);
-		fetchData();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
+	useEffect(() => {
+		if (loginData) {
+			fetchData();
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [loginData]);
 	return (
 		<>
 			{data ? (

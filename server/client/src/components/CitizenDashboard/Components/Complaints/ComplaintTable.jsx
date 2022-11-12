@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { PlusCircleOutlined, EyeOutlined, EditOutlined } from "@ant-design/icons";
 import { Box } from "@mui/material";
 import "antd/dist/antd.min.css";
-import { Button, Input, Space, Table, Modal, Typography, Drawer, Form, Select, message, Row, Col } from "antd";
+import { Button, Input, Space, Table, Modal, Typography, Drawer, Form, Select, message, Row, Col, Tag } from "antd";
 import { getColumnSearchProps } from "../Services/Complaint/TableService";
 import { LoginContext } from "../../../../context/Context";
 import ComplaintForm from "./ComplaintForm";
@@ -96,7 +96,7 @@ export default function ComplaintTable(props) {
 			title: "ID",
 			dataIndex: "complaintid",
 			key: "complaintid",
-			width: "10%",
+			width: "15%",
 			...getColumnSearchProps("complaintid", searchInput, setSearchText, setSearchedColumn, handleReset, searchedColumn, searchText),
 		},
 		{
@@ -137,6 +137,25 @@ export default function ComplaintTable(props) {
 			dataIndex: "status",
 			key: "status",
 			width: "10%",
+			render: (_, { status }) => {
+				let color;
+				if (status === "Reviewed") {
+					color = "yellow";
+				} else if (status === "UnderInvestigation") {
+					color = "geekblue";
+				} else if (status === "Pending") {
+					color = "volcano";
+				} else {
+					color = "green";
+				}
+				return (
+					<>
+						<Tag color={color} key={status}>
+							{status}
+						</Tag>
+					</>
+				);
+			},
 		},
 		{
 			title: (

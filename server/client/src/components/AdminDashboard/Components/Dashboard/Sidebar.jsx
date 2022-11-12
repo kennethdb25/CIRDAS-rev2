@@ -127,8 +127,7 @@ export default function Sidebar() {
 			<Section>
 				<div className="top">
 					<div className="brand">
-						<MdLocalPolice />
-						<span>CIRDAS</span>
+						<span onClick={() => setCurrentLink(1)}>CIRDAS</span>
 					</div>
 					<div className="toggle">
 						{navbarState ? (
@@ -375,7 +374,7 @@ const Section = styled.section`
 			span {
 				font-size: 2rem;
 				color: #edf6ff;
-				font-family: "Permanent Marker", cursive;
+				font-family: "Libre Bodoni";
 			}
 		}
 		.links {

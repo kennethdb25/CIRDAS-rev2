@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { SearchOutlined, PlusCircleOutlined, EyeOutlined, EditOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
-import { toast } from "react-toastify";
 import emailjs from "@emailjs/browser";
 import { MunicipalData } from "../../../../data/CitizensData";
 import { AdminRole } from "../../../../data/AdminData";
@@ -153,7 +152,7 @@ export default function UserAccountTable() {
 				"DMcuBIZy8OD0MT29W"
 			);
 			setLoading(true);
-			toast.success("Validation Completed", { position: toast.POSITION.TOP_CENTER, autoClose: 1000 });
+			message.success("Validation Completed");
 			setIsValidated(false);
 			getCitizenUsers();
 			setLoading(false);
@@ -180,7 +179,7 @@ export default function UserAccountTable() {
 				"DMcuBIZy8OD0MT29W"
 			);
 			setLoading(true);
-			toast.success("Rejection Completed", { position: toast.POSITION.TOP_CENTER, autoClose: 1000 });
+			message.success("Rejection Completed");
 			setIsValidated(false);
 			getCitizenUsers();
 			setLoading(false);
@@ -419,12 +418,12 @@ export default function UserAccountTable() {
 		});
 		const res = await data.json();
 		if (res.status === 201) {
-			toast.success("Registered Successfully", { position: toast.POSITION.TOP_CENTER, autoClose: 1000 });
+			message.success("Registered Successfully");
 			onClose();
 			getPoliceUsers();
 			form.resetFields();
 		} else {
-			toast.error(res.error, { position: toast.POSITION.TOP_CENTER, autoClose: 3000 });
+			message.error(res.error);
 		}
 	};
 
@@ -434,6 +433,22 @@ export default function UserAccountTable() {
 
 	const onSubmitAdminForm = async (values) => {
 		console.log(values);
+		const data = await fetch("/admin/register", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(values),
+		});
+		const res = await data.json();
+		if (res.status === 201) {
+			message.success("Registered Successfully");
+			onClose();
+			getAdminUsers();
+			form.resetFields();
+		} else {
+			message.error(res.error);
+		}
 	};
 
 	const onSubmitAdminFormFailed = async (error) => {

@@ -3,7 +3,8 @@ import React, { useState, useRef, useContext, useEffect } from "react";
 import styled from "styled-components";
 import { SearchOutlined, EyeOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
-import { Button, Input, Space, Table, Modal, Typography, Row, Col, Image, Drawer, Form, message, Select } from "antd";
+import { UilListUl } from "@iconscout/react-unicons";
+import { Button, Input, Space, Table, Modal, Typography, Row, Col, Image, Drawer, Form, message, Select, Tag } from "antd";
 import MissingPersonForm from "./MissingPersonForm";
 import { AdminMissingStatus } from "../../../../data/AdminData";
 
@@ -226,6 +227,23 @@ export default function MissingPersonTable(props) {
 			dataIndex: "status",
 			key: "status",
 			width: "5%",
+			render: (_, { status }) => {
+				let color;
+				if (status === "Missing") {
+					color = "geekblue";
+				} else if (status === "Pending") {
+					color = "volcano";
+				} else {
+					color = "green";
+				}
+				return (
+					<>
+						<Tag color={color} key={status}>
+							{status}
+						</Tag>
+					</>
+				);
+			},
 		},
 		{
 			title: (
@@ -302,7 +320,10 @@ export default function MissingPersonTable(props) {
 	return (
 		<Section>
 			<div className="table">
-				<Title level={4}>Provincial List of Missing Person</Title>
+				<div style={{ display: "flex", flexDirection: "row", gap: "0.5rem" }}>
+					<Title level={4}>PROVINCIAL LIST</Title>
+					<UilListUl />
+				</div>
 				<Table columns={columnsAll} dataSource={allData[0]?.body} pagination={pagination} loading={loading} />
 			</div>
 			<Drawer

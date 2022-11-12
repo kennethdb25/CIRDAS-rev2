@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState, useContext } from "react";
 import styled from "styled-components";
 import { PlusCircleOutlined, SearchOutlined, EyeOutlined, EditOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
-import { Button, Input, Space, Table, Modal, Typography, Select, Form, message, Drawer, Row, Col } from "antd";
+import { Button, Input, Space, Table, Modal, Typography, Select, Form, message, Drawer, Row, Col, Tag } from "antd";
 import { Box } from "@mui/material";
 import { MunicipalData } from "../../../../data/CitizensData";
 import { LoginContext } from "../../../../context/Context";
@@ -203,6 +203,25 @@ export default function ComplaintTable(props) {
 			dataIndex: "status",
 			key: "status",
 			width: "10%",
+			render: (_, { status }) => {
+				let color;
+				if (status === "Reviewed") {
+					color = "yellow";
+				} else if (status === "UnderInvestigation") {
+					color = "geekblue";
+				} else if (status === "Pending") {
+					color = "volcano";
+				} else {
+					color = "green";
+				}
+				return (
+					<>
+						<Tag color={color} key={status}>
+							{status}
+						</Tag>
+					</>
+				);
+			},
 		},
 		{
 			title: (
