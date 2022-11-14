@@ -30,10 +30,7 @@ export default function WantedPerson() {
 		<Section>
 			<Navbar />
 			<div className="grid">
-				<div className="row__two">
-					<Analytics />
-					<FAQ />
-				</div>
+				<div className="row__two"></div>
 				<div className="row__one">
 					<WantedPersonTable />
 				</div>

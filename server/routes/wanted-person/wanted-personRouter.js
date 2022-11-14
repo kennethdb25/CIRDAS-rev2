@@ -33,38 +33,34 @@ wantedpersonRouter.post("/wanted-person", upload.single("photo"), async (req, re
 
 	const wantedpersoncount = await wantedPersonSchema.find().count();
 
-	if (!name || !age || !cases || !address || !municipal || !description || !contact) {
-		res.status(422).json({ error: "Fill all required details" });
-	} else {
-		try {
-			const finalWantedPerson = new wantedPersonSchema({
-				wantedId: `WP-${wantedpersoncount + 1}`,
-				name,
-				age,
-				imgpath: filename,
-				cases,
-				address,
-				year: `${new Date().getFullYear()}`,
-				month: months[new Date().getMonth() + 1],
-				timeAndDate: `${new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString()}`,
-				municipal,
-				eyes,
-				gender,
-				hair,
-				height,
-				description,
-				contact,
-				status: "Wanted",
-			});
+	try {
+		const finalWantedPerson = new wantedPersonSchema({
+			wantedId: `WP-${wantedpersoncount + 1}`,
+			name,
+			age,
+			imgpath: filename,
+			cases,
+			address,
+			year: `${new Date().getFullYear()}`,
+			month: months[new Date().getMonth() + 1],
+			timeAndDate: `${new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString()}`,
+			municipal,
+			eyes,
+			gender,
+			hair,
+			height,
+			description,
+			contact,
+			status: "Wanted",
+		});
 
-			const storeData = await finalWantedPerson.save();
+		const storeData = await finalWantedPerson.save();
 
-			res.status(201).json({ status: 201, storeData });
-		} catch (error) {
-			console.log(error);
-			res.status(422).json(error);
-			console.log("catch block error");
-		}
+		res.status(201).json({ status: 201, storeData });
+	} catch (error) {
+		console.log(error);
+		res.status(422).json(error);
+		console.log("catch block error");
 	}
 });
 

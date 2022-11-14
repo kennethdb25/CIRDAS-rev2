@@ -180,6 +180,16 @@ export default function MissingPersonTable(props) {
 	const ViewRecord = (record) => {
 		setIsView(true);
 		setViewData(record);
+		fetch(`/uploads/${viewData?.imgpath}`)
+			.then((res) => res.blob())
+			.then(
+				(result) => {
+					setImg(URL.createObjectURL(result));
+				},
+				(error) => {
+					console.log(error);
+				}
+			);
 	};
 
 	const columnsAll = [

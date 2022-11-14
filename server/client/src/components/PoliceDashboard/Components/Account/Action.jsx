@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Drawer, Space, Modal, Form, Input, Row, Col, Button, message } from "antd";
+import { Drawer, Space, Modal, Form, Input, Row, Col, Button, message, Select } from "antd";
 import { DeleteOutlined, LockOutlined, SyncOutlined } from "@ant-design/icons";
 import styled from "styled-components";
+import { MunicipalData } from "../../../../data/CitizensData";
 
 export default function Action(props) {
 	const [visible, setVisible] = useState(false);
@@ -389,7 +390,13 @@ export default function Action(props) {
 											},
 										]}
 									>
-										<Input />
+										<Select placeholder="Select your Municipality">
+											{MunicipalData.map((value, index) => (
+												<Select.Option key={index} value={value.name}>
+													{value.label}
+												</Select.Option>
+											))}
+										</Select>
 									</Form.Item>
 								</Col>
 							</Row>

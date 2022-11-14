@@ -2,7 +2,8 @@ import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { SearchOutlined, EyeOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
-import { Button, Input, Space, Table, Modal, Typography, Row, Col, Image, Tag } from "antd";
+import { Button, Input, Space, Table, Modal, Typography, Row, Col, Image, Tag, Drawer } from "antd";
+import WantedPersonForm from "./WantedPersonForm";
 const { Title, Text } = Typography;
 const { TextArea } = Input;
 
@@ -38,6 +39,21 @@ export default function WantedPersonTable() {
 		const dataComp = await res.json();
 		setData([dataComp]);
 		setLoading(false);
+	};
+
+	const ViewRecord = (record) => {
+		setIsView(true);
+		setViewData(record);
+		fetch(`/uploads/${viewData?.imgpath}`)
+			.then((res) => res.blob())
+			.then(
+				(result) => {
+					setImg(URL.createObjectURL(result));
+				},
+				(error) => {
+					console.log(error);
+				}
+			);
 	};
 
 	useEffect(() => {
@@ -152,9 +168,8 @@ export default function WantedPersonTable() {
 			),
 	});
 
-	const ViewRecord = (record) => {
-		setIsView(true);
-		setViewData(record);
+	const onClose = () => {
+		setVisible(false);
 	};
 
 	const columns = [
@@ -242,6 +257,23 @@ export default function WantedPersonTable() {
 		<Section>
 			<div className="table">
 				<Table columns={columns} dataSource={data[0]?.body} pagination={pagination} loading={loading} />
+			</div>
+			<div className="drawer">
+				<Drawer
+					title="ADD WANTED PERSON"
+					placement="right"
+					width="100%"
+					onClose={onClose}
+					open={visible}
+					height={650}
+					style={{
+						display: "flex",
+						justifyContent: "center",
+					}}
+					extra={<Space></Space>}
+				>
+					<WantedPersonForm fetchData={fetchData} onClose={onClose} />
+				</Drawer>
 			</div>
 			<div className="modal">
 				<Modal

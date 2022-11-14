@@ -6,7 +6,7 @@ import Highlighter from "react-highlight-words";
 import emailjs from "@emailjs/browser";
 import { MunicipalData } from "../../../../data/CitizensData";
 import { AdminRole } from "../../../../data/AdminData";
-import { Button, Input, Space, Table, Modal, message, Select, DatePicker, Typography, Drawer, Form, Row, Col, Image, Radio, Tabs } from "antd";
+import { Button, Input, Space, Table, Modal, message, Select, DatePicker, Typography, Drawer, Form, Row, Col, Image, Radio, Tabs, Tag } from "antd";
 const { Text } = Typography;
 
 export default function UserAccountTable() {
@@ -15,7 +15,11 @@ export default function UserAccountTable() {
 	const [getPolice, setGetPolice] = useState([]);
 	const [getAdmin, setGetAdmin] = useState([]);
 	const [validationData, setValidationData] = useState(null);
+	const [policeData, setPoliceData] = useState(null);
+	const [adminData, setAdminData] = useState(null);
 	const [isReview, setIsReview] = useState(false);
+	const [isPolReview, setIsPolReview] = useState(false);
+	const [isAdminReview, setIsAdminReview] = useState(false);
 	const [showPoliceForm, setShowPoliceForm] = useState(false);
 	const [showAdminForm, setShowAdminForm] = useState(false);
 	const [isValidated, setIsValidated] = useState(false);
@@ -29,7 +33,7 @@ export default function UserAccountTable() {
 		pageSize: 10,
 		total: getCitizen[0]?.body.length,
 	});
-
+	console.log(adminData);
 	useEffect(() => {
 		getCitizenUsers();
 		getPoliceUsers();
@@ -131,6 +135,16 @@ export default function UserAccountTable() {
 	const onValidateRecord = async (record) => {
 		setValidationData(record);
 		setIsValidated(true);
+		fetch(`/uploads/${validationData?.imgpath}`)
+			.then((res) => res.blob())
+			.then(
+				(result) => {
+					setImg(URL.createObjectURL(result));
+				},
+				(error) => {
+					console.log(error);
+				}
+			);
 	};
 
 	const ValidationOfRecord = async (email) => {
@@ -321,7 +335,7 @@ export default function UserAccountTable() {
 							shape="round"
 							icon={<EyeOutlined />}
 							onClick={() => {
-								onViewPoliceRecord(record);
+								onViewAdminRecord(record);
 							}}
 						>
 							Review
@@ -370,6 +384,23 @@ export default function UserAccountTable() {
 			dataIndex: "accountstatus",
 			key: "accountstatus",
 			width: "10%",
+			render: (_, { accountstatus }) => {
+				let color;
+				if (accountstatus === "Deleted") {
+					color = "volcano";
+				} else if (accountstatus === "Pending") {
+					color = "geekblue";
+				} else {
+					color = "green";
+				}
+				return (
+					<>
+						<Tag color={color} key={accountstatus}>
+							{accountstatus}
+						</Tag>
+					</>
+				);
+			},
 		},
 		{
 			title: "",
@@ -400,7 +431,13 @@ export default function UserAccountTable() {
 	const [form] = Form.useForm();
 
 	const onViewPoliceRecord = (record) => {
-		console.log(record);
+		setIsPolReview(true);
+		setPoliceData(record);
+	};
+
+	const onViewAdminRecord = (record) => {
+		setIsAdminReview(true);
+		setAdminData(record);
 	};
 
 	const onClose = () => {
@@ -1251,6 +1288,146 @@ export default function UserAccountTable() {
 							<br></br>
 							<Text strong>Municipality:</Text>
 							<Input style={{ marginBottom: "8px" }} value={validationData?.municipal} disabled />
+						</Col>
+					</Row>
+				</Modal>
+				<Modal
+					title="Review Police User"
+					width={1000}
+					open={isPolReview}
+					onCancel={() => setIsPolReview(false)}
+					footer={[
+						<Button key="cancel1" onClick={() => setIsPolReview(false)}>
+							Cancel
+						</Button>,
+					]}
+				>
+					<Row gutter={12}>
+						<Col xs={{ span: 24 }} md={{ span: 8 }}>
+							<br></br>
+							<Text strong>Police ID:</Text>
+							<Input style={{ marginBottom: "8px" }} value={policeData?.policeId} disabled />
+						</Col>
+						<Col xs={{ span: 24 }} md={{ span: 8 }}>
+							<br></br>
+							<Text strong>Email Address:</Text>
+							<Input style={{ marginBottom: "8px" }} value={policeData?.email} disabled />
+						</Col>
+					</Row>
+					<Row gutter={12}>
+						<Col xs={{ span: 24 }} md={{ span: 8 }}>
+							<br></br>
+							<Text strong>Rank:</Text>
+							<Input style={{ marginBottom: "8px" }} value={policeData?.rank} disabled />
+						</Col>
+						<Col xs={{ span: 24 }} md={{ span: 8 }}>
+							<br></br>
+							<Text strong>First Name:</Text>
+							<Input style={{ marginBottom: "8px" }} value={policeData?.firstName} disabled />
+						</Col>
+						<Col xs={{ span: 24 }} md={{ span: 8 }}>
+							<br></br>
+							<Text strong>Middle Name:</Text>
+							<Input style={{ marginBottom: "8px" }} value={policeData?.middleName === "undefined" ? "N/A" : policeData?.middleName} disabled />
+						</Col>
+					</Row>
+					<Row gutter={12}>
+						<Col xs={{ span: 24 }} md={{ span: 8 }}>
+							<br></br>
+							<Text strong>Last Name:</Text>
+							<Input style={{ marginBottom: "8px" }} value={policeData?.lastName} disabled />
+						</Col>
+						<Col xs={{ span: 24 }} md={{ span: 8 }}>
+							<br></br>
+							<Text strong>Gender:</Text>
+							<Input style={{ marginBottom: "8px" }} value={policeData?.gender} disabled />
+						</Col>
+						<Col xs={{ span: 24 }} md={{ span: 8 }}>
+							<br></br>
+							<Text strong>Date of Birth:</Text>
+							<Input style={{ marginBottom: "8px" }} value={new Date(policeData?.birthdate).toDateString()} disabled />
+						</Col>
+					</Row>
+					<Row gutter={12}>
+						<Col xs={{ span: 24 }} md={{ span: 16 }}>
+							<br></br>
+							<Text strong>Address:</Text>
+							<Input style={{ marginBottom: "8px" }} value={policeData?.address} disabled />
+						</Col>
+						<Col xs={{ span: 24 }} md={{ span: 8 }}>
+							<br></br>
+							<Text strong>Municipality:</Text>
+							<Input style={{ marginBottom: "8px" }} value={policeData?.municipal} disabled />
+						</Col>
+					</Row>
+				</Modal>
+				<Modal
+					title="Review Admin User"
+					width={1000}
+					open={isAdminReview}
+					onCancel={() => setIsAdminReview(false)}
+					footer={[
+						<Button key="cancel1" onClick={() => setIsAdminReview(false)}>
+							Cancel
+						</Button>,
+					]}
+				>
+					<Row gutter={12}>
+						<Col xs={{ span: 24 }} md={{ span: 8 }}>
+							<br></br>
+							<Text strong>Admin ID:</Text>
+							<Input style={{ marginBottom: "8px" }} value={adminData?.adminId} disabled />
+						</Col>
+						<Col xs={{ span: 24 }} md={{ span: 8 }}>
+							<br></br>
+							<Text strong>Email Address:</Text>
+							<Input style={{ marginBottom: "8px" }} value={adminData?.email} disabled />
+						</Col>
+					</Row>
+					<Row gutter={12}>
+						<Col xs={{ span: 24 }} md={{ span: 8 }}>
+							<br></br>
+							<Text strong>Role:</Text>
+							<Input style={{ marginBottom: "8px" }} value={adminData?.role} disabled />
+						</Col>
+						<Col xs={{ span: 24 }} md={{ span: 8 }}>
+							<br></br>
+							<Text strong>First Name:</Text>
+							<Input style={{ marginBottom: "8px" }} value={adminData?.firstName} disabled />
+						</Col>
+						<Col xs={{ span: 24 }} md={{ span: 8 }}>
+							<br></br>
+							<Text strong>Middle Name:</Text>
+							<Input style={{ marginBottom: "8px" }} value={adminData?.middleName === "undefined" ? "N/A" : adminData?.middleName} disabled />
+						</Col>
+					</Row>
+					<Row gutter={12}>
+						<Col xs={{ span: 24 }} md={{ span: 8 }}>
+							<br></br>
+							<Text strong>Last Name:</Text>
+							<Input style={{ marginBottom: "8px" }} value={adminData?.lastName} disabled />
+						</Col>
+						<Col xs={{ span: 24 }} md={{ span: 8 }}>
+							<br></br>
+							<Text strong>Gender:</Text>
+							<Input style={{ marginBottom: "8px" }} value={adminData?.gender} disabled />
+						</Col>
+						<Col xs={{ span: 24 }} md={{ span: 8 }}>
+							<br></br>
+							<Text strong>Date of Birth:</Text>
+							<Input style={{ marginBottom: "8px" }} value={new Date(adminData?.dob).toDateString()} disabled />
+						</Col>
+					</Row>
+					<Row gutter={12}>
+						<Col xs={{ span: 24 }} md={{ span: 16 }}>
+							<br></br>
+							<Text strong>Address:</Text>
+							<Input style={{ marginBottom: "8px" }} value={adminData?.address} disabled />
+						</Col>
+						<Col xs={{ span: 24 }} md={{ span: 8 }}>
+							<br></br>
+							<Text strong>Municipality:</Text>
+							<Input style={{ marginBottom: "8px" }} value={adminData?.municipal} disabled />
 						</Col>
 					</Row>
 				</Modal>

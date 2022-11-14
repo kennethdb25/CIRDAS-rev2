@@ -156,6 +156,16 @@ export default function WantedPersonTable() {
 	const ViewRecord = (record) => {
 		setIsView(true);
 		setViewData(record);
+		fetch(`/uploads/${viewData?.imgpath}`)
+			.then((res) => res.blob())
+			.then(
+				(result) => {
+					setImg(URL.createObjectURL(result));
+				},
+				(error) => {
+					console.log(error);
+				}
+			);
 	};
 
 	const columns = [

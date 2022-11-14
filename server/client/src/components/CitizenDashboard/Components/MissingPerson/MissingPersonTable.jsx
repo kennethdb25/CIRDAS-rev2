@@ -215,6 +215,16 @@ export default function MissingPersonTable(props) {
 	const ViewRecord = (record) => {
 		setViewData(record);
 		setIsView(true);
+		fetch(`/uploads/${viewData?.imgpath}`)
+			.then((res) => res.blob())
+			.then(
+				(result) => {
+					setImg(URL.createObjectURL(result));
+				},
+				(error) => {
+					console.log(error);
+				}
+			);
 	};
 
 	const getColumnSearchProps = (dataIndex) => ({
