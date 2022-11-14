@@ -60,16 +60,16 @@ export default function ComplaintTable(props) {
 		});
 		const res = await data.json();
 		if (res.status === 201) {
-			toast.success("Updated Successfully", { position: toast.POSITION.TOP_CENTER, autoClose: 1000 });
+			message.success("Updated Successfully");
 			onClose();
 			fetchData();
 			form.resetFields();
 		} else {
-			toast.error(res.error, { position: toast.POSITION.TOP_CENTER, autoClose: 3000 });
+			message.error(res.error);
 		}
 	};
 
-	const onFinishFailed = (errorInfo) => {
+	const onFinishFailed = () => {
 		message.error("Please input all the required details");
 	};
 

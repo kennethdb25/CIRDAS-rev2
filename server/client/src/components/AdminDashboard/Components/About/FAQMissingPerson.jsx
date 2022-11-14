@@ -1,48 +1,145 @@
 import React from "react";
 import styled from "styled-components";
-import { IoIosArrowForward } from "react-icons/io";
-import { AiFillFileAdd } from "react-icons/ai";
 import { MdImportantDevices } from "react-icons/md";
 import { cardStyles } from "./ReusableStyles";
+import { Collapse } from "antd";
+
+const { Panel } = Collapse;
+
+const text = (
+	<p
+		style={{
+			paddingLeft: 24,
+			fontSize: 18,
+		}}
+	>
+		- You can file a missing person, view information, and change their information on this page. All users were able to view the list of provincial missing
+		people for the province of Pampanga.
+	</p>
+);
+
+const text1 = (
+	<p
+		style={{
+			paddingLeft: 24,
+			fontSize: 18,
+		}}
+	>
+		- To file a missing person kindly fill out the following details;
+		<br />
+		<br />
+		● Missing person full name
+		<br />
+		● missing person birthday
+		<br />
+		● age
+		<br />
+		● gender
+		<br />
+		● nationality
+		<br />
+		● eye color
+		<br />
+		● hair color
+		<br />
+		● wearing
+		<br />
+		● height
+		<br />
+		● weight
+		<br />
+		● photo
+		<br />
+		● last seen date
+		<br />
+		● contact number
+		<br />
+		● address
+		<br />
+		● municipality
+		<br />
+		● how
+		<br />
+	</p>
+);
+
+const text2 = (
+	<p
+		style={{
+			paddingLeft: 24,
+			fontSize: 18,
+		}}
+	>
+		- You need to know the details;
+		<br />
+		<br />
+		● Missing person full name
+		<br />
+		● missing person birthday
+		<br />
+		● age
+		<br />
+		● gender
+		<br />
+		● nationality
+		<br />
+		● eye color
+		<br />
+		● hair color
+		<br />
+		● wearing
+		<br />
+		● height
+		<br />
+		● weight
+		<br />
+		● photo
+		<br />
+		● last seen date
+		<br />
+		● contact number
+		<br />
+		● address
+		<br />
+		● municipality
+		<br />
+		● how
+		<br />
+	</p>
+);
 export default function FAQMissingPerson() {
-	const faqs = [
-		{
-			icon: <MdImportantDevices />,
-			text: "What is Missing Person's Page?",
-		},
-		{
-			icon: <AiFillFileAdd />,
-			text: "How to file a missing person?",
-		},
-		{
-			icon: <AiFillFileAdd />,
-			text: "What to know before filing missing person?",
-		},
-	];
 	return (
 		<Section>
 			<div className="title">
+				<MdImportantDevices style={{ fontSize: "25px" }} />
 				<h2>Missing Person's Page</h2>
 			</div>
-			<div className="faqs">
-				{faqs.map((faq) => {
-					return (
-						<div className="faq">
-							<div className="info">
-								{faq.icon}
-								<h4>{faq.text}</h4>
-							</div>
-							<IoIosArrowForward />
-						</div>
-					);
-				})}
-			</div>
+			<Collapse
+				bordered={false}
+				style={{
+					fontSize: 18,
+					backgroundColor: "#437fc7",
+				}}
+			>
+				<Panel header="What is the missing person page?" key="1">
+					{text}
+				</Panel>
+				<Panel header="How to file a missing person?" key="2">
+					{text1}
+				</Panel>
+				<Panel header="What to know before filing a missing person?" key="3">
+					{text2}
+				</Panel>
+			</Collapse>
 		</Section>
 	);
 }
 const Section = styled.section`
 	${cardStyles};
 	.title {
+		display: flex;
+		align-items: "center";
+		gap: 1rem;
 		h2 {
 			color: white;
 			font-family: "Montserrat";

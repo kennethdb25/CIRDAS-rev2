@@ -1,12 +1,13 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import styled from "styled-components";
 import { SearchOutlined, PlusCircleOutlined, EyeOutlined, EditOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import emailjs from "@emailjs/browser";
 import { MunicipalData } from "../../../../data/CitizensData";
 import { AdminRole } from "../../../../data/AdminData";
-import { Button, Input, Space, Table, Modal, message, Select, DatePicker, Typography, Drawer, Form, Row, Col, Image, Radio, Tabs, Tag } from "antd";
+import { LoginContext } from "../../../../context/Context";
+import { Button, Input, Space, Table, Modal, message, Select, DatePicker, Typography, Drawer, Form, Row, Col, Image, Radio, Tabs, Tag, Popconfirm } from "antd";
 const { Text } = Typography;
 
 export default function UserAccountTable() {
@@ -14,6 +15,7 @@ export default function UserAccountTable() {
 	const [getCitizen, setGetCitizen] = useState([]);
 	const [getPolice, setGetPolice] = useState([]);
 	const [getAdmin, setGetAdmin] = useState([]);
+	const { loginData } = useContext(LoginContext);
 	const [validationData, setValidationData] = useState(null);
 	const [policeData, setPoliceData] = useState(null);
 	const [adminData, setAdminData] = useState(null);
@@ -26,6 +28,7 @@ export default function UserAccountTable() {
 	const [searchedColumn, setSearchedColumn] = useState("");
 	const [searchText, setSearchText] = useState("");
 	const searchInput = useRef(null);
+	const [confirmEmail, setConfirmEmail] = useState("");
 	const [loading, setLoading] = useState(false);
 	const [filteredInfo, setFilteredInfo] = useState({});
 	const [pagination, setPagination] = useState({
@@ -33,7 +36,6 @@ export default function UserAccountTable() {
 		pageSize: 10,
 		total: getCitizen[0]?.body.length,
 	});
-	console.log(adminData);
 	useEffect(() => {
 		getCitizenUsers();
 		getPoliceUsers();
@@ -127,14 +129,10 @@ export default function UserAccountTable() {
 		setFilteredInfo(filters);
 	};
 
-	const onViewRecord = (record) => {
-		setIsReview(true);
-		setValidationData(record);
-	};
-
 	const onValidateRecord = async (record) => {
 		setValidationData(record);
 		setIsValidated(true);
+		setConfirmEmail(record?.email);
 		fetch(`/uploads/${validationData?.imgpath}`)
 			.then((res) => res.blob())
 			.then(
@@ -145,6 +143,12 @@ export default function UserAccountTable() {
 					console.log(error);
 				}
 			);
+	};
+
+	const text = `Are you sure want to validate this ${confirmEmail} account?`;
+
+	const confirm = () => {
+		ValidationOfRecord(confirmEmail);
 	};
 
 	const ValidationOfRecord = async (email) => {
@@ -172,6 +176,15 @@ export default function UserAccountTable() {
 			getCitizenUsers();
 			setLoading(false);
 		}
+	};
+
+	const confirmDelete = () => {
+		RejectionOfRecord(confirmEmail);
+	};
+
+	const onViewRecord = (record) => {
+		setIsReview(true);
+		setValidationData(record);
 	};
 
 	const RejectionOfRecord = async (email) => {
@@ -284,7 +297,7 @@ export default function UserAccountTable() {
 				text
 			),
 	});
-
+	console.log(loginData);
 	const AdminColumn = [
 		{
 			title: "ID",
@@ -320,9 +333,17 @@ export default function UserAccountTable() {
 		},
 		{
 			title: (
-				<Button type="primary" shape="round" icon={<PlusCircleOutlined />} onClick={() => setShowAdminForm(true)}>
-					Add Admin User
-				</Button>
+				<>
+					{loginData.validadmin?.role === "Regional Admin" ? (
+						<>
+							<Button type="primary" shape="round" icon={<PlusCircleOutlined />} onClick={() => setShowAdminForm(true)}>
+								Add Admin User
+							</Button>
+						</>
+					) : (
+						<></>
+					)}
+				</>
 			),
 			dataIndex: "",
 			key: "x",
@@ -1452,12 +1473,20 @@ export default function UserAccountTable() {
 						>
 							Cancel
 						</Button>,
-						<Button key="reject" type="danger" onClick={() => RejectionOfRecord(validationData?.email)}>
-							Reject
-						</Button>,
-						<Button key="validate" type="primary" onClick={() => ValidationOfRecord(validationData?.email)}>
-							Validate
-						</Button>,
+						<>
+							<Popconfirm placement="topRight" title={text} onConfirm={confirmDelete} okText="Yes" cancelText="No">
+								<Button key="reject" type="danger">
+									Reject
+								</Button>
+							</Popconfirm>
+						</>,
+						<>
+							<Popconfirm placement="topRight" title={text} onConfirm={confirm} okText="Yes" cancelText="No">
+								<Button key="validate" type="primary">
+									Validate
+								</Button>
+							</Popconfirm>
+						</>,
 					]}
 				>
 					<Row gutter={12}>

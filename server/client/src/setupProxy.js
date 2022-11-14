@@ -19,6 +19,7 @@ module.exports = function (app) {
 			"/missing-person/update",
 			"/station-details",
 			"/wanted-person",
+			"/wanted-person/update",
 			"/getAll",
 			"/uploads",
 		],

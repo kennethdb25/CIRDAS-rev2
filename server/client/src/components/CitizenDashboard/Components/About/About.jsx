@@ -80,10 +80,11 @@ const Section = styled.section`
 	}
 	@media screen and (min-width: 280px) and (max-width: 1080px) {
 		margin-left: 0;
+		width: 100%;
 		.grid {
 			.row__one {
 				grid-template-columns: 1fr;
-				width: 40%;
+				width: 100%;
 			}
 			.row__two {
 				grid-template-columns: 1fr;

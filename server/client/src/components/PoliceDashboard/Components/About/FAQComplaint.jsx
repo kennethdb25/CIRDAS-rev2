@@ -1,48 +1,108 @@
 import React from "react";
 import styled from "styled-components";
-import { IoIosArrowForward } from "react-icons/io";
-import { AiFillFileAdd } from "react-icons/ai";
 import { MdImportantDevices } from "react-icons/md";
 import { cardStyles } from "./ReusableStyles";
+import { Collapse } from "antd";
+
+const { Panel } = Collapse;
+
+const text = (
+	<p
+		style={{
+			paddingLeft: 24,
+			fontSize: 18,
+		}}
+	>
+		- Where you can file a complaint , view information, and change their information on this page.
+	</p>
+);
+
+const text1 = (
+	<p
+		style={{
+			paddingLeft: 24,
+			fontSize: 18,
+		}}
+	>
+		- To file a complaint kindly fill out the following details;
+		<br />
+		<br />
+		● What (Complaint)
+		<br />
+		● Contact number
+		<br />
+		● Where (Crime Location)
+		<br />
+		● Municipality
+		<br />
+		● Time and Date
+		<br />
+		● Victim name
+		<br />
+		● Witness name
+		<br />
+		● Suspect name
+		<br />
+		● How (Description)
+		<br />
+	</p>
+);
+
+const text2 = (
+	<p
+		style={{
+			paddingLeft: 24,
+			fontSize: 18,
+		}}
+	>
+		● Rape
+		<br />
+		● Libel
+		<br />
+		● Alarm and Scandal
+		<br />
+		● Robbery
+		<br />
+		● Physical Injury
+		<br />
+		● Murder
+		<br />
+	</p>
+);
+
 export default function FAQComplaint() {
-	const faqs = [
-		{
-			icon: <MdImportantDevices />,
-			text: "What is Complaint Page?",
-		},
-		{
-			icon: <AiFillFileAdd />,
-			text: "How to file a complaint?",
-		},
-		{
-			icon: <AiFillFileAdd />,
-			text: "What are the complaints that you can file?",
-		},
-	];
 	return (
 		<Section>
 			<div className="title">
+				<MdImportantDevices style={{ fontSize: "25px" }} />
 				<h2>Complaint Page</h2>
 			</div>
-			<div className="faqs">
-				{faqs.map((faq) => {
-					return (
-						<div className="faq">
-							<div className="info">
-								{faq.icon}
-								<h4>{faq.text}</h4>
-							</div>
-							<IoIosArrowForward />
-						</div>
-					);
-				})}
-			</div>
+			<Collapse
+				bordered={false}
+				style={{
+					fontSize: 18,
+					backgroundColor: "#437fc7",
+				}}
+			>
+				<Panel header="What is a compliant page?" key="1">
+					{text}
+				</Panel>
+				<Panel header="How to file a Complaint?" key="2">
+					{text1}
+				</Panel>
+				<Panel header="What are the complaints that you can file?" key="3">
+					{text2}
+				</Panel>
+			</Collapse>
 		</Section>
 	);
 }
 const Section = styled.section`
 	${cardStyles};
 	.title {
+		display: flex;
+		align-items: "center";
+		gap: 1rem;
 		h2 {
 			color: white;
 			font-family: "Montserrat";

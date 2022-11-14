@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { SearchOutlined, PlusCircleOutlined, EyeOutlined, EditOutlined } from "@ant-design/icons";
 import { UilClipboardAlt, UilListUl } from "@iconscout/react-unicons";
 import Highlighter from "react-highlight-words";
-import { toast } from "react-toastify";
 
 import { MunicipalData } from "../../../../data/CitizensData";
 import { Button, Input, Space, Table, Modal, message, Select, DatePicker, Typography, Drawer, Form, Row, Col, Image, Radio, Upload, Tabs, Tag } from "antd";
@@ -143,13 +142,13 @@ export default function MissingPersonTable(props) {
 
 		const res = await data.json();
 		if (res.status === 201) {
-			toast.success("Updated Successfully", { position: toast.POSITION.TOP_CENTER, autoClose: 1000 });
+			message.success("Updated Successfully");
 			onClose();
 			fetchData();
 			fetchAllData();
 			form.resetFields();
 		} else {
-			toast.error(res.error, { position: toast.POSITION.TOP_CENTER });
+			message.error(res.error);
 		}
 	};
 

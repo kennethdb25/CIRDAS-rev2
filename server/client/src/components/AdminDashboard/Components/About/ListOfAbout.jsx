@@ -1,52 +1,87 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
-import { IoIosArrowForward } from "react-icons/io";
 import { MdImportantDevices } from "react-icons/md";
-import { cardStyles } from "../Dashboard/ReusableStyles";
-import { Modal, Typography } from "antd";
+import { cardStyles } from "./ReusableStyles";
+import { Collapse } from "antd";
+
+const { Panel } = Collapse;
+
+const text = (
+	<p
+		style={{
+			paddingLeft: 24,
+			fontSize: 18,
+		}}
+	>
+		- The main aim of CIRDAS is to secure and make privacy on crime related data over manually data storage. This web and mobile based project is made for
+		providing information and awareness about crimes.
+	</p>
+);
+
+const text1 = (
+	<p
+		style={{
+			paddingLeft: 24,
+			fontSize: 18,
+		}}
+	>
+		- Data Privacy Consent.
+	</p>
+);
+
+const text2 = (
+	<p
+		style={{
+			paddingLeft: 24,
+			fontSize: 18,
+		}}
+	>
+		- Dela Cruz ,Jhames Robert
+		<br />
+		- Dimitui, Camille
+		<br />
+		- Lingat Angelo Gabriel
+		<br />
+		- Macapagal, Shiena Marie
+		<br />
+		- Simon, Albert Jr.
+		<br />- Yambao, Christopher
+	</p>
+);
+
 export default function ListOfAbout() {
-	const [isView, setIsView] = useState(false);
 	return (
 		<Section>
 			<div className="title">
+				<MdImportantDevices style={{ fontSize: "25px" }} />
 				<h2>Information about CIRDAS System</h2>
 			</div>
-			<div className="faqs">
-				<div className="faq">
-					<div className="info">
-						<MdImportantDevices />
-						<h4>What is the importance of CIRDAS?</h4>
-					</div>
-					<IoIosArrowForward
-						onClick={() => {
-							setIsView(true);
-						}}
-					/>
-				</div>
-				<div className="faq">
-					<div className="info">
-						<MdImportantDevices />
-						<h4>Data Privacy Consent</h4>
-					</div>
-					<IoIosArrowForward />
-				</div>
-				<div className="faq">
-					<div className="info">
-						<MdImportantDevices />
-						<h4>People behind CIRDAS System</h4>
-					</div>
-					<IoIosArrowForward />
-				</div>
-			</div>
-			<Modal title="What is the importance of CIRDAS?" open={isView} onCancel={() => setIsView(false)} onOk={() => setIsView(false)}>
-				<Typography>Lorem Ipsum</Typography>
-			</Modal>
+			<Collapse
+				bordered={false}
+				style={{
+					fontSize: 18,
+					backgroundColor: "#437fc7",
+				}}
+			>
+				<Panel header="What is the importance of CIRDAS?" key="1">
+					{text}
+				</Panel>
+				<Panel header="Data Privacy Consent" key="2">
+					{text1}
+				</Panel>
+				<Panel header="People behind CIRDAS System" key="3">
+					{text2}
+				</Panel>
+			</Collapse>
 		</Section>
 	);
 }
 const Section = styled.section`
 	${cardStyles};
 	.title {
+		display: flex;
+		align-items: "center";
+		gap: 1rem;
 		h2 {
 			color: white;
 			font-family: "Montserrat";

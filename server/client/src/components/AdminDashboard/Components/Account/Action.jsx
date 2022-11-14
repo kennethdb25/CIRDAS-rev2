@@ -4,7 +4,6 @@ import { Drawer, Space, Modal, Form, Input, Row, Col, Button, message, Select } 
 import { DeleteOutlined, LockOutlined, SyncOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 import { MunicipalData } from "../../../../data/CitizensData";
-import { AdminRole } from "../../../../data/AdminData";
 
 export default function Action(props) {
 	const [visible, setVisible] = useState(false);
@@ -321,13 +320,7 @@ export default function Action(props) {
 											},
 										]}
 									>
-										<Select placeholder="Select your Role">
-											{AdminRole.map((value, index) => (
-												<Select.Option key={index} value={value.name}>
-													{value.label}
-												</Select.Option>
-											))}
-										</Select>
+										<Input placeholder="Enter your role" disabled />
 									</Form.Item>
 								</Col>
 							</Row>

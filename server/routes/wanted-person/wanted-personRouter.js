@@ -64,6 +64,35 @@ wantedpersonRouter.post("/wanted-person", upload.single("photo"), async (req, re
 	}
 });
 
+wantedpersonRouter.patch("/wanted-person/update/:wantedId", upload.single("photo"), async (req, res) => {
+	try {
+		const wantedpersonId = req.params.wantedId;
+		const { name, age, cases, address, municipal, description, contact, eyes, gender, hair, height } = req.body;
+
+		const getWantedPerson = await wantedPersonSchema.findOne({ wantedId: wantedpersonId });
+
+		if (!getWantedPerson) {
+			res.status(422).json({ error: `No missing person match with ${getWantedPerson}` });
+		} else {
+			if (name) getWantedPerson.name = name;
+			if (cases) getWantedPerson.cases = cases;
+			if (age) getWantedPerson.age = age;
+			if (gender) getWantedPerson.gender = gender;
+			if (eyes) getWantedPerson.eyes = eyes;
+			if (hair) getWantedPerson.hair = hair;
+			if (height) getWantedPerson.height = height;
+			if (address) getWantedPerson.address = address;
+			if (municipal) getWantedPerson.municipal = municipal;
+			if (contact) getWantedPerson.contact = contact;
+			if (description) getWantedPerson.description = description;
+
+			const updatedData = await getWantedPerson.save();
+
+			res.status(201).json({ status: 201, updatedData });
+		}
+	} catch (error) {}
+});
+
 // get all wanted person
 wantedpersonRouter.get("/wanted-person", async (req, res) => {
 	try {
