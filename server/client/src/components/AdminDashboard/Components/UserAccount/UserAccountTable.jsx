@@ -83,17 +83,6 @@ export default function UserAccountTable() {
 		setLoading(false);
 	};
 
-	// get image
-
-	// const fetchImage = async () => {
-	// 	const res = await fetch(`/uploads/${validationData?.imgpath}`);
-	// 	console.log(res);
-	// 	const imageBlob = await res.blob();
-	// 	const imageObjectUrl = URL.createObjectURL(imageBlob);
-	// 	setImg(imageObjectUrl);
-	// 	console.log(imageObjectUrl);
-	// };
-
 	useEffect(() => {
 		if (validationData) {
 			fetch(`/uploads/${validationData?.imgpath}`)
@@ -152,7 +141,6 @@ export default function UserAccountTable() {
 	};
 
 	const ValidationOfRecord = async (email) => {
-		console.log(email);
 		const data = await fetch(`/citizen/users/${email}`, {
 			method: "PATCH",
 			headers: {
@@ -188,7 +176,6 @@ export default function UserAccountTable() {
 	};
 
 	const RejectionOfRecord = async (email) => {
-		console.log(email);
 		const data = await fetch(`/citizen/users/${email}`, {
 			method: "DELETE",
 			headers: {
@@ -297,7 +284,6 @@ export default function UserAccountTable() {
 				text
 			),
 	});
-	console.log(loginData);
 	const AdminColumn = [
 		{
 			title: "ID",
@@ -491,7 +477,6 @@ export default function UserAccountTable() {
 	};
 
 	const onSubmitAdminForm = async (values) => {
-		console.log(values);
 		const data = await fetch("/admin/register", {
 			method: "POST",
 			headers: {

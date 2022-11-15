@@ -82,6 +82,8 @@ function App() {
 				setLoginData(fetchedData);
 				history("/user-citizen/dashboard");
 			}
+		} else {
+			setData(true);
 		}
 	};
 

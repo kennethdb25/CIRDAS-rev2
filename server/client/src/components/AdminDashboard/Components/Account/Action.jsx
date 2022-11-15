@@ -75,11 +75,10 @@ export default function Action(props) {
 	}, []);
 
 	const onChangePasswordFailed = async (error) => {
-		console.log(error);
+		message.error(error);
 	};
 
 	const onDeleteAccount = async () => {
-		console.log("Deleting Account");
 		const data = await fetch(`/admin/delete/${email}`, {
 			method: "PATCH",
 		});

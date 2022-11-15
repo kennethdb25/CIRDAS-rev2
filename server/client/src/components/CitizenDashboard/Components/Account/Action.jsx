@@ -15,7 +15,6 @@ export default function Action(props) {
 	const [form] = Form.useForm();
 	const history = useNavigate();
 	const { loginData, ValidUser } = props;
-	console.log(loginData);
 
 	const initialValues = {
 		firstName: loginData.validcitizen?.firstName,
@@ -83,7 +82,6 @@ export default function Action(props) {
 				.then(
 					(result) => {
 						setImg(URL.createObjectURL(result));
-						console.log(URL.createObjectURL(result));
 					},
 					(error) => {
 						console.log(error);

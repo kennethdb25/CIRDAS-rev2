@@ -491,7 +491,6 @@ export default function MissingPersonTable(props) {
 								icon={<EditOutlined />}
 								onClick={() => {
 									UpdateRecord(record);
-									console.log(record);
 									setTimeout(() => {
 										form.resetFields();
 									}, 10);

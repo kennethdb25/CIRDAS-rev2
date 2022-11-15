@@ -533,16 +533,15 @@ export default function ComplaintTable(props) {
 				<Typography>Status</Typography>
 				<Input style={{ marginBottom: "15px" }} value={viewData?.status} disabled />
 				<Typography>How</Typography>
-				<TextArea
-					value={viewData?.description}
-					showCount
-					autoSize="false"
-					maxLength={300}
-					style={{
-						height: 120,
-					}}
-					disabled
-				/>
+				<TextArea value={viewData?.description} showCount autoSize="false" maxLength={500} style={{ marginBottom: "15px" }} disabled />
+				{viewData?.status === "Solved" ? (
+					<>
+						<Typography>Resolution</Typography>
+						<TextArea value={viewData?.description} showCount autoSize="false" maxLength={500} style={{ marginBottom: "15px" }} disabled />
+					</>
+				) : (
+					<></>
+				)}
 			</Modal>
 		</Section>
 	);

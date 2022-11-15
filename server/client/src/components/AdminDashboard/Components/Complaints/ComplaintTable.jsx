@@ -26,6 +26,7 @@ export default function ComplaintTable(props) {
 	const [viewData, setViewData] = useState(null);
 	const [isView, setIsView] = useState(false);
 	const [isEdit, setIsEdit] = useState(false);
+	// eslint-disable-next-line no-unused-vars
 	const [pagination, setPagination] = useState({
 		defaultCurrent: 1,
 		pageSize: 6,
@@ -61,7 +62,7 @@ export default function ComplaintTable(props) {
 		});
 		const res = await data.json();
 		if (res.status === 201) {
-			message.success("Updated Successfully");
+			message.success("Complaint Updated Successfully");
 			onClose();
 			fetchData();
 			form.resetFields();
@@ -328,7 +329,7 @@ export default function ComplaintTable(props) {
 		});
 		const res = await data.json();
 		if (res.status === 201) {
-			message.success("Updated Successfully");
+			message.success("Complaint Status Updated Successfully");
 			form.resetFields();
 			getFiledComplaint();
 			getPendingComplaints();
@@ -363,7 +364,7 @@ export default function ComplaintTable(props) {
 			</div>
 			<div className="drawe">
 				<Drawer
-					title="FILE A COMPLAINT"
+					title={isEdit ? "UPDATE A COMPLAINT" : "FILE A COMPLAINT"}
 					placement="right"
 					width="100%"
 					onClose={onClose}

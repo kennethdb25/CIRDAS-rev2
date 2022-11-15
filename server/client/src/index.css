@@ -4,6 +4,8 @@
 
 body {
 	font-family: "Montrat", sans-serif, "PT Serif", serif, Garamond;
+	/* background-image: url(../public/images/test.png); */
+	/* background-attachment: fixed; */
 }
 
 * {

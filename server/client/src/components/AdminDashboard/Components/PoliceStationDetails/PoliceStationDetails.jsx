@@ -42,7 +42,14 @@ export default function PoliceStationDetails() {
 					</div>
 					<iframe
 						className="iframe"
-						style={{ height: "500px", width: "100%", border: "none", borderRadius: "2px", boxShadow: "0 2px 10px 0 rgba(70, 76, 79, .2)" }}
+						style={{
+							height: "500px",
+							width: "100%",
+							border: "none",
+							backgroundColor: "white",
+							borderRadius: "2px",
+							boxShadow: "0 2px 10px 0 rgba(70, 76, 79, .2)",
+						}}
 						title="Wanted Person Status Rate"
 						src="https://charts.mongodb.com/charts-cirdas-ngmsy/embed/charts?id=63298e7c-7e44-46b5-8293-fa65c5bc95a9&maxDataAge=10&theme=light&autoRefresh=true"
 					></iframe>

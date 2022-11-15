@@ -1,9 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
-import { SearchOutlined, EyeOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import { SearchOutlined, EyeOutlined, PlusCircleOutlined, EditOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
-import { Button, Input, Space, Table, Modal, Typography, Row, Col, Image, Tag, Drawer } from "antd";
+import { Button, Input, Space, Table, Modal, Typography, Row, Col, Image, Tag, Drawer, message, Form, Radio, Select } from "antd";
 import WantedPersonForm from "./WantedPersonForm";
+import { MunicipalData } from "../../../../data/CitizensData";
+
 const { Title, Text } = Typography;
 const { TextArea } = Input;
 
@@ -14,14 +16,18 @@ export default function WantedPersonTable() {
 	const [searchText, setSearchText] = useState("");
 	const [visible, setVisible] = useState(false);
 	const [isView, setIsView] = useState(false);
+	const [isEdit, setIsEdit] = useState(false);
+	const [updateData, setUpdateData] = useState(null);
 	const [searchedColumn, setSearchedColumn] = useState("");
 	const searchInput = useRef(null);
 	const [loading, setLoading] = useState(false);
+	// eslint-disable-next-line no-unused-vars
 	const [pagination, setPagination] = useState({
 		defaultCurrent: 1,
 		pageSize: 6,
 		total: data[0]?.body.length,
 	});
+	const [form] = Form.useForm();
 
 	useEffect(() => {
 		fetchData();
@@ -39,6 +45,58 @@ export default function WantedPersonTable() {
 		const dataComp = await res.json();
 		setData([dataComp]);
 		setLoading(false);
+	};
+
+	const UpdateRecord = (record) => {
+		setIsEdit(true);
+		setVisible(true);
+		setUpdateData(record);
+	};
+
+	const initialValuesUpdate = {
+		address: updateData?.address,
+		age: updateData?.age,
+		description: updateData?.description,
+		contact: updateData?.contact,
+		cases: updateData?.cases,
+		eyes: updateData?.eyes,
+		name: updateData?.name,
+		gender: updateData?.gender,
+		hair: updateData?.hair,
+		height: updateData?.height,
+		municipal: updateData?.municipal,
+	};
+
+	const onFinishUpdate = async (values) => {
+		const newData = new FormData();
+		newData.append("address", values.address);
+		newData.append("age", values.age);
+		newData.append("contact", values.contact);
+		newData.append("description", values.description);
+		newData.append("eyes", values.eyes);
+		newData.append("name", values.name);
+		newData.append("gender", values.gender);
+		newData.append("hair", values.hair);
+		newData.append("height", values.height);
+		newData.append("municipal", values.municipal);
+		const data = await fetch(`/wanted-person/update/${updateData?.wantedId}`, {
+			method: "PATCH",
+			body: newData,
+		});
+
+		const res = await data.json();
+		if (res.status === 201) {
+			message.success("Updated Successfully");
+			onClose();
+			fetchData();
+			form.resetFields();
+		} else {
+			message.error(res.error);
+		}
+	};
+
+	const onFinishUpdateFailed = (errorInfo) => {
+		message.error("Please input all the required details");
 	};
 
 	const ViewRecord = (record) => {
@@ -170,6 +228,8 @@ export default function WantedPersonTable() {
 
 	const onClose = () => {
 		setVisible(false);
+		setIsEdit(false);
+		form.resetFields();
 	};
 
 	const columns = [
@@ -239,16 +299,33 @@ export default function WantedPersonTable() {
 			key: "x",
 			width: "15%",
 			render: (record) => (
-				<Button
-					type="primary"
-					shape="round"
-					icon={<EyeOutlined />}
-					onClick={() => {
-						ViewRecord(record);
-					}}
-				>
-					View
-				</Button>
+				<>
+					<div style={{ display: "flex" }}>
+						<Button
+							type="primary"
+							shape="round"
+							icon={<EyeOutlined />}
+							onClick={() => {
+								ViewRecord(record);
+							}}
+						>
+							View
+						</Button>
+						<Button
+							type="success"
+							shape="round"
+							icon={<EditOutlined />}
+							onClick={() => {
+								UpdateRecord(record);
+								setTimeout(() => {
+									form.resetFields();
+								}, 10);
+							}}
+						>
+							Edit
+						</Button>
+					</div>
+				</>
 			),
 		},
 	];
@@ -260,7 +337,7 @@ export default function WantedPersonTable() {
 			</div>
 			<div className="drawer">
 				<Drawer
-					title="ADD WANTED PERSON"
+					title={isEdit ? "UPDATE WANTED PERSON" : "ADD WANTED PERSON"}
 					placement="right"
 					width="100%"
 					onClose={onClose}
@@ -272,7 +349,326 @@ export default function WantedPersonTable() {
 					}}
 					extra={<Space></Space>}
 				>
-					<WantedPersonForm fetchData={fetchData} onClose={onClose} />
+					{isEdit ? (
+						<Form
+							form={form}
+							labelCol={{
+								span: 8,
+							}}
+							initialValues={initialValuesUpdate}
+							layout="horizontal"
+							onFinish={onFinishUpdate}
+							onFinishFailed={onFinishUpdateFailed}
+							autoComplete="off"
+							style={{
+								width: "100%",
+								maxHeight: "100vh",
+							}}
+						>
+							<Row>
+								<Col xs={{ span: 0 }} md={{ span: 4 }}></Col>
+								<Col xs={{ span: 24 }} md={{ span: 16 }}>
+									<Row gutter={12}>
+										<Col xs={{ span: 24 }} md={{ span: 8 }}>
+											<Form.Item
+												label="Wanted Person's Fullname"
+												name="name"
+												labelCol={{
+													span: 24,
+												}}
+												wrapperCol={{
+													span: 24,
+												}}
+												hasFeedback
+												rules={[
+													{
+														required: true,
+														message: "Please input wanted person's fullname!",
+													},
+													{
+														pattern: /^[a-zA-Z_ ]*$/,
+														message: "Fullname should have no number or special character.",
+													},
+												]}
+											>
+												<Input placeholder="Enter wanted person's fullname" />
+											</Form.Item>
+										</Col>
+										<Col xs={{ span: 24 }} md={{ span: 8 }}>
+											<Form.Item
+												label="Age"
+												name="age"
+												labelCol={{
+													span: 24,
+												}}
+												wrapperCol={{
+													span: 24,
+												}}
+												hasFeedback
+												rules={[
+													{
+														required: true,
+														message: "Please input missing person's age!",
+													},
+													{
+														pattern: /^[0-9]*$/,
+														message: "Age should be a number.",
+													},
+												]}
+											>
+												<Input placeholder="Enter missing person's age" />
+											</Form.Item>
+										</Col>
+										<Col xs={{ span: 24 }} md={{ span: 8 }}>
+											<Form.Item
+												label="Gender"
+												name="gender"
+												labelCol={{
+													span: 24,
+													//offset: 2
+												}}
+												wrapperCol={{
+													span: 24,
+												}}
+												hasFeedback
+												rules={[
+													{
+														required: true,
+														message: "Please select your gender!",
+													},
+												]}
+											>
+												<Radio.Group style={{ width: "100%" }}>
+													<Radio value="Male">Male</Radio>
+													<Radio value="Female">Female</Radio>
+												</Radio.Group>
+											</Form.Item>
+										</Col>
+									</Row>
+									<Row gutter={12}>
+										<Col xs={{ span: 24 }} md={{ span: 8 }}>
+											<Form.Item
+												label="Eye Color"
+												name="eyes"
+												labelCol={{
+													span: 24,
+												}}
+												wrapperCol={{
+													span: 24,
+												}}
+												hasFeedback
+												rules={[
+													{
+														required: true,
+														message: "Please input missing person's Eye Color!",
+													},
+													{
+														pattern: /^[a-zA-Z_ ]*$/,
+														message: "Eye Color should have no number or special",
+													},
+												]}
+											>
+												<Input placeholder="Enter missing person's Eye Color " />
+											</Form.Item>
+										</Col>
+										<Col xs={{ span: 24 }} md={{ span: 8 }}>
+											<Form.Item
+												label="Hair Color"
+												name="hair"
+												labelCol={{
+													span: 24,
+												}}
+												wrapperCol={{
+													span: 24,
+												}}
+												hasFeedback
+												rules={[
+													{
+														required: true,
+														message: "Please input missing person's Hair Color!",
+													},
+													{
+														pattern: /^[a-zA-Z_ ]*$/,
+														message: "Hair Color should have no number or special",
+													},
+												]}
+											>
+												<Input placeholder="Enter missing person's age" />
+											</Form.Item>
+										</Col>
+										<Col xs={{ span: 24 }} md={{ span: 8 }}>
+											<Form.Item
+												label="Height (in cm)"
+												name="height"
+												labelCol={{
+													span: 24,
+												}}
+												wrapperCol={{
+													span: 24,
+												}}
+												hasFeedback
+												rules={[
+													{
+														required: true,
+														message: "Please input missing person's height!",
+													},
+													{
+														pattern: /^[0-9]*$/,
+														message: "Height should be a number",
+													},
+												]}
+											>
+												<Input placeholder="Enter missing person's height (in cm)" />
+											</Form.Item>
+										</Col>
+									</Row>
+									<Row gutter={12}>
+										<Col xs={{ span: 24 }} md={{ span: 8 }} layout="vertical">
+											<Form.Item
+												label="Filed Cases"
+												name="cases"
+												labelCol={{
+													span: 24,
+												}}
+												wrapperCol={{
+													span: 24,
+												}}
+												hasFeedback
+												rules={[
+													{
+														required: true,
+														message: "Please enter last seen location",
+													},
+												]}
+											>
+												<Input placeholder="Enter last seen location" />
+											</Form.Item>
+										</Col>
+										<Col xs={{ span: 24 }} md={{ span: 8 }}>
+											<Form.Item
+												label="Contact Number"
+												name="contact"
+												labelCol={{
+													span: 24,
+												}}
+												wrapperCol={{
+													span: 24,
+												}}
+												hasFeedback
+												rules={[
+													{
+														required: true,
+														message: "Please input your contact number!",
+													},
+													{
+														pattern: /^[0-9]*$/,
+														message: "Contact number should be number.",
+													},
+													{ max: 11 },
+													{ min: 11 },
+												]}
+											>
+												<Input placeholder="Enter your contact number" />
+											</Form.Item>
+										</Col>
+									</Row>
+									<Row gutter={12}>
+										<Col xs={{ span: 24 }} md={{ span: 16 }}>
+											<Form.Item
+												label="Address"
+												name="address"
+												labelCol={{
+													span: 24,
+													//offset: 2
+												}}
+												wrapperCol={{
+													span: 24,
+												}}
+												hasFeedback
+												rules={[
+													{
+														required: true,
+														message: "Please enter your address!",
+													},
+												]}
+											>
+												<Input placeholder="Enter your House No./Street Name/Barangay" />
+											</Form.Item>
+										</Col>
+										<Col xs={{ span: 24 }} md={{ span: 8 }}>
+											<Form.Item
+												label="Municipality"
+												name="municipal"
+												labelCol={{
+													span: 24,
+												}}
+												wrapperCol={{
+													span: 24,
+												}}
+												hasFeedback
+												rules={[
+													{
+														required: true,
+														message: "Please select your Municipality!",
+													},
+												]}
+											>
+												<Select placeholder="Select your Municipality">
+													{MunicipalData.map((value, index) => (
+														<Select.Option key={index} value={value.name}>
+															{value.label}
+														</Select.Option>
+													))}
+												</Select>
+											</Form.Item>
+										</Col>
+									</Row>
+									<Row gutter={12}>
+										<Col xs={{ span: 24 }} md={{ span: 24 }}>
+											<Form.Item
+												label="Characteristics"
+												name="description"
+												labelCol={{
+													span: 24,
+													//offset: 2
+												}}
+												wrapperCol={{
+													span: 24,
+												}}
+												hasFeedback
+												rules={[
+													{
+														required: true,
+														message: "Please enter identifying characteristic",
+													},
+												]}
+											>
+												<TextArea
+													showCount
+													maxLength={500}
+													style={{
+														height: 120,
+													}}
+												/>
+											</Form.Item>
+										</Col>
+									</Row>
+									<Button type="primary" htmlType="submit">
+										File Missing Person
+									</Button>
+								</Col>
+
+								<Col xs={{ span: 24 }} md={{ span: 24 }}>
+									<Input hidden />
+								</Col>
+								<Col xs={{ span: 0 }} md={{ span: 4 }}></Col>
+							</Row>
+						</Form>
+					) : (
+						<>
+							<WantedPersonForm fetchData={fetchData} onClose={onClose} />
+						</>
+					)}
 				</Drawer>
 			</div>
 			<div className="modal">
