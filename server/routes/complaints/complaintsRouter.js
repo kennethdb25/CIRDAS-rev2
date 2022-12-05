@@ -45,7 +45,7 @@ complaintRouter.post("/citizen/complaint", async (req, res) => {
 complaintRouter.patch("/admin/complaint-update/:_id", async (req, res) => {
 	try {
 		const id = req.params._id;
-		const { status } = req.body;
+		const { status, resolution } = req.body;
 
 		const getComplaint = await complaintSchema.findOne({ _id: id });
 
@@ -53,6 +53,7 @@ complaintRouter.patch("/admin/complaint-update/:_id", async (req, res) => {
 			res.status(422).json({ error: `No complaint match with ${id}` });
 		} else {
 			if (status) getComplaint.status = status;
+			if (resolution) getComplaint.resolution = resolution;
 
 			const updatedData = await getComplaint.save();
 

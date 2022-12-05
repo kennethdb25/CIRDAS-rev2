@@ -410,7 +410,7 @@ export default function Action(props) {
 				</Form>
 			</Drawer>
 			<Modal
-				title="Action"
+				title="Delete?"
 				width={400}
 				open={isDelete}
 				onCancel={() => setIsDelete(false)}

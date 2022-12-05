@@ -70,6 +70,10 @@ const complaintSchema = new mongoose.Schema({
 		type: String,
 		required: false,
 	},
+	resolution: {
+		type: String,
+		required: false,
+	},
 	assignment: [
 		{
 			assignTo: {

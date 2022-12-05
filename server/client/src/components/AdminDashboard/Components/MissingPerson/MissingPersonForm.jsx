@@ -94,7 +94,6 @@ const MissingPersonForm = (props) => {
 	};
 	return (
 		<Form
-			orm
 			form={form}
 			labelCol={{
 				span: 8,

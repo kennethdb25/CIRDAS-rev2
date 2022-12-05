@@ -14,6 +14,8 @@ const { TextArea } = Input;
 
 export default function ComplaintTable(props) {
 	const { getFiledComplaint, getPendingComplaints, getReviewedComplaints, getUnderInvestigation } = props;
+	const [checkRecord, setCheckRecord] = useState(null);
+	const [recordData, setRecordData] = useState(null);
 	const [updateData, setUpdateData] = useState(null);
 	const [data, setData] = useState([]);
 	const [status, setStatus] = useState(true);
@@ -26,6 +28,7 @@ export default function ComplaintTable(props) {
 	const [viewData, setViewData] = useState(null);
 	const [isView, setIsView] = useState(false);
 	const [isEdit, setIsEdit] = useState(false);
+	const [reso, setReso] = useState(false);
 	// eslint-disable-next-line no-unused-vars
 	const [pagination, setPagination] = useState({
 		defaultCurrent: 1,
@@ -48,6 +51,14 @@ export default function ComplaintTable(props) {
 		suspect: updateData?.suspect,
 		description: updateData?.description,
 		complaintid: updateData?.complaintid,
+	};
+
+	const handleStatusResolved = (values) => {
+		if (values === "Solved") {
+			setReso(true);
+		} else {
+			setReso(false);
+		}
 	};
 
 	const classes = useStyles();
@@ -192,8 +203,14 @@ export default function ComplaintTable(props) {
 	});
 
 	const ViewRecord = (record) => {
+		console.log(record);
 		setIsView(true);
 		setViewData(record);
+	};
+
+	const CheckRecord = (record) => {
+		setCheckRecord(true);
+		setRecordData(record);
 	};
 
 	const columns = [
@@ -273,34 +290,49 @@ export default function ComplaintTable(props) {
 			width: "10%",
 			render: (record) => (
 				<>
-					<div style={{ display: "flex" }}>
-						<Button
-							type="primary"
-							shape="round"
-							icon={<EyeOutlined />}
-							onClick={() => {
-								ViewRecord(record);
-								setTimeout(() => {
-									form.resetFields();
-								}, 10);
-							}}
-						>
-							Review
-						</Button>
-						<Button
-							type="success"
-							shape="round"
-							icon={<EditOutlined />}
-							onClick={() => {
-								UpdateRecord(record);
-								setTimeout(() => {
-									form.resetFields();
-								}, 10);
-							}}
-						>
-							Edit
-						</Button>
-					</div>
+					{record.status !== "Solved" ? (
+						<div style={{ display: "flex" }}>
+							<Button
+								type="primary"
+								shape="round"
+								icon={<EyeOutlined />}
+								onClick={() => {
+									ViewRecord(record);
+									setTimeout(() => {
+										form.resetFields();
+									}, 10);
+								}}
+							>
+								Review
+							</Button>
+							<Button
+								type="success"
+								shape="round"
+								icon={<EditOutlined />}
+								onClick={() => {
+									UpdateRecord(record);
+									setTimeout(() => {
+										form.resetFields();
+									}, 10);
+								}}
+							>
+								Edit
+							</Button>
+						</div>
+					) : (
+						<div style={{ display: "flex" }}>
+							<Button
+								type="primary"
+								shape="round"
+								icon={<EyeOutlined />}
+								onClick={() => {
+									CheckRecord(record);
+								}}
+							>
+								View
+							</Button>
+						</div>
+					)}
 				</>
 			),
 		},
@@ -308,6 +340,7 @@ export default function ComplaintTable(props) {
 
 	const initialValues = {
 		status: viewData?.status,
+		resolution: viewData?.resolution,
 	};
 
 	const enableStatus = () => {
@@ -316,6 +349,7 @@ export default function ComplaintTable(props) {
 
 	const onClearForms = () => {
 		setIsView(false);
+		setCheckRecord(false);
 		setStatus(true);
 	};
 
@@ -717,6 +751,8 @@ export default function ComplaintTable(props) {
 						<Input style={{ marginBottom: "15px" }} value={viewData?.victim} disabled />
 						<Typography>Suspect</Typography>
 						<Input style={{ marginBottom: "15px" }} value={viewData?.suspect} disabled />
+						<Typography>How</Typography>
+						<TextArea value={viewData?.description} showCount autoSize="false" maxLength={500} style={{ marginBottom: "15px" }} disabled />
 						<Form.Item
 							label="Status"
 							name="status"
@@ -732,7 +768,7 @@ export default function ComplaintTable(props) {
 							{status ? (
 								<Input disabled={status} />
 							) : (
-								<Select style={{ width: "100%" }} disabled={status}>
+								<Select style={{ width: "100%" }} onChange={handleStatusResolved} disabled={status}>
 									{AdminComplaintStatus.map((value, index) => (
 										<Select.Option key={index} value={value.name}>
 											{value.label}
@@ -741,17 +777,79 @@ export default function ComplaintTable(props) {
 								</Select>
 							)}
 						</Form.Item>
+
+						{reso ? (
+							<>
+								<Form.Item
+									label="Resolution"
+									name="resolution"
+									labelCol={{
+										span: 24,
+										//offset: 2
+									}}
+									wrapperCol={{
+										span: 24,
+									}}
+									hasFeedback
+								>
+									<Input placeholder="Enter Resolution" disabled={status} />
+								</Form.Item>
+							</>
+						) : (
+							<></>
+						)}
+
 						{status ? (
 							<></>
 						) : (
 							<>
-								{" "}
 								<Button type="primary" htmlType="submit">
 									Update
 								</Button>
 							</>
 						)}
 					</Form>
+				</Modal>
+
+				<Modal
+					title="Complaint Details"
+					open={checkRecord}
+					onCancel={() => {
+						onClearForms();
+					}}
+					footer={[
+						<Button
+							key="cancel"
+							onClick={() => {
+								onClearForms();
+							}}
+						>
+							Close
+						</Button>,
+					]}
+				>
+					<Typography>Complainant</Typography>
+					<Input style={{ marginBottom: "15px" }} value={recordData?.complainantname} disabled />
+					<Typography>Complaint</Typography>
+					<Input style={{ marginBottom: "15px" }} value={recordData?.complaint} disabled />
+					<Typography>Address</Typography>
+					<Input style={{ marginBottom: "15px" }} value={recordData?.address} disabled />
+					<Typography>Municipal</Typography>
+					<Input style={{ marginBottom: "15px" }} value={recordData?.municipal} disabled />
+					<Typography>Time and Date</Typography>
+					<Input style={{ marginBottom: "15px" }} value={recordData?.timeAndDate} disabled />
+					<Typography>Witness</Typography>
+					<Input style={{ marginBottom: "15px" }} value={recordData?.witness} disabled />
+					<Typography>Victim</Typography>
+					<Input style={{ marginBottom: "15px" }} value={recordData?.victim} disabled />
+					<Typography>Suspect</Typography>
+					<Input style={{ marginBottom: "15px" }} value={recordData?.suspect} disabled />
+					<Typography>Status</Typography>
+					<Input style={{ marginBottom: "15px" }} value={recordData?.status} disabled />
+					<Typography>Resolution</Typography>
+					<Input style={{ marginBottom: "15px" }} value={recordData?.resolution} disabled />
+					<Typography>How</Typography>
+					<TextArea value={recordData?.description} showCount autoSize="false" maxLength={500} style={{ marginBottom: "15px" }} disabled />
 				</Modal>
 			</div>
 		</Section>
