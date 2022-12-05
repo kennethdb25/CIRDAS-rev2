@@ -24,7 +24,7 @@ module.exports = function (app) {
 			"/uploads",
 		],
 		createProxyMiddleware({
-			target: "http://localhost:5000" || "https://cirdas.herokuapp.com:5000",
+			target: "http://localhost:5000" || "https://cirdas.herokuapp.com:5000" || "https://www.cirdas.com",
 		})
 	);
 };
