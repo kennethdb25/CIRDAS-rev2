@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import scrollreveal from "scrollreveal";
@@ -83,10 +84,7 @@ export default function MissingPerson() {
 		<Section>
 			<Navbar />
 			<div className="grid">
-				<div className="row__two">
-					<Analytics getAll={getAll} getMissing={getMissing} getPending={getPending} getFound={getFound} />
-					<FAQ />
-				</div>
+				<div className="row__two"></div>
 				<div className="row__one">
 					<MissingPersonTable />
 				</div>
@@ -94,7 +92,8 @@ export default function MissingPerson() {
 		</Section>
 	);
 }
-
+// <Analytics getAll={getAll} getMissing={getMissing} getPending={getPending} getFound={getFound} />
+// 					<FAQ />
 const Section = styled.section`
 	margin-left: 18vw;
 	padding: 2rem;

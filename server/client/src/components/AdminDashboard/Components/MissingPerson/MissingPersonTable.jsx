@@ -269,30 +269,22 @@ export default function MissingPersonTable(props) {
 			width: "10%",
 			render: (record) => (
 				<>
-					<div style={{ display: "flex" }}>
-						<Button
-							type="primary"
-							shape="round"
-							icon={<EyeOutlined />}
+					<div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
+						<EyeOutlined
+							style={{ color: "green" }}
 							onClick={() => {
 								ViewRecord(record);
 							}}
-						>
-							Review
-						</Button>
-						<Button
-							type="success"
-							shape="round"
-							icon={<EditOutlined />}
+						/>
+						<EditOutlined
+							style={{ color: "red" }}
 							onClick={() => {
 								UpdateRecord(record);
 								setTimeout(() => {
 									form.resetFields();
 								}, 10);
 							}}
-						>
-							Edit
-						</Button>
+						/>
 					</div>
 				</>
 			),

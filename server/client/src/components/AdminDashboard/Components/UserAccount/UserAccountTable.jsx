@@ -336,17 +336,13 @@ export default function UserAccountTable() {
 			width: "10%",
 			render: (record) => (
 				<>
-					<div style={{ display: "flex" }}>
-						<Button
-							type="primary"
-							shape="round"
-							icon={<EyeOutlined />}
+					<div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
+						<EyeOutlined
+							style={{ color: "green" }}
 							onClick={() => {
 								onViewAdminRecord(record);
 							}}
-						>
-							Review
-						</Button>
+						/>
 					</div>
 				</>
 			),
@@ -416,17 +412,26 @@ export default function UserAccountTable() {
 			width: "10%",
 			render: (record) => (
 				<>
-					<div style={{ display: "flex" }}>
-						<Button
-							type={record?.accountstatus === "Pending" ? "danger" : "primary"}
-							shape="round"
-							icon={record?.accountstatus === "Pending" ? <EditOutlined /> : <EyeOutlined />}
-							onClick={() => {
-								record?.accountstatus === "Pending" ? onValidateRecord(record) : onViewRecord(record);
-							}}
-						>
-							{record?.accountstatus === "Pending" ? "Validate" : "Review"}
-						</Button>
+					<div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
+						{record?.accountstatus === "Pending" ? (
+							<>
+								<EditOutlined
+									style={{ color: "green" }}
+									onClick={() => {
+										onValidateRecord(record);
+									}}
+								/>
+							</>
+						) : (
+							<>
+								<EyeOutlined
+									style={{ color: "green" }}
+									onClick={() => {
+										onViewRecord(record);
+									}}
+								/>
+							</>
+						)}
 					</div>
 				</>
 			),
@@ -550,17 +555,13 @@ export default function UserAccountTable() {
 			width: "10%",
 			render: (record) => (
 				<>
-					<div style={{ display: "flex" }}>
-						<Button
-							type="primary"
-							shape="round"
-							icon={<EyeOutlined />}
+					<div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
+						<EyeOutlined
+							style={{ color: "green" }}
 							onClick={() => {
 								onViewPoliceRecord(record);
 							}}
-						>
-							Review
-						</Button>
+						/>
 					</div>
 				</>
 			),

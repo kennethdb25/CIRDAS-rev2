@@ -9,7 +9,7 @@ export default function Navbar() {
 			<div className="title">
 				<h4>Hello {loginData.validcitizen?.firstName},</h4>
 				<h1>
-					Welcome to <span>CIRDAS</span>
+					Welcome to<span>CIRDAS</span>
 				</h1>
 			</div>
 			<div className="title">
@@ -39,7 +39,6 @@ const Nav = styled.nav`
 				margin-left: 0.5rem;
 				color: black;
 				font-family: "Libre Bodoni";
-				letter-spacing: 0.2rem;
 			}
 		}
 	}

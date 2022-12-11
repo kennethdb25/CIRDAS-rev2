@@ -1,7 +1,8 @@
-import React, { useContext, useState, useEffect, useRef } from "react";
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import { Button, Input, Space, Table, Modal, Typography, Drawer, Form, Row, Col, Image } from "antd";
-import { SearchOutlined, PlusCircleOutlined, EyeOutlined, EditOutlined } from "@ant-design/icons";
+import { Button, Input, Space, Table, Modal, Typography } from "antd";
+import { SearchOutlined, EyeOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 
 export default function Analytics() {
@@ -173,27 +174,23 @@ export default function Analytics() {
 			title: "Station Name",
 			dataIndex: "details",
 			key: "details",
-			width: "30%",
+			width: "20%",
 			...getColumnSearchProps("details"),
 		},
 		{
 			title: "",
 			dataIndex: "",
 			key: "x",
-			width: "10%",
+			width: "30%",
 			render: (record) => (
 				<>
-					<div style={{ display: "flex" }}>
-						<Button
-							type="primary"
-							shape="round"
-							icon={<EyeOutlined />}
+					<div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
+						<EyeOutlined
+							style={{ color: "green" }}
 							onClick={() => {
 								ViewRecord(record);
 							}}
-						>
-							View
-						</Button>
+						/>
 					</div>
 				</>
 			),

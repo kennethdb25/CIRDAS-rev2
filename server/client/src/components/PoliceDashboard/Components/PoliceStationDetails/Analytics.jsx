@@ -173,27 +173,23 @@ export default function Analytics() {
 			title: "Station Name",
 			dataIndex: "details",
 			key: "details",
-			width: "30%",
+			width: "20%",
 			...getColumnSearchProps("details"),
 		},
 		{
 			title: "",
 			dataIndex: "",
 			key: "x",
-			width: "10%",
+			width: "30%",
 			render: (record) => (
 				<>
-					<div style={{ display: "flex" }}>
-						<Button
-							type="primary"
-							shape="round"
-							icon={<EyeOutlined />}
+					<div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
+						<EyeOutlined
+							style={{ color: "green" }}
 							onClick={() => {
 								ViewRecord(record);
 							}}
-						>
-							View
-						</Button>
+						/>
 					</div>
 				</>
 			),

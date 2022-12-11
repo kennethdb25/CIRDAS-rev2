@@ -8,7 +8,7 @@ export default function Navbar() {
 			<div className="title">
 				<h3>Hello {loginData.validcitizen?.firstName},</h3>
 				<h1>
-					Welcome to <span>CIRDAS</span>
+					Welcome to<span>CIRDAS</span>
 				</h1>
 			</div>
 			<div className="title">
@@ -33,7 +33,6 @@ const Nav = styled.nav`
 				margin-left: 0.5rem;
 				color: black;
 				font-family: PT Serif;
-				// letter-spacing: 0.2rem;
 			}
 		}
 	}

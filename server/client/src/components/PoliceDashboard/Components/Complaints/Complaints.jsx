@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import scrollreveal from "scrollreveal";
@@ -85,10 +86,7 @@ export default function Complaints() {
 		<Section>
 			<Navbar />
 			<div className="grid">
-				<div className="row__two">
-					<Analytics data={data} getPending={getPending} getReviewed={getReviewed} getUnder={getUnder} />
-					<FAQ />
-				</div>
+				<div className="row__two"></div>
 				<div className="row__one">
 					<ComplaintTable />
 				</div>
@@ -96,7 +94,8 @@ export default function Complaints() {
 		</Section>
 	);
 }
-
+// <Analytics data={data} getPending={getPending} getReviewed={getReviewed} getUnder={getUnder} />
+// <FAQ />
 const Section = styled.section`
 	margin-left: 18vw;
 	padding: 2rem;

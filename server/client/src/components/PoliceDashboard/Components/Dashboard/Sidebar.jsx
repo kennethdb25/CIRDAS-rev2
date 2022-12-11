@@ -244,12 +244,12 @@ export default function Sidebar() {
 						>
 							<a>
 								<UilSetting />
-								<span> Settings</span>
+								<span> Account</span>
 							</a>
 						</li>
 						<li
 							key={7}
-							className={currentLink === 6 ? "active" : "none"}
+							className={currentLink === 7 ? "active" : "none"}
 							onClick={() => {
 								setCurrentLink(7);
 							}}
@@ -446,7 +446,7 @@ const ResponsiveNav = styled.div`
 			list-style-type: none;
 			display: flex;
 			flex-direction: column;
-			gap: 1rem;
+			gap: 0.5rem;
 			margin-top: 3rem;
 			li {
 				padding: 0.6rem 1rem;

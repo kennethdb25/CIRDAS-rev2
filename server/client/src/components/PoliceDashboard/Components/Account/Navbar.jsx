@@ -40,7 +40,6 @@ const Nav = styled.nav`
 				margin-left: 0.5rem;
 				color: black;
 				font-family: "Libre Bodoni";
-				letter-spacing: 0.2rem;
 			}
 		}
 	}

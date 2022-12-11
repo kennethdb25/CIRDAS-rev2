@@ -152,34 +152,35 @@ export default function ComplaintTable() {
 			title: "Complainant Name",
 			dataIndex: "complainantname",
 			key: "complainantname",
-			width: "30%",
+			width: "20%",
 			...getColumnSearchProps("complainantname"),
 		},
 		{
 			title: "What",
 			dataIndex: "complaint",
 			key: "complaint",
-			width: "20%",
+			width: "10%",
+			...getColumnSearchProps("complaint"),
 		},
 		{
 			title: "Where",
 			dataIndex: "address",
 			key: "address",
 			...getColumnSearchProps("address"),
-			width: "20%",
+			width: "10%",
 		},
 		{
 			title: "When",
 			dataIndex: "timeAndDate",
 			key: "timeAndDate",
-			width: "30%",
+			width: "15%",
 		},
 		{
 			title: "Who(Suspect)",
 			dataIndex: "suspect",
 			key: "suspect",
 			...getColumnSearchProps("suspect"),
-			width: "30%",
+			width: "15%",
 		},
 		{
 			title: "Status",
@@ -213,17 +214,13 @@ export default function ComplaintTable() {
 			width: "10%",
 			render: (record) => (
 				<>
-					<div style={{ display: "flex" }}>
-						<Button
-							type="primary"
-							shape="round"
-							icon={<EyeOutlined />}
+					<div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
+						<EyeOutlined
+							style={{ color: "green" }}
 							onClick={() => {
 								ViewRecord(record);
 							}}
-						>
-							View
-						</Button>
+						/>
 					</div>
 				</>
 			),
@@ -242,7 +239,7 @@ export default function ComplaintTable() {
 				<Input style={{ marginBottom: "15px" }} value={viewData?.complaint} disabled />
 				<Typography>Address</Typography>
 				<Input style={{ marginBottom: "15px" }} value={viewData?.address} disabled />
-				<Typography>Municipal</Typography>
+				<Typography>Municipality</Typography>
 				<Input style={{ marginBottom: "15px" }} value={viewData?.municipal} disabled />
 				<Typography>Time and Date</Typography>
 				<Input style={{ marginBottom: "15px" }} value={viewData?.timeAndDate} disabled />

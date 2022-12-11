@@ -233,6 +233,7 @@ export default function ComplaintTable(props) {
 			dataIndex: "complaint",
 			key: "complaint",
 			width: "20%",
+			...getColumnSearchProps("complaint"),
 		},
 		{
 			title: "Where",
@@ -291,46 +292,34 @@ export default function ComplaintTable(props) {
 			render: (record) => (
 				<>
 					{record.status !== "Solved" ? (
-						<div style={{ display: "flex" }}>
-							<Button
-								type="primary"
-								shape="round"
-								icon={<EyeOutlined />}
+						<div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
+							<EyeOutlined
+								style={{ color: "green" }}
 								onClick={() => {
 									ViewRecord(record);
 									setTimeout(() => {
 										form.resetFields();
 									}, 10);
 								}}
-							>
-								Review
-							</Button>
-							<Button
-								type="success"
-								shape="round"
-								icon={<EditOutlined />}
+							/>
+							<EditOutlined
+								style={{ color: "red" }}
 								onClick={() => {
 									UpdateRecord(record);
 									setTimeout(() => {
 										form.resetFields();
 									}, 10);
 								}}
-							>
-								Edit
-							</Button>
+							/>
 						</div>
 					) : (
-						<div style={{ display: "flex" }}>
-							<Button
-								type="primary"
-								shape="round"
-								icon={<EyeOutlined />}
+						<div style={{ display: "flex", justifyContent: "center" }}>
+							<EyeOutlined
+								style={{ color: "blue" }}
 								onClick={() => {
 									CheckRecord(record);
 								}}
-							>
-								View
-							</Button>
+							/>
 						</div>
 					)}
 				</>
@@ -741,7 +730,7 @@ export default function ComplaintTable(props) {
 						<Input style={{ marginBottom: "15px" }} value={viewData?.complaint} disabled />
 						<Typography>Address</Typography>
 						<Input style={{ marginBottom: "15px" }} value={viewData?.address} disabled />
-						<Typography>Municipal</Typography>
+						<Typography>Municipality</Typography>
 						<Input style={{ marginBottom: "15px" }} value={viewData?.municipal} disabled />
 						<Typography>Time and Date</Typography>
 						<Input style={{ marginBottom: "15px" }} value={viewData?.timeAndDate} disabled />
@@ -834,7 +823,7 @@ export default function ComplaintTable(props) {
 					<Input style={{ marginBottom: "15px" }} value={recordData?.complaint} disabled />
 					<Typography>Address</Typography>
 					<Input style={{ marginBottom: "15px" }} value={recordData?.address} disabled />
-					<Typography>Municipal</Typography>
+					<Typography>Municipality</Typography>
 					<Input style={{ marginBottom: "15px" }} value={recordData?.municipal} disabled />
 					<Typography>Time and Date</Typography>
 					<Input style={{ marginBottom: "15px" }} value={recordData?.timeAndDate} disabled />

@@ -221,21 +221,21 @@ export default function WantedPersonTable() {
 			},
 		},
 		{
-			title: "Action",
+			title: "",
 			dataIndex: "",
 			key: "x",
 			width: "15%",
 			render: (record) => (
-				<Button
-					type="primary"
-					shape="round"
-					icon={<EyeOutlined />}
-					onClick={() => {
-						ViewRecord(record);
-					}}
-				>
-					View
-				</Button>
+				<>
+					<div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
+						<EyeOutlined
+							style={{ color: "green" }}
+							onClick={() => {
+								ViewRecord(record);
+							}}
+						/>
+					</div>
+				</>
 			),
 		},
 	];

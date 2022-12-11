@@ -64,6 +64,28 @@ wantedpersonRouter.post("/wanted-person", upload.single("photo"), async (req, re
 	}
 });
 
+wantedpersonRouter.patch("/admin/wanted-person/:_id", async (req, res) => {
+	try {
+		const id = req.params._id;
+		const { status } = req.body;
+
+		const getWantedPerson = await wantedPersonSchema.findOne({ _id: id });
+
+		if (!getWantedPerson) {
+			res.status(422).json({ error: `No wanted person match with ${id}` });
+		} else {
+			if (status) getWantedPerson.status = status;
+
+			const updatedData = await getWantedPerson.save();
+
+			res.status(201).json({ status: 201, updatedData });
+		}
+	} catch (error) {
+		console.log(error);
+		res.status(404).json(error);
+	}
+});
+
 wantedpersonRouter.patch("/wanted-person/update/:wantedId", upload.single("photo"), async (req, res) => {
 	try {
 		const wantedpersonId = req.params.wantedId;

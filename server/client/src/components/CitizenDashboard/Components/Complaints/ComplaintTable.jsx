@@ -111,6 +111,7 @@ export default function ComplaintTable(props) {
 			dataIndex: "complaint",
 			key: "complaint",
 			width: "20%",
+			...getColumnSearchProps("complaint", searchInput, setSearchText, setSearchedColumn, handleReset, searchedColumn, searchText),
 		},
 		{
 			title: "Where",
@@ -168,31 +169,23 @@ export default function ComplaintTable(props) {
 			width: "10%",
 			render: (record) => (
 				<>
-					<div style={{ display: "flex" }}>
-						<Button
-							type="primary"
-							shape="round"
-							icon={<EyeOutlined />}
+					<div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
+						<EyeOutlined
+							style={{ color: "green" }}
 							onClick={() => {
 								ViewRecord(record);
 							}}
-						>
-							View
-						</Button>
+						/>
 						{record.status === "Pending" ? (
-							<Button
-								type="success"
-								shape="round"
-								icon={<EditOutlined />}
+							<EditOutlined
+								style={{ color: "red" }}
 								onClick={() => {
 									UpdateRecord(record);
 									setTimeout(() => {
 										form.resetFields();
 									}, 10);
 								}}
-							>
-								Edit
-							</Button>
+							/>
 						) : (
 							<></>
 						)}
@@ -520,7 +513,7 @@ export default function ComplaintTable(props) {
 				<Input style={{ marginBottom: "15px" }} value={viewData?.complaint} disabled />
 				<Typography>Address</Typography>
 				<Input style={{ marginBottom: "15px" }} value={viewData?.address} disabled />
-				<Typography>Municipal</Typography>
+				<Typography>Municipality</Typography>
 				<Input style={{ marginBottom: "15px" }} value={viewData?.municipal} disabled />
 				<Typography>Time and Date</Typography>
 				<Input style={{ marginBottom: "15px" }} value={viewData?.timeAndDate} disabled />

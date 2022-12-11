@@ -45,7 +45,7 @@ export default function Profile(props) {
 					<h3>{`${loginData.validcitizen?.accountstatus}`}</h3>
 				</div>
 			</div>
-			<div className="info">
+			<div className="action">
 				<Action ValidUser={ValidUser} loginData={loginData} />
 			</div>
 		</Section>
@@ -99,6 +99,12 @@ const Section = styled.section`
 		.info {
 			display: grid;
 			grid-template-columns: repeat(2, 1fr);
+			gap: 1rem;
+			font-size: 12px;
+		}
+		.action {
+			display: grid;
+			grid-template-columns: 1fr;
 			gap: 1rem;
 			font-size: 12px;
 		}

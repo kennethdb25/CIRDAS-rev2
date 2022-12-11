@@ -4,6 +4,7 @@ import { SearchOutlined, EyeOutlined, PlusCircleOutlined, EditOutlined } from "@
 import Highlighter from "react-highlight-words";
 import { Button, Input, Space, Table, Modal, Typography, Row, Col, Image, Tag, Drawer, message, Form, Radio, Select } from "antd";
 import WantedPersonForm from "./WantedPersonForm";
+import { AdminWantedStatus } from "../../../../data/AdminData";
 import { MunicipalData } from "../../../../data/CitizensData";
 
 const { Title, Text } = Typography;
@@ -13,6 +14,7 @@ export default function WantedPersonTable() {
 	const [img, setImg] = useState();
 	const [viewData, setViewData] = useState(null);
 	const [data, setData] = useState([]);
+	const [status, setStatus] = useState(true);
 	const [searchText, setSearchText] = useState("");
 	const [visible, setVisible] = useState(false);
 	const [isView, setIsView] = useState(false);
@@ -97,6 +99,30 @@ export default function WantedPersonTable() {
 
 	const onFinishUpdateFailed = (errorInfo) => {
 		message.error("Please input all the required details");
+	};
+
+	const onFinish = async (values) => {
+		const data = await fetch(`/admin/wanted-person/${viewData?._id}`, {
+			method: "PATCH",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify(values),
+		});
+		const res = await data.json();
+		if (res.status === 201) {
+			message.success("Updated Successfully");
+			setTimeout(() => {
+				form.resetFields();
+			}, 10);
+			fetchData();
+			onClearForms();
+		} else {
+			message.error(res.error);
+		}
+	};
+	const onFinishFailed = async (errorInfo) => {
+		message.error(errorInfo);
 	};
 
 	const ViewRecord = (record) => {
@@ -225,11 +251,22 @@ export default function WantedPersonTable() {
 				text
 			),
 	});
-
+	const initialValues = {
+		status: viewData?.status,
+	};
 	const onClose = () => {
 		setVisible(false);
 		setIsEdit(false);
 		form.resetFields();
+	};
+
+	const onClearForms = () => {
+		setIsView(false);
+		setStatus(true);
+	};
+
+	const enableStatus = () => {
+		setStatus(false);
 	};
 
 	const columns = [
@@ -300,30 +337,22 @@ export default function WantedPersonTable() {
 			width: "15%",
 			render: (record) => (
 				<>
-					<div style={{ display: "flex" }}>
-						<Button
-							type="primary"
-							shape="round"
-							icon={<EyeOutlined />}
+					<div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
+						<EyeOutlined
+							style={{ color: "green" }}
 							onClick={() => {
 								ViewRecord(record);
 							}}
-						>
-							View
-						</Button>
-						<Button
-							type="success"
-							shape="round"
-							icon={<EditOutlined />}
+						/>
+						<EditOutlined
+							style={{ color: "red" }}
 							onClick={() => {
 								UpdateRecord(record);
 								setTimeout(() => {
 									form.resetFields();
 								}, 10);
 							}}
-						>
-							Edit
-						</Button>
+						/>
 					</div>
 				</>
 			),
@@ -654,7 +683,7 @@ export default function WantedPersonTable() {
 										</Col>
 									</Row>
 									<Button type="primary" htmlType="submit">
-										File Missing Person
+										File Wanted Person
 									</Button>
 								</Col>
 
@@ -680,83 +709,149 @@ export default function WantedPersonTable() {
 						setIsView(false);
 						setImg();
 					}}
-					onOk={() => {
-						setIsView(false);
-						setImg();
-					}}
+					footer={[
+						<Button
+							key="cancel"
+							onClick={() => {
+								onClearForms();
+								setImg();
+							}}
+						>
+							Cancel
+						</Button>,
+						<>
+							{status ? (
+								<Button type="primary" key="updatestatus" onClick={enableStatus}>
+									Update Status
+								</Button>
+							) : (
+								<></>
+							)}
+							,
+						</>,
+					]}
 				>
-					<Row>
-						<Col xs={{ span: 0 }} md={{ span: 4 }}></Col>
-						<Col xs={{ span: 24 }} md={{ span: 16 }}>
-							<Row gutter={12}>
-								<Col xs={{ span: 24 }} md={{ span: 24 }}>
-									<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-										<Title level={2}>{viewData?.name}</Title>
-									</div>
-								</Col>
-							</Row>
-							<Row gutter={12}>
-								<Col xs={{ span: 24 }} md={{ span: 24 }}>
-									<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-										<Image style={{ border: "1px solid black" }} height={300} weight={300} src={img} alt="view" />
-									</div>
-								</Col>
-							</Row>
-							<Row gutter={12}>
-								<Col xs={{ span: 24 }} md={{ span: 12 }}>
-									<br></br>
-									<Text strong>Case:</Text>
-									<Input style={{ marginBottom: "8px" }} value={viewData?.cases} disabled />
-								</Col>
-								<Col xs={{ span: 24 }} md={{ span: 12 }}>
-									<br></br>
-									<Text strong>Height:</Text>
-									<Input style={{ marginBottom: "8px" }} value={viewData?.height} disabled />
-								</Col>
-								<Col xs={{ span: 24 }} md={{ span: 12 }}>
-									<br></br>
-									<Text strong>Age:</Text>
-									<Input style={{ marginBottom: "8px" }} value={viewData?.age} disabled />
-								</Col>
-								<Col xs={{ span: 24 }} md={{ span: 12 }}>
-									<br></br>
-									<Text strong>Gender:</Text>
-									<Input style={{ marginBottom: "8px" }} value={viewData?.gender} disabled />
-								</Col>
-								<Col xs={{ span: 24 }} md={{ span: 12 }}>
-									<br></br>
-									<Text strong>Eyes:</Text>
-									<Input style={{ marginBottom: "8px" }} value={viewData?.eyes} disabled />
-								</Col>
-								<Col xs={{ span: 24 }} md={{ span: 12 }}>
-									<br></br>
-									<Text strong>Hair:</Text>
-									<Input style={{ marginBottom: "8px" }} value={viewData?.hair} disabled />
-								</Col>
-
-								<Col xs={{ span: 24 }} md={{ span: 24 }}>
-									<br></br>
-									<Text strong>Identifying Characteristic:</Text>
-									<TextArea autoSize="false" style={{ marginBottom: "8px" }} value={viewData?.description} disabled />
-								</Col>
-								<Col xs={{ span: 24 }} md={{ span: 24 }}>
-									<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-										<Title level={5}>IF YOU HAVE ANY INFORMATION ABOUT</Title>
-									</div>
-								</Col>
-								<Col xs={{ span: 24 }} md={{ span: 24 }}>
-									<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-										<Title level={4}>{viewData?.name.toUpperCase()},</Title>
-									</div>
-								</Col>
-								<Col xs={{ span: 24 }} md={{ span: 24 }}>
-									<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-										<Title level={4}> PLEASE CONTACT: {viewData?.contact}</Title>
-									</div>
-								</Col>
-							</Row>
-						</Col>
-					</Row>
+					<Form
+						form={form}
+						labelCol={{
+							span: 8,
+						}}
+						initialValues={initialValues}
+						layout="horizontal"
+						onFinish={onFinish}
+						onFinishFailed={onFinishFailed}
+						autoComplete="off"
+						style={{
+							width: "100%",
+						}}
+					>
+						<Row>
+							<Col xs={{ span: 0 }} md={{ span: 4 }}></Col>
+							<Col xs={{ span: 24 }} md={{ span: 16 }}>
+								<Row gutter={12}>
+									<Col xs={{ span: 24 }} md={{ span: 24 }}>
+										<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+											<Title level={2}>{viewData?.name}</Title>
+										</div>
+									</Col>
+								</Row>
+								<Row gutter={12}>
+									<Col xs={{ span: 24 }} md={{ span: 24 }}>
+										<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+											<Image style={{ border: "1px solid black" }} height={300} weight={300} src={img} alt="view" />
+										</div>
+									</Col>
+								</Row>
+								<Row gutter={12}>
+									<Col xs={{ span: 24 }} md={{ span: 12 }}>
+										<br></br>
+										<Text strong>Case:</Text>
+										<Input style={{ marginBottom: "8px" }} value={viewData?.cases} disabled />
+									</Col>
+									<Col xs={{ span: 24 }} md={{ span: 12 }}>
+										<br></br>
+										<Text strong>Height:</Text>
+										<Input style={{ marginBottom: "8px" }} value={viewData?.height} disabled />
+									</Col>
+									<Col xs={{ span: 24 }} md={{ span: 12 }}>
+										<br></br>
+										<Text strong>Age:</Text>
+										<Input style={{ marginBottom: "8px" }} value={viewData?.age} disabled />
+									</Col>
+									<Col xs={{ span: 24 }} md={{ span: 12 }}>
+										<br></br>
+										<Text strong>Gender:</Text>
+										<Input style={{ marginBottom: "8px" }} value={viewData?.gender} disabled />
+									</Col>
+									<Col xs={{ span: 24 }} md={{ span: 12 }}>
+										<br></br>
+										<Text strong>Eyes:</Text>
+										<Input style={{ marginBottom: "8px" }} value={viewData?.eyes} disabled />
+									</Col>
+									{console.log(viewData)}
+									<Col xs={{ span: 24 }} md={{ span: 12 }}>
+										<br></br>
+										<Text strong>Hair:</Text>
+										<Input style={{ marginBottom: "8px" }} value={viewData?.hair} disabled />
+									</Col>
+									<Col xs={{ span: 24 }} md={{ span: 24 }}>
+										<Form.Item
+											label="Status"
+											name="status"
+											labelCol={{
+												span: 24,
+												//offset: 2
+											}}
+											wrapperCol={{
+												span: 24,
+											}}
+											hasFeedback
+										>
+											{status ? (
+												<Input value={viewData?.status} disabled />
+											) : (
+												<Select style={{ width: "100%" }} disabled={status}>
+													{AdminWantedStatus.map((value, index) => (
+														<Select.Option key={index} value={value.name}>
+															{value.label}
+														</Select.Option>
+													))}
+												</Select>
+											)}
+										</Form.Item>
+									</Col>
+									{status ? (
+										<></>
+									) : (
+										<Button type="primary" htmlType="submit">
+											Update
+										</Button>
+									)}
+									<Col xs={{ span: 24 }} md={{ span: 24 }}>
+										<br></br>
+										<Text strong>Identifying Characteristic:</Text>
+										<TextArea autoSize="false" style={{ marginBottom: "8px" }} value={viewData?.description} disabled />
+									</Col>
+									<Col xs={{ span: 24 }} md={{ span: 24 }}>
+										<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+											<Title level={5}>IF YOU HAVE ANY INFORMATION ABOUT</Title>
+										</div>
+									</Col>
+									<Col xs={{ span: 24 }} md={{ span: 24 }}>
+										<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+											<Title level={4}>{viewData?.name.toUpperCase()},</Title>
+										</div>
+									</Col>
+									<Col xs={{ span: 24 }} md={{ span: 24 }}>
+										<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+											<Title level={4}> PLEASE CONTACT: {viewData?.contact}</Title>
+										</div>
+									</Col>
+									<div style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignContent: "center" }}></div>
+								</Row>
+							</Col>
+						</Row>
+					</Form>
 				</Modal>
 			</div>
 		</Section>

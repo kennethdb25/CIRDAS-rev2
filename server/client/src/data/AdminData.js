@@ -42,3 +42,14 @@ export const AdminMissingStatus = [
 		value: "Found",
 	},
 ];
+
+export const AdminWantedStatus = [
+	{
+		name: "Wanted",
+		value: "Wanted",
+	},
+	{
+		name: "Found",
+		value: "Found",
+	},
+];
